@@ -5,3 +5,4 @@
 /*.js
 /node_modules/
 /tests/unit/LIcon.test.js
+/src
