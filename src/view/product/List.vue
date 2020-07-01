@@ -34,7 +34,7 @@
                 <template slot-scope="scope">
                     <el-button plain size="mini" type="warn" @click="handleChangStatus(scope.row.id)" v-if="scope.row.status==1">下架</el-button>
                     <el-button plain size="mini" type="success" @click="handleChangStatus(scope.row.id)" v-else>上架</el-button>
-                    <el-button plain size="mini" type="primary" @click="handleEdit(scope.row.id)">编辑</el-button>
+                    <el-button plain size="mini" type="primary" @click="handleEdit(scope.row)">编辑</el-button>
                     <el-button plain size="mini" type="danger" @click="handleDel(scope.row.id)" >删除</el-button>
                 </template>
             </el-table-column>
@@ -97,6 +97,7 @@ export default {
       const data = await ProductM.getByKeyword({});
       this.productList=data.products;
       this.count=data.count;
+      console.log(this.productList)
     },
     /**弹出删除对话框 */
     handleDel(id){
@@ -123,8 +124,8 @@ export default {
       this.targetComponent = 'Add'
     },
     /**编辑按钮点击 */
-    async handleEdit(themeId){
-      this.theme = await ThemeM.getDetail(themeId);
+    handleEdit(product){
+      this.product = product
       this.switchComponent = true
       this.targetComponent = 'Edit'
     },

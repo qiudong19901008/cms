@@ -1,65 +1,101 @@
 <template>
     <div class="container">
         <!-- 商品基础信息 -->
-        <div class="theme-fox">
+        <div class="info-container">
+            <div class="info-title title-css">商品基础信息</div>
             <el-form :model="product" :rules="rules" status-icon ref="form" label-width="100px" @submit.native.prevent>
-                <el-form-item label="商品图片" prop="head_img.id">
-                    <upload-imgs ref="uploadHead" :max-num="1" :value="headImgInitDataArr" :remote-fuc="uploadImage"/>
+                <el-form-item label="商品图片" prop="main_img_url">
+                    <upload-imgs ref="uploadMainImg" :max-num="1" :value="mainImgInitDataArr" :remote-fuc="uploadImage"/>
                 </el-form-item>
                 <el-form-item label="名称" prop="name">
-                    <el-input size="medium" v-model="temp.name" placeholder="精选主题名称"></el-input>
+                    <el-input size="medium" v-model="product.name" placeholder="商品名称"></el-input>
                 </el-form-item>
-                <el-form-item label="简介" prop="description">
-                    <el-input v-model="temp.description" size="medium" type="textarea" :rows="4" placeholder="精选主题简介"/>
+                <el-form-item label="分类"  >
+                  <el-select placeholder="请选择" prop="category" v-model="product.category.id">
+                    <el-option
+                        v-for="item in categories"
+                        :key="item.value"
+                        :label="item.label"
+                        :value="item.value">
+                    </el-option>
+                  </el-select>
                 </el-form-item>
-                <el-form-item label="主题图" prop="topic_img.id">
-                    <upload-imgs ref="uploadTopic" :max-num="1" :value="topicImgInitDataArr" :remote-fuc="uploadImage"/>
+                <el-form-item label="单价" prop="price">
+                    <el-input size="medium" v-model="product.price" placeholder="单价"></el-input>
                 </el-form-item>
-                <el-form-item label="详情页头图" prop="head_img.id">
-                    <upload-imgs ref="uploadHead" :max-num="1" :value="headImgInitDataArr" :remote-fuc="uploadImage"/>
+                <el-form-item label="库存" prop="stock">
+                    <el-input size="medium" v-model="product.stock" placeholder="库存"></el-input>
+                </el-form-item>
+                <el-form-item label="概述">
+                    <el-input v-model="product.summary" size="medium" type="textarea" :rows="4" placeholder="概述"/>
+                </el-form-item>
+                <el-form-item label="上架/下架">
+                <el-switch v-model="product.status" active-color="#13ce66" inactive-color="#ff4949"></el-switch>
                 </el-form-item>
             </el-form>
         </div>
-
+        <!-- 商品图片 -->
+        <div class="images-container">
+          <div class="properties-title title-css">商品详情图片</div>
+          <upload-imgs ref="uploadImages" :max-num="20" :value="imagesInitDataArr" :remote-fuc="uploadImage"/>
+        </div>
         <!-- 商品关联属性 -->
-        <div class="product-fox">
-            <div class="product-fox-title">关联商品</div>
-            <div class="theme-product-options">
-                <el-button @click="handleChange">更改</el-button>
-                <!--                <el-button @click="handleDelProduct">删除</el-button>-->
+        <div class="properties-container">
+            <div class="properties-title title-css">商品属性</div>
+            <div class="handle-container">
+                <el-button @click="handleAdd">添加</el-button>
+                <el-button @click="handleEdit">编辑</el-button>
+                <el-button @click="handleDel">删除</el-button>
             </div>
-            <div class="theme-product-table">
-                <el-table :data="temp.products" style="width: 100%">
-                    <el-table-column type="index" width="55"/>
-                    <el-table-column label="商品名称" prop="name"/>
-                    <el-table-column label="单价" prop="price"/>
-                    <el-table-column label="剩余库存" prop="stock"/>
-                    <el-table-column label="商品摘要" prop="summary"/>
+            <div class="properties-table">
+                <el-table :data="product.properties" style="width: 100%">
+                  <el-table-column  type="selection"  width="55" />
+                  <el-table-column label="属性名称">
+                    <template slot-scope="scope">
+                      <el-input v-model="scope.row.name" :readonly="readOnly" ></el-input>
+                    </template>
+                  </el-table-column>
+                  <el-table-column label="属性属性">
+                    <template slot-scope="scope">
+                      <el-input v-model="scope.row.detail" :readonly="readOnly"></el-input>
+                    </template>
+                  </el-table-column>
                 </el-table>
             </div>
         </div>
+        <el-dialog title="添加属性" :visible.sync="dialogVisible">
+          <span>添加属性</span>
+          <el-form  :inline="true" label-width="100px" @submit.native.prevent>
+            <template v-for="(item,key,index) in propertiesArr">
+              <el-form-item label="名称" :key="index">
+                  <el-input size="medium" v-model="item.name" placeholder="属性名" ></el-input>
+              </el-form-item>
+              <el-form-item label="属性" :key="index">
+                  <el-input size="medium" v-model="item.detail" placeholder="属性值"></el-input>
+              </el-form-item>
+            </template>
+          </el-form>
+          <span slot="footer" class="dialog-footer">
+            <el-button @click="handlePropertyCancel">取 消</el-button>
+            <el-button type="primary" @click="handlePropertyOk">确 定</el-button>
+          </span>
+        </el-dialog>
         <!-- 页面保存及重置按钮 -->
-        <div class="submit-box">
+        <div class="handle-container">
             <el-button @click="resetForm">重 置</el-button>
             <el-button type="primary" @click="handleSubmit">保 存</el-button>
         </div>
-        <!-- 更改主题关联商品对话框 -->
-        <el-dialog title="更改主题关联商品" :visible.sync="changeDialogVisible">
-            <el-transfer v-loading="loading" v-model="selectedTransfer" :data="transferList"></el-transfer>
-            <span slot="footer" class="dialog-footer">
-                <el-button @click="changeDialogVisible = false">取 消</el-button>
-                <el-button type="primary" @click="handleConfirmChange">确 定</el-button>
-            </span>
-        </el-dialog>
     </div>
 </template>
 
 <script>
 import UploadImgs from '@/component/base/upload-image'
 import ProductM from '../../../model/product'
+import CategoryM from '../../../model/category'
 import { 
   customImageUpload,
-  createId
+  createId,
+  initUploadImageArr
  } from '@/lin/util/myUtil'
 
 export default {
@@ -72,77 +108,112 @@ export default {
   },
   data() {
     return {
-      transferList: [],//所有待选框商品
-      selectedTransfer: [],//已经选择的商品
       product: {
         id: -1,
+        main_img_url:'',
         name: '',
-        description: '',
-        topic_img: {
-          id: '',
-          url: '',
-        },
-        head_img: {
-          id: '',
-          url: '',
-        },
-        products: [],
+        category:null,
+        price:0,
+        stock:0,
+        summary: '',
+        status:0,
+        images:[],
+        properties: [],
       },
-      loading: false,//加载动画
-      changeDialogVisible: false,//穿梭框显示控制
-      productList: [],//储存穿梭框商品数据
-      topicImgInitDataArr: [],//储存上传的头图
-      headImgInitDataArr: [],//储存上传的详情页图
+      readOnly:true,//
+      dialogVisible:false,//控制属性对话框显示
+      categories: [],//分类
+      mainImgInitDataArr: [],//储存上传的头图
+      imagesInitDataArr: [],//储存上传的详情页图
+      propertiesArr:[],//临时用来存储properties
       rules: {
-        name: [
-          {
-            required: true,
-            message: '请输入主题名称',
-            trigger: 'blur',
-          },
+        'main_img_url':[
+          {required: true,message: '头图不能为空',trigger: 'blur',}
         ],
-        'topic_img.id': [
-          {
-            required: true,
-            message: '主题图片不能为空',
-            trigger: 'blur',
-          },
+        'name': [
+           {required: true,message: '名称必填',trigger: 'blur',}
         ],
-        'head_img.id': [
-          {
-            required: true,
-            message: '主题详情页头图不能为空',
-            trigger: 'blur',
-          },
+        'category': [
+         {required: true,message: '分类必选',trigger: 'blur',}
+        ],
+        'price': [
+         {required: true,message: '价格必填',trigger: 'blur',}
+        ],
+        'stock': [
+         {required: true,message: '库存必填',trigger: 'blur',}
         ],
       },
     }
   },
   components: {UploadImgs},
-  created() {
-    this.init()
+  async created() {
+    await this.init()
   },
   methods: {
+
     // 初始化
-    init() {
-      
-    },
-    //打开穿梭框
-    handleChange() {
-     
-    },
-    /**生成穿梭框内的数据 */
-    async _generateData() {
-      
+    async init() {
+      this.categories=[]
+      this.mainImgInitDataArr=[]
+      this.imagesInitDataArr=[]
+      this.propertiesArr=[]
+      //获取分类
+      const categories = (await CategoryM.getAll()).categories;
+      categories.map(c=>{
+        const data = {
+          label:c.name,
+          value:c.id
+        };
+        this.categories.push(data);
+      });
+      //根据商品赋值
+      const data = JSON.parse(JSON.stringify(this.data));
+      const imagesInitDataArr = [];
+      if(data){
+        this.product=data
+        data.images.map(item=>{
+          imagesInitDataArr.push({id:item.img.id,url:item.img.url});
+        });
+        //初始化图片
+        this.mainImgInitDataArr = initUploadImageArr({url:data.main_img_url,id:data.img_id});
+        this.imagesInitDataArr = initUploadImageArr(imagesInitDataArr);
+        //初始化属性
+        // this.propertiesArr=data.properties;
+      }
     },
     // 提交表单
     async handleSubmit() {
      
     },
-    
-    // 确认更改
-    handleConfirmChange() {
-     
+    handleAdd(){
+      this.dialogVisible=true;
+      this.propertiesArr=[{name:'',detail:''}]
+    },
+    handleEdit(){
+      this.dialogVisible=true;
+      this.propertiesArr=JSON.parse(JSON.stringify(this.product.properties));
+    },
+    handleDel(){
+
+    },
+    handlePropertyCancel(){
+      this.dialogVisible=false;
+      this.propertiesArr=[];
+    },
+    handlePropertyOk(){
+      this.dialogVisible=false;
+      const realProperties = this.product.properties;
+      console.log(this.propertiesArr)
+      this.propertiesArr.map(property=>{
+        for(let index in realProperties){
+          if(realProperties[index].name ==property.name){
+            realProperties[index]=property
+            return
+          }
+        }
+        realProperties.push(property);
+      });
+      this.propertiesArr=[];
     },
     // 自定义图片上传组件上传
     async uploadImage(file) {
@@ -154,33 +225,46 @@ export default {
     },
     // 表单重置
     resetForm() {
-      
+      this.init();
     },
-    
   },
-  
 }
+  
+
 </script>
 
 <style lang="scss" scoped>
+    .title-css{
+       padding-bottom:30px;
+        line-height: 59px;
+        color: #3963bc;
+    }
     .container {
-        .product-fox {
-            .product-fox-title {
-                height: 59px;
-                line-height: 59px;
-                color: $parent-title-color;
-                font-size: 16px;
-                font-weight: 500;
-            }
+        display: flex;
+        flex-direction: column;
+        padding-left:30px;
+        .info-container{
 
-            .theme-product-options {
-                margin-bottom: 20px;
-            }
+          .info-title{
+            text-indent: 30px;
+          } 
         }
+        .images-container{
+          display: flex;
+          flex-direction: column;
 
-        .submit-box {
-            margin-top: 20px;
-            text-align: center;
         }
+        .properties-container{
+          display: flex;
+          flex-direction: column;
+          .handle-container{
+            padding-top:0;
+            padding-bottom:20px;
+          }
+        }
+        .handle-container{
+          padding-top:30px;
+        }
+      
     }
 </style>

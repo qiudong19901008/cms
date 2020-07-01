@@ -19,9 +19,26 @@ const createId = ()=>{
   .toString(36)
   .substring(2)
 }
-/** */
+/**初始化图片数组 */
+const initUploadImageArr =(data)=>{
+  console.log(data)
+  const uploadImageArr = [];
+  if(!(data instanceof Array)){
+    data = [data];
+  }
+  for (let i=0,size= data.length; i<size; i++) {
+    const img = {
+      id: createId(),
+      imgId: data[i].id,
+      display: data[i].url,
+    };
+    uploadImageArr.push(img)
+  }
+  return uploadImageArr;
+}
 
 export {
   customImageUpload,
-  createId
+  createId,
+  initUploadImageArr
 }
