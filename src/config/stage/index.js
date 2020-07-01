@@ -3,6 +3,7 @@ import bookConfig from './book' // 引入图书管理路由文件
 import bannerConfig from './banner'
 import themeConfig from './theme' 
 import categoryConfig from './category' 
+import productConfig from './product' 
 import pluginsConfig from './plugin'
 import Utils from '@/lin/util/util'
 
@@ -51,7 +52,8 @@ let homeRouter = [
   adminConfig,
   bannerConfig,
   themeConfig,
-  categoryConfig
+  categoryConfig,
+  productConfig
 ]
 
 const plugins = [...pluginsConfig]
