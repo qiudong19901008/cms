@@ -1,7 +1,8 @@
+<!-- src/views/banner/add.vue -->
 <template>
     <div class="container">
         <div class="header">
-            <span>新增主题</span>
+            <span>编辑分类</span>
             <span class="back" @click="handleBack">
                 <i class="iconfont icon-fanhui"/> 返回
             </span>
@@ -10,7 +11,7 @@
         <div class="form-container">
             <el-row>
                 <el-col :lg="16" :md="20" :sm="24" :xs="24">
-                    <ThemeForm @submit="handleSubmit"/>
+                    <CategoryForm :data="category" @submit="handleSubmit"/>
                 </el-col>
             </el-row>
         </div>
@@ -19,34 +20,50 @@
 
 <script>
 /* eslint-disable */
-import ThemeForm from './component/Form'
-import ThemeM from '../../model/theme'
+import CategoryForm from './component/Form'
+import CategoryM from '../../model/category'
 export default {
-  name: 'Add',
-  components:{ThemeForm},
+  name: 'Edit',
+  props:{
+      data:Object,
+  },
+  data(){
+    return{
+      category:null
+    }
+  },
+  components:{CategoryForm},
+  created(){
+      this.init();
+  },
   methods: {
+    /**
+     * 初始化
+     */
+    init(){
+      const data = JSON.parse(JSON.stringify(this.data));
+      this.category = data;
+    },
+    //提交事件
+    async handleSubmit(formData){
+      const id = formData.id;
+      const submitInfo={
+           name:formData.name,
+           description:formData.description,
+           topic_img_id:formData.topic_img.id,
+           from:1
+       };
+       try{
+           await CategoryM.editOne(id,submitInfo);
+           this.$message.success('修改成功');
+           this.handleBack();
+       }catch(e){
+           this.$message.error('修改失败');
+       }
+    },
     // 返回按钮点击事件
     handleBack() {
       this.$emit('back')
-    },
-    /**提交form表单 */
-    async handleSubmit(formData){
-        const products = JSON.parse(JSON.stringify(formData.products));
-        const mainInfo = {
-          name:formData.name,
-          description:formData.description,
-          head_img_id:formData.head_img.id,
-          topic_img_id:formData.topic_img.id,
-        };
-        const productIdArr = products.map(p=>p.id);
-        try {
-            const res = await ThemeM.createOne(mainInfo)
-            await ThemeM.addProducts(res.id,productIdArr);
-            this.$message.success('新增成功')
-            this.handleBack()
-        } catch (e) {
-            this.$message.error('新增失败');
-        }
     },
   },
   
@@ -76,9 +93,7 @@ export default {
         }
 
         .form-container {
-           padding: 20px 20px 100px 20px;
+            margin-top: 40px;
         }
     }
-
-    
 </style>

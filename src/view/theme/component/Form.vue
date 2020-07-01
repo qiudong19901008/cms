@@ -121,16 +121,17 @@ export default {
   methods: {
     // 初始化
     init() {
-      this.temp = this.data != null ? JSON.parse(JSON.stringify(this.data)) : this.temp
+      const data = JSON.parse(JSON.stringify(this.data))
+      this.temp = this.data  ?  data: this.temp
       const topicImgInitData = {
         id: createId(),
-        imgId: this.temp.topic_img.id,
-        display: this.temp.topic_img.url,
+        imgId: this.temp.topic_img.id?this.temp.topic_img.id:'',
+        display: this.temp.topic_img.url?this.temp.topic_img.url:'',
       }
       const headImgInitData = {
         id: createId(),
-        imgId: this.temp.head_img.id,
-        display: this.temp.head_img.url,
+        imgId: this.temp.head_img.id?this.temp.head_img.id:'',
+        display: this.temp.head_img.url?this.temp.head_img.url:'',
       }
       this.topicImgInitDataArr.push(topicImgInitData)
       this.headImgInitDataArr.push(headImgInitData)
@@ -165,7 +166,6 @@ export default {
     },
     // 提交表单
     async handleSubmit() {
-      const formName = 'form';
       if (this.temp.products.length < 1) {
         this.$message.error('主题关联商品不能为空')
         return;
@@ -208,8 +208,9 @@ export default {
     },
     // 表单重置
     resetForm() {
-      this.init()
-      // this.selectedTransfer = []
+       this.topicImgInitDataArr=[];
+       this.headImgInitDataArr=[];
+       this.init();
     },
     
   },

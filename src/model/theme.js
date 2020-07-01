@@ -31,15 +31,39 @@ class ThemeM {
     return theme;
   }
   /**
+   * @url PATCH /v1/theme/:id
+   * @return 编辑主题信息(不包含商品)
+   */
+    static async editOne(id,data){
+      return await _axios({
+        method: 'patch',
+        url:'v1/theme/'+id,
+        data
+      });
+    }
+  /**
    * @url POST /v1/theme/product/:id
    * @return 新增主题关联商品
    */
-  static async addProducts(id,products){
+  static async addProducts(id,productIdArr){
     return await _axios({
       method: 'post',
       url:'v1/theme/product/'+id,
       data:{
-        products
+        products:productIdArr
+      }
+    });
+  }
+  /**
+   * @url DELETE /v1/theme/product/:id
+   * @return 删除主题关联商品
+   */
+  static async delProducts(id,productIdArr){
+    return await _axios({
+      method: 'delete',
+      url:'v1/theme/product/'+id,
+      data:{
+        products:productIdArr
       }
     });
   }
@@ -53,7 +77,18 @@ class ThemeM {
       url:'v1/theme/'+id,
     });
   }
-
+  /**
+   * @url DELETE /v1/theme?ids=1,2,3...
+   * @return 根据ids删除主题
+   */
+  static async delThemes(ids){
+    return await _axios({
+      method: 'delete',
+      url:'v1/theme?ids='+ids,
+    });
+  }
+  
+  
 
 
   

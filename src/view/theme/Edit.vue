@@ -41,6 +41,26 @@ export default {
 
   methods: {
     async handleSubmit(formData) {
+      const themeId= formData.id;
+      const newProducts = JSON.parse(JSON.stringify(formData.products));
+      const newProductIdArr = newProducts.map(p=>p.id);
+      const oldProducts = this.theme.products;
+      const oldProductIdArr = oldProducts.map(p=>p.id);
+      const mainInfo = {
+        name:formData.name,
+        description:formData.description,
+        head_img_id:formData.head_img.id,
+        topic_img_id:formData.topic_img.id,
+      };
+       try {
+            await ThemeM.editOne(themeId,mainInfo);
+            await ThemeM.delProducts(themeId,oldProductIdArr);
+            await ThemeM.addProducts(themeId,newProductIdArr);
+            this.$message.success('修改成功')
+            this.handleBack()
+        } catch (e) {
+            this.$message.error('修改失败');
+        }
 
     },
 
@@ -73,7 +93,7 @@ export default {
         }
 
         .form-container {
-            padding: 20px 20px 40px 20px;
+            padding: 20px 20px 100px 20px;
         }
     }
 </style>
