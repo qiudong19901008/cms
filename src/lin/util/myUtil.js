@@ -19,7 +19,10 @@ const createId = ()=>{
   .toString(36)
   .substring(2)
 }
-/**初始化图片数组 */
+/**
+ * 初始化图片数组 
+ * data格式:[{id,url},{id,url},...] 或者{id,url}
+ */
 const initUploadImageArr =(data)=>{
   console.log(data)
   const uploadImageArr = [];

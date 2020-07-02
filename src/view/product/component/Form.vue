@@ -11,7 +11,7 @@
                     <el-input size="medium" v-model="product.name" placeholder="商品名称"></el-input>
                 </el-form-item>
                 <el-form-item label="分类"  >
-                  <el-select placeholder="请选择" prop="category" v-model="product.category.id">
+                  <el-select placeholder="请选择" prop="category" v-model="product.category_id" @change="handleChange">
                     <el-option
                         v-for="item in categories"
                         :key="item.value"
@@ -30,7 +30,7 @@
                     <el-input v-model="product.summary" size="medium" type="textarea" :rows="4" placeholder="概述"/>
                 </el-form-item>
                 <el-form-item label="上架/下架">
-                <el-switch v-model="product.status" active-color="#13ce66" inactive-color="#ff4949"></el-switch>
+                <el-switch v-model="status" active-color="#13ce66" inactive-color="#ff4949" @change="handleStatus"></el-switch>
                 </el-form-item>
             </el-form>
         </div>
@@ -48,16 +48,17 @@
                 <el-button @click="handleDel">删除</el-button>
             </div>
             <div class="properties-table">
-                <el-table :data="product.properties" style="width: 100%">
-                  <el-table-column  type="selection"  width="55" />
+                <el-table :data="product.properties" style="width: 100%" @selection-change="handleSelect" ref="multiSelector">
+                  <el-table-column  type="selection"  width="55">
+                  </el-table-column>
                   <el-table-column label="属性名称">
                     <template slot-scope="scope">
-                      <el-input v-model="scope.row.name" :readonly="readOnly" ></el-input>
+                      <el-input v-model="scope.row.name" readonly></el-input>
                     </template>
                   </el-table-column>
                   <el-table-column label="属性属性">
                     <template slot-scope="scope">
-                      <el-input v-model="scope.row.detail" :readonly="readOnly"></el-input>
+                      <el-input v-model="scope.row.detail"  readonly></el-input>
                     </template>
                   </el-table-column>
                 </el-table>
@@ -112,20 +113,21 @@ export default {
         id: -1,
         main_img_url:'',
         name: '',
-        category:null,
         price:0,
         stock:0,
         summary: '',
         status:0,
+        category_id:0,
         images:[],
         properties: [],
       },
-      readOnly:true,//
+      status:false,//控制滑块状态
       dialogVisible:false,//控制属性对话框显示
       categories: [],//分类
       mainImgInitDataArr: [],//储存上传的头图
       imagesInitDataArr: [],//储存上传的详情页图
-      propertiesArr:[],//临时用来存储properties
+      propertiesArr:[],//临时用来存储对话框中的属性
+      selectionArr:[],//临时存储选中的属性
       rules: {
         'main_img_url':[
           {required: true,message: '头图不能为空',trigger: 'blur',}
@@ -168,52 +170,79 @@ export default {
       });
       //根据商品赋值
       const data = JSON.parse(JSON.stringify(this.data));
-      const imagesInitDataArr = [];
       if(data){
         this.product=data
+        //初始化图片
+        const imagesInitDataArr = [];
         data.images.map(item=>{
           imagesInitDataArr.push({id:item.img.id,url:item.img.url});
         });
-        //初始化图片
-        this.mainImgInitDataArr = initUploadImageArr({url:data.main_img_url,id:data.img_id});
         this.imagesInitDataArr = initUploadImageArr(imagesInitDataArr);
+        this.mainImgInitDataArr = initUploadImageArr({url:data.main_img_url,id:data.img_id});
         //初始化属性
         // this.propertiesArr=data.properties;
+        //初始化滑块状态
+        this.status = data.status==0?false:true;
+        console.log(this.product.category.id);
       }
     },
-    // 提交表单
-    async handleSubmit() {
-     
-    },
+    /**添加属性 */
     handleAdd(){
       this.dialogVisible=true;
       this.propertiesArr=[{name:'',detail:''}]
     },
+    /**编辑属性 */
     handleEdit(){
       this.dialogVisible=true;
       this.propertiesArr=JSON.parse(JSON.stringify(this.product.properties));
     },
+    /**删除属性 */
     handleDel(){
-
+      if(this.selectionArr.length<1){
+        this.$message.error('没有选中任何属性');
+        return;
+      }
+      const realProperties = this.product.properties;
+      this.selectionArr.map(property=>{
+        for(let index in realProperties){
+          if(realProperties[index].name ==property.name){
+            realProperties.splice(index,1);
+          }
+        }
+      })
     },
+    /**属性对话框关闭事件 */
     handlePropertyCancel(){
       this.dialogVisible=false;
       this.propertiesArr=[];
     },
+    /**属性对话框确认事件 */
     handlePropertyOk(){
       this.dialogVisible=false;
-      const realProperties = this.product.properties;
-      console.log(this.propertiesArr)
+      const realProperties = JSON.parse(JSON.stringify(this.product.properties));
       this.propertiesArr.map(property=>{
         for(let index in realProperties){
           if(realProperties[index].name ==property.name){
             realProperties[index]=property
-            return
+            return 
           }
         }
         realProperties.push(property);
       });
       this.propertiesArr=[];
+      this.product.properties=realProperties;
+    },
+    /**改变滑块状态 */
+    handleStatus(){
+      this.product.status = this.status==true?1:0;
+    },
+    /**属性表格选中事件触发*/
+    handleSelect(rows){
+      this.selectionArr = rows;
+    },
+    /**分类选择事件 */
+    handleChange(val){
+      this.category_id = val;
     },
     // 自定义图片上传组件上传
     async uploadImage(file) {
@@ -226,6 +255,11 @@ export default {
     // 表单重置
     resetForm() {
       this.init();
+    },
+    // 提交表单
+    async handleSubmit() {
+     console.log(this.product)
+     console.log()
     },
   },
 }

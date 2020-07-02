@@ -1,5 +1,4 @@
 import adminConfig from './admin'
-import bookConfig from './book' // 引入图书管理路由文件
 import bannerConfig from './banner'
 import themeConfig from './theme' 
 import categoryConfig from './category' 
@@ -48,7 +47,6 @@ let homeRouter = [
     inNav: false,
     icon: 'iconfont icon-rizhiguanli',
   },
-  bookConfig,
   adminConfig,
   bannerConfig,
   themeConfig,
