@@ -21,6 +21,13 @@
 /* eslint-disable */
 import ProductForm from './component/Form'
 import ProductM from '../../model/product'
+import { 
+  customImageUpload,
+  createId,
+  initUploadImageArr,
+  delArrPropeties,
+  addArrPropeties
+ } from '@/lin/util/myUtil'
 export default {
   name: 'Edit',
   components:{ProductForm},
@@ -48,7 +55,26 @@ export default {
     },
     /**提交form表单 */
     async handleSubmit(formData){
-       
+       const product_id=formData.id;
+       const addImageArr=[];
+       const addPropertyArr=[];
+       for(let i=0;i<formData.images.length;i++){
+         addImageArr.push({product_id});
+       }
+        for(let i=0;i<formData.properties.length;i++){
+         addPropertyArr.push({product_id});
+       }
+       formData.images=addArrPropeties(formData.images,addImageArr);
+       formData.properties=addArrPropeties(formData.properties,addPropertyArr);
+       delArrPropeties(formData.properties,'id');
+       try{
+         await ProductM.editOne(formData);
+         this.handleBack();
+         this.$message.success('修改成功');
+       }catch(e){
+         console.log(e);
+         this.$message.error('修改失败');
+       }
     },
   },
   

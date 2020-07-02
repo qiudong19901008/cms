@@ -11,7 +11,7 @@
                     <el-input size="medium" v-model="product.name" placeholder="商品名称"></el-input>
                 </el-form-item>
                 <el-form-item label="分类"  >
-                  <el-select placeholder="请选择" prop="category" v-model="product.category_id" @change="handleChange">
+                  <el-select placeholder="请选择" prop="category" v-model="product.category_id">
                     <el-option
                         v-for="item in categories"
                         :key="item.value"
@@ -117,7 +117,8 @@ export default {
         stock:0,
         summary: '',
         status:0,
-        category_id:0,
+        category_id:'请选择',
+        img_id:0,
         images:[],
         properties: [],
       },
@@ -136,7 +137,7 @@ export default {
            {required: true,message: '名称必填',trigger: 'blur',}
         ],
         'category': [
-         {required: true,message: '分类必选',trigger: 'blur',}
+         {required:true,type:'number',message: '分类必选',trigger: 'blur',}
         ],
         'price': [
          {required: true,message: '价格必填',trigger: 'blur',}
@@ -159,6 +160,20 @@ export default {
       this.mainImgInitDataArr=[]
       this.imagesInitDataArr=[]
       this.propertiesArr=[]
+      this.status=false
+      this.product={
+        id: -1,
+        main_img_url:'',
+        name: '',
+        price:0,
+        stock:0,
+        summary: '',
+        status:0,
+        category_id:'请选择',
+        img_id:0,
+        images:[],
+        properties: [],
+      }
       //获取分类
       const categories = (await CategoryM.getAll()).categories;
       categories.map(c=>{
@@ -172,18 +187,23 @@ export default {
       const data = JSON.parse(JSON.stringify(this.data));
       if(data){
         this.product=data
+        console.log(data)
         //初始化图片
-        const imagesInitDataArr = [];
-        data.images.map(item=>{
-          imagesInitDataArr.push({id:item.img.id,url:item.img.url});
-        });
-        this.imagesInitDataArr = initUploadImageArr(imagesInitDataArr);
-        this.mainImgInitDataArr = initUploadImageArr({url:data.main_img_url,id:data.img_id});
+        if(data.main_img_url){
+          console.log(data.main_img_url)
+          this.mainImgInitDataArr = initUploadImageArr({url:data.main_img_url,id:data.img_id});
+        }
+        if(data.images.length>0){
+          const imagesInitDataArr = [];
+          data.images.map(item=>{
+            imagesInitDataArr.push({id:item.img.id,url:item.img.url});
+          });
+          this.imagesInitDataArr = initUploadImageArr(imagesInitDataArr);
+        }
         //初始化属性
         // this.propertiesArr=data.properties;
         //初始化滑块状态
-        this.status = data.status==0?false:true;
-        console.log(this.product.category.id);
+        this.status = data.status==0?false:true; 
       }
     },
     /**添加属性 */
@@ -253,13 +273,39 @@ export default {
       })
     },
     // 表单重置
-    resetForm() {
-      this.init();
+    async resetForm() {
+      await this.init();
     },
     // 提交表单
     async handleSubmit() {
-     console.log(this.product)
-     console.log()
+      this.mainImgInitDataArr = await this.$refs.uploadMainImg.getValue();
+      this.imagesInitDataArr = await this.$refs.uploadImages.getValue();
+     //把头图获取
+     if(this.mainImgInitDataArr.length>0){
+        this.product.main_img_url=this.mainImgInitDataArr[0].display;
+        this.product.img_id=this.mainImgInitDataArr[0].imgId;
+     }
+     //把详情图获取
+     const images = [];
+     for(let i=0,size=this.imagesInitDataArr.length;i<size;i++){
+       images.push({
+         order:i,
+         img_id:this.imagesInitDataArr[i].imgId,
+        //  img:{
+        //    id:this.imagesInitDataArr[i].imgId,
+        //    url:this.imagesInitDataArr[i].display,
+        //  }
+       });
+     }
+     this.product.images=images;
+    //  console.log(this.mainImgInitDataArr)
+    // console.log(this.imagesInitDataArr)
+    // console.log(this.product)
+     this.$refs.form.validate((valid) => {
+        if (valid) {
+          this.$emit('submit', this.product)
+        }
+      })
     },
   },
 }

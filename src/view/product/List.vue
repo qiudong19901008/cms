@@ -109,11 +109,12 @@ export default {
       this.showDialog=false;
       this.loading=true;
       try {
-        const res= await ThemeM.delThemes(this.id);
-        this.getThemes();
+        const res= await ProductM.delOne(this.id);
+        this.getProducts();
         this.loading=false;
         this.$message.success('删除成功');
       } catch (e) {
+        console.log(e)
         this.loading=false;
         this.$message.error('删除失败');
       }

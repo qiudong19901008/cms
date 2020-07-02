@@ -37,7 +37,39 @@ class ProductM {
       url:`/v1/product/${id}`
     });
   }
-
+  /**
+   * @url POST /v1/product
+   * @return 新增商品
+   */
+  static async addOne(data){
+    return await _axios({
+      method:'post',
+      url:`/v1/product`,
+      data,
+    });
+  }
+  /**
+   * @url PUT /v1/product/edit
+   * @return 修改商品信息
+   */ 
+  static async editOne(data){
+    return await _axios({
+      method:'put',
+      url:`/v1/product/edit`,
+      data,
+    });
+  }
+  /**
+   * @url DELETE /v1/product/:id
+   * @return 删除商品信息
+   */
+  static async delOne(id){
+    return await _axios({
+      method:'delete',
+      url:`/v1/product/${id}`,
+    });
+  }
+  
   
 
 }

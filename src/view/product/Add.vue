@@ -31,7 +31,15 @@ export default {
     },
     /**提交form表单 */
     async handleSubmit(formData){
-       
+        console.log(formData);
+        try{
+            await ProductM.addOne(formData);
+            this.$message.success('新增成功');
+            this.handleBack();
+        }catch(e){
+            console.log(e);
+            this.$message.error('新增失败');
+        }
     },
   },
   
