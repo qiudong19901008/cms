@@ -94,7 +94,7 @@ export default {
   methods:{
     /**加载商品列表 */
     async getProducts(){
-      const data = await ProductM.getByKeyword({});
+      const data = await ProductM.getByKeyword({page:this.currentPage-1});
       this.productList=data.products;
       this.count=data.count;
       console.log(this.productList)
@@ -139,6 +139,7 @@ export default {
     },
     /**分页点击 */
     async handleCurrentChange(currentPage){
+      this.currentPage = currentPage;
       const page = currentPage-1;
       const data = await ProductM.getByKeyword({page});
       this.productList=data.products;
