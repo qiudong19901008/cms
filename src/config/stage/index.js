@@ -3,6 +3,7 @@ import bannerConfig from './banner'
 import themeConfig from './theme' 
 import categoryConfig from './category' 
 import productConfig from './product' 
+import orderConfig from './order' 
 import pluginsConfig from './plugin'
 import Utils from '@/lin/util/util'
 
@@ -51,7 +52,8 @@ let homeRouter = [
   bannerConfig,
   themeConfig,
   categoryConfig,
-  productConfig
+  productConfig,
+  orderConfig
 ]
 
 const plugins = [...pluginsConfig]

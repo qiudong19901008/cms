@@ -28,7 +28,7 @@
               <template slot-scope="scope">
                 <el-tag type="success" v-if="scope.row.status==1">上架中</el-tag>
                 <el-tag type="info" v-else>已下架</el-tag>
-              </template>v-if=
+              </template>
             </el-table-column>
             <el-table-column label="操作" fixed="right" width="250">
                 <template slot-scope="scope">
