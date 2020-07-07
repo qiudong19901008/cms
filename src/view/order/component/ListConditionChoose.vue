@@ -85,10 +85,7 @@ export default {
   methods:{
     /**搜索逻辑 */
     handleSearch(){
-      if(!this.selectedTime){
-        this.selectedTime=[];
-      }
-      this.$emit('search',this.inputContent,this.selectedTime);
+      this.$emit('search');
     },
     /**重置逻辑 */
     handleResert(){
@@ -98,16 +95,14 @@ export default {
     },
   },
   watch:{
-    // syncInputContent(){
-    //   this.tempInputContent = this.inputContent
-    //   this.$emit('update:tempInputContent',this.inputContent)
-    // }
-    // // tempInputContent(){
-    // //   return this.inputContent
-    // // },
-    // tempSelectedTime(){
-    //   return this.selectedContent
-    // }
+    inputContent(){
+      this.$emit('update:tempInputContent',this.inputContent)
+      console.log(this.tempInputContent);
+    },
+    selectedTime(){
+      this.$emit('update:tempSelectedTime',this.selectedTime)
+      console.log(this.selectedTime);
+    }
 
   }
 };

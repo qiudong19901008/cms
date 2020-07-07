@@ -12,7 +12,9 @@
     </ListConditionChoose>
     <!-- 订单表格 -->
     <ListTable
-    :orderListAndCount= "orderListAndCount"
+    :tempOrderList= "orderList"
+    :tempCount= "count"
+    :tempLoading = "loading"
     @showDialog= "handleShowDialog"
     @currentChange= "handleCurrentChange"
     >
@@ -41,9 +43,11 @@ export default {
   data(){
     return {
       inputContent:'',//存储当前输入的内容
-      selectedTime:[],
-      orderListAndCount:null,
+      selectedTime:[],//存储当前选中的时间
+      orderList:[],//列表数据
+      count:-1,//当前数据总数
       orderId:-1,//为发货准备的id
+      loading:false,//加载数据控制动画
     }
   },
   async created(){
@@ -53,13 +57,74 @@ export default {
     /**组件初始化 */
     async init(params ={}){
       const data = await orderM.getByPageCondition(params);
-      this.orderListAndCount = data;
+      this.orderList = data.orders;
+      this.count = data.count;
     },
 
     /**搜索点击 */
-    async handleSearch(input,time){
+    async handleSearch(){
+      const params = this._assembleParams();
+      try{
+        this.loading=true;
+        this.init(params);
+        this.loading=false;
+        // this.$message.success('发货成功');
+      }catch(e){
+        console.log(e);
+        this.loading=false;
+        // this.$message.error('发货失败')
+      }
+    },
+    /**重置 */
+    async handleReset(){
+      this.init();
+    },
+
+    /**分页查询 */
+    async handleCurrentChange(currentPage){
+      const page = currentPage-1;
+      const params = this._assembleParams();
+      params.page=page;
+      try{
+        this.loading=true;
+        this.init(params);
+        this.loading=false;
+      }catch(e){
+        this.loading=false;
+      }
+    },
+
+    /**弹出快递dialog */
+    async handleShowDialog(id){
+      this.orderId = id;
+    },
+    /**确认发货 */
+    async handleBeSureDeliver(data){
+      data.orderId =this.orderId;
+      this.orderId=-1;
+      try{
+        this.loading=true;
+        await orderM.deliverGoods(data);
+        await this.init();
+        this.loading=false;
+        this.$message.success('发货成功');
+      }catch(e){
+        console.log(e);
+        this.loading=false;
+        this.$message.error('发货失败')
+      }
+    },
+    /**关闭快递dialog */
+    handleHideDialog(){
+      this.orderId=-1;
+    },
+
+    /**组装发送参数 */
+    _assembleParams(){
       const params = {}
-      if(time.length>1){
+      const input = this.inputContent;
+      const time = this.selectedTime;
+      if(time && time.length>1){
         params.start=time[0];
         params.end=time[1];
       }
@@ -72,47 +137,8 @@ export default {
         params.orderNo = '';
         params.name = input;
       }   
-      this.queryCondition=params;
-      try{
-        this.init(params);
-        // this.$message.success('发货成功');
-      }catch(e){
-        console.log(e);
-        // this.$message.error('发货失败')
-      }
-    },
-    /**重置 */
-    async handleReset(){
-      this.init();
-    },
-
-    /**分页查询 */
-    async handleCurrentChange(currentPage){
-      const page = currentPage-1;
-      this.init();
-    },
-
-    /**弹出快递dialog */
-    async handleShowDialog(id){
-      this.orderId = id;
-    },
-    /**确认发货 */
-    async handleBeSureDeliver(data){
-      data.orderId =this.orderId;
-      this.orderId=-1;
-      try{
-        await orderM.deliverGoods(data);
-        await this.init();
-        this.$message.success('发货成功');
-      }catch(e){
-        console.log(e);
-        this.$message.error('发货失败')
-      }
-    },
-    /**关闭快递dialog */
-    handleHideDialog(){
-      this.orderId=-1;
-    },
+      return params;
+    }
   
     
   },

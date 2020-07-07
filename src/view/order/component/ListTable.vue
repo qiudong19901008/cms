@@ -1,6 +1,6 @@
 <template>
     <div class="container">
-      <el-table :data="orders">
+      <el-table :data="tempOrderList" v-loading="tempLoading">
           <!-- label定义列头显示的文本，prop定义要渲染data数组中元素的哪个字段，width定义列宽 -->
           <el-table-column label="序号" prop="id" width="160"></el-table-column>
           <el-table-column label="订单号" prop="order_no" width="200"></el-table-column>
@@ -21,7 +21,7 @@
           <el-table-column label="操作" fixed="right" width="170">
               <template slot-scope="scope"> 
                   <el-button plain size="mini" type="primary" @click="handleShowDialog(scope.row.id)" v-if="scope.row.status ==2">发货</el-button>
-                  <el-button plain size="mini" type="primary" disabled v-else>发货</el-button>
+                  <el-button plain size="mini" type="primary" disabled v-else>禁用</el-button>
               </template>
           </el-table-column>
       </el-table>
@@ -32,7 +32,7 @@
           layout="prev, pager, next"
           @current-change="handleCurrentChange"
           :current-page="currentPage"
-          :total="count">
+          :total="tempCount">
         </el-pagination>
       </div>
     </div>
@@ -45,13 +45,16 @@
 export default {
   name: 'ListTable',
   props:{
-    orderListAndCount:Object,
+    tempOrderList:{
+      type:Array,
+      default:{}
+    },
+    tempCount:Number,
+    tempLoading:Boolean,
   },
   data() {
     return{
       currentPage:1,
-      orders:orderListAndCount.orders,
-      count:orderListAndCount.count
     }
   },
   methods:{
