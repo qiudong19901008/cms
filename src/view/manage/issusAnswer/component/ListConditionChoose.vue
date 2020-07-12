@@ -2,24 +2,23 @@
     <!-- @keyup.enter.native="search" -->
     <div class = "container">
         <div class="form-container">
-          <!-- 名称选择 -->
-          <el-input class="input" size="medium" placeholder="订单号/收货人" type="text" style="width:200px" 
-            v-model="inputContent" @keyup.enter.native="handleSearch">
+          <!-- 分类选择 -->
+          <el-select class="condition"  size="medium" filterable placeholder="分类" v-model="categoryId" >
+            <el-option
+              v-for="item in categoryList"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value">
+            </el-option>
+          </el-select>
+          <!-- 关键字选择 -->
+          <el-input class="condition" size="medium" placeholder="关键字" type="text" style="width:200px" 
+            v-model="keyword" @keyup.enter.native="handleSearch">
           </el-input>
-          <!-- 时间段选择  @change = "handlePick" -->
-          <el-date-picker
-              v-model="selectedTime"
-              value-format="yyyy-MM-dd"
-              format="yyyy-MM-dd"
-              type="daterange"
-              align="right"
-              unlink-panels
-              range-separator="至"
-              start-placeholder="开始日期"
-              end-placeholder="结束日期"
-              :picker-options="pickerOptions"
-          >
-          </el-date-picker>
+          <!-- 问题选择 -->
+          <el-input class="condition" size="medium" placeholder="问题" type="text" style="width:400px" 
+            v-model="issue" @keyup.enter.native="handleSearch">
+          </el-input>
         </div>
         <!-- 搜索按钮 | 重置按钮 -->
         <div class = "btn-container">
@@ -34,52 +33,17 @@
 export default {
   name: 'ListConditionChoose',
   props:{
-    tempInputContent:String,
-    tempSelectedTime:Array,
+    tempCategoryList:Array,
+    tempKeyword:String,
+    tempIssue:String,
+    tempCategoryId:Number,
   },
   data() {
     return { 
-      inputContent:'',//存储当前输入的内容
-      selectedTime: [],//存储当前选择的时间
-       //input插槽下拉框数据
-      // selectList:[
-      //   { value: 'orderNo',label: '订单号',},
-      //   { value: 'name',label: '收货人',},
-      // ],
-      // selectListValue:'name',//当前input插槽选中的数据
-  
-      //时间选择的快捷方式
-      pickerOptions: {
-        shortcuts: [
-          {
-            text: '最近一周',
-            onClick(picker) {
-              const end = new Date();
-              const start = new Date();
-              start.setTime(start.getTime() - 3600 * 1000 * 24 * 7);
-              picker.$emit('pick', [start, end]);
-            }
-          }, 
-          {
-            text: '最近一个月',
-            onClick(picker) {
-              const end = new Date();
-              const start = new Date();
-              start.setTime(start.getTime() - 3600 * 1000 * 24 * 30);
-              picker.$emit('pick', [start, end]);
-            }
-          }, 
-          {
-            text: '最近三个月',
-            onClick(picker) {
-              const end = new Date();
-              const start = new Date();
-              start.setTime(start.getTime() - 3600 * 1000 * 24 * 90);
-              picker.$emit('pick', [start, end]);
-            }
-          }
-        ]
-      },
+        categoryId:undefined,
+        keyword:'',
+        issue:'',
+        categoryList:[]      
     };
   },
   methods:{
@@ -89,21 +53,29 @@ export default {
     },
     /**重置逻辑 */
     handleResert(){
-      this.selectedContent = '';
-      this.selectedTime =[];
+      this.keyword = '';
+      this.issue ='';
+      this.categoryId=undefined;
       this.$emit('reset')
     },
   },
   watch:{
-    inputContent(){
-      this.$emit('update:tempInputContent',this.inputContent)
-      console.log(this.tempInputContent);
+    keyword(){
+      this.$emit('update:tempKeyword',this.keyword)
     },
-    selectedTime(){
-      this.$emit('update:tempSelectedTime',this.selectedTime)
-      console.log(this.selectedTime);
+    issue(){
+      this.$emit('update:tempIssue',this.issue)
+    },
+    categoryId(){
+      this.$emit('update:tempCategoryId',this.categoryId)
+    },
+    tempCategoryList(){
+      const temp = []
+      this.tempCategoryList.forEach(c=>{
+        temp.push({value:c.id,label:c.name})
+      })
+      this.categoryList=temp;
     }
-
   }
 };
 </script>
@@ -114,7 +86,7 @@ export default {
     align-items: center;
     padding:30px 30px 0 30px;
     .form-container{
-      .input{
+      .condition{
         margin-right:30px;
       }
     }

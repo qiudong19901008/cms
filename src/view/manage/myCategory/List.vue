@@ -2,22 +2,20 @@
 <template>
   <div class="lin-container">
     <div class="lin-title">
-      <div>问题答案列表</div>
+      <div>分类列表</div>
       <el-button type="primary" @click="handleShowDialog">新增</el-button>
     </div>
     <!-- 表格条件查询 -->
     <ListConditionChoose 
     :tempCategoryList ="categoryList"
-    :tempIssue.sync ="issue"
-    :tempKeyword.sync ="keyword"
-    :tempCategoryId.sync ="categoryId"
+    :tempName.sync ="name"
     @reset = "handleReset"
     @search = "handleSearch"
     >
     </ListConditionChoose>
     <!-- 表格 -->
     <ListTable
-    :tempIssueList= "issueList"
+    :tempCategoryList= "categoryList"
     :tempCount= "count"
     @showDialog= "handleShowDialog"
     @currentChange= "handleCurrentChange"
@@ -27,9 +25,7 @@
     <ListDialog 
     @beSureExecute= "handleBeSureExecute" 
     @hideDialog= "handleHideDialog"
-    :tempIssueAnwser="issueAnwser"
-    :tempCategoryList ="categoryList"
-    :tempIsCheck="isCheck"
+    :tempCategory="category"
     :tempIsDelete="isDelete"
     >
     </ListDialog>
@@ -38,7 +34,6 @@
 
 <script>
 /* eslint-disable */
-import IssueAnwserM from '../../../model/issueAnwser'
 import MyCategoryM from '../../../model/myCategory'
 import ListConditionChoose from './component/ListConditionChoose'
 import ListTable from './component/ListTable'
@@ -53,17 +48,12 @@ export default {
   },
   data(){
     return {
-      issueList:[],//列表数据
+      categoryList:[],//列表数据
       count:-1,//当前数据总数
 
-      categoryList:[],//问题分类列表
-      issue:'',
-      keyword:'',
-      categoryId:0,
+      name:'',
 
-      issueAnwser:null,//一个问题实体
-      // issueId:-1,//为删除准备的id
-      isCheck:false,//是否是查看
+      category:null,//一个分类实体
       isDelete:false,//是否是删除
     }
   },
@@ -73,12 +63,9 @@ export default {
   methods:{
     /**组件初始化 */
     async init(params ={}){
-      const data = await IssueAnwserM.getAll(params);
-      const categories = await MyCategoryM.getAll();
-      this.issueList = data.list;
-      this.count = data.count;
+      const categories = await MyCategoryM.getAll(params);
+      this.count = categories.count;
       this.categoryList = categories.list;
-      console.log(this.count)
     },
 
     /**搜索点击 */
@@ -95,6 +82,7 @@ export default {
     async handleCurrentChange(currentPage){
       const page = currentPage-1;
       const params = this._assembleParams();
+      console.log(params)
       params.page=page;
       try{
         this.init(params);
@@ -106,50 +94,41 @@ export default {
 
     /**弹出新增,编辑,查看dialog */
     async handleShowDialog(row,type){
+      console.log(row)
       if(type == 'edit'){
-        this.issueAnwser = row;
-      }
-      if(type =='check'){
-        this.issueAnwser = row;
-        this.isCheck=true;
+        this.category = row;
       }
       if(type == 'del'){
-        this.issueAnwser = row;
+        this.category = row;
         this.isDelete = true;
       }
       if(!type){
-        this.issueAnwser={
+        this.category={
           id:-2,
-          issue:'',
-          anwser:'',
-          category:{
-            id:1
-          },
-          keyword:''
+          name:'',
+          description:'',
         }
       }
     },
     /**确认新增,修改,删除操作 */
-    async handleBeSureExecute(issueAnwser,type){
-      const id =issueAnwser.id;
+    async handleBeSureExecute(category,type){
+      const id =category.id;
       if(type == 'del'){
-        await IssueAnwserM.deleteOne(id);
+        await MyCategoryM.deleteOne(id);
         this.handleHideDialog();
         this.handleSearch();
         return ;
       }
       
       let params = {
-        issue:issueAnwser.issue,
-        anwser:issueAnwser.anwser,
-        keyword:issueAnwser.keyword,
-        categoryId:issueAnwser.category.id,
+        name:category.name,
+        description:category.description,
       }
       try{
         if(id>0){//修改
-          await IssueAnwserM.updateOne(id,params);
+          await MyCategoryM.updateOne(id,params);
         }else{//新增
-          await IssueAnwserM.createOne(params);
+          await MyCategoryM.createOne(params);
         }
         this.handleHideDialog();
         this.handleSearch();
@@ -162,30 +141,20 @@ export default {
     },
     /**关闭dialog */
     handleHideDialog(){
-      this.issueAnwser={
+      this.category={
         id:-1,
-        issue:'',
-        anwser:'',
-        category:{
-          id:1
-        },
-        keyword:''
+        name:'',
+        description:'',
       }
       setTimeout(()=>{
         this.isDelete=false;
       },500)
-      this.isCheck=false;
-      
     },
 
     /**组装发送参数 */
     _assembleParams(){
       const params = {
-        issue:this.issue,
-        keyword:this.keyword,
-      }
-      if(this.categoryId!=0){
-        params.categoryId =this.categoryId;
+        name:this.name,
       }
       return params;
     }

@@ -77,11 +77,39 @@ const addArrPropeties = (arr,addP)=>{
   return resArr;
 }
 
+/**
+ * 截取字符串前n位,并添加...
+ */
+const getSummary = (val,number=10)=>{
+  let Datas = val;
+  //所返回数据length为7是添加"..."
+    let Datas_msg = Datas.substr(0, number) + "...";
+    if (Datas.length <= 8) {
+      return Datas;
+    } else {
+      return Datas_msg;
+    }
+}
+/**
+ * 时间格式化
+ */
+const formatDate = (val)=>{
+  const t=new Date(val);
+  return t.getFullYear()+"-"+fillZero((t.getMonth()+1))+"-"+fillZero(t.getDate())+" "+fillZero(t.getHours())+":"+fillZero(t.getMinutes())+":"+fillZero(t.getSeconds());
+}
+/**
+ * 小于10补0
+ */
+const  fillZero = (val) =>{
+  return val<10?'0'+val:val;
+}
 
 export {
   customImageUpload,
   createId,
   initUploadImageArr,
   delArrPropeties,
-  addArrPropeties
+  addArrPropeties,
+  getSummary,
+  formatDate,
 }

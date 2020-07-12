@@ -16,6 +16,14 @@ const manageRouter = {
       inNav: true,
       icon: 'iconfont icon-tushuguanli',
     },
+    {
+      title: '知识分类列表',
+      type: 'view',
+      route: '/myCategory/list',
+      filePath: 'view/manage/myCategory/List.vue',
+      inNav: true,
+      icon: 'iconfont icon-tushuguanli',
+    },
     
   ]
 }

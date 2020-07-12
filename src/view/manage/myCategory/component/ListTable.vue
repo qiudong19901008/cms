@@ -1,28 +1,12 @@
 <template>
     <div class="container">
-      <el-table :data="tempIssueList" >
+      <el-table :data="tempCategoryList" >
           <!-- label定义列头显示的文本，prop定义要渲染data数组中元素的哪个字段，width定义列宽 -->
           <el-table-column label="序号" prop="id" width="160"></el-table-column>
-          <el-table-column label="问题" prop="issue" width="200"></el-table-column>
-          <el-table-column label="答案"  class="anwser-summary">
-              <template slot-scope="scope">
-                {{scope.row.anwser | getSummary}}
-              </template>
-          </el-table-column>
-          <el-table-column label="分类" prop="category.name" ></el-table-column>
-          <el-table-column label="关键词" prop="keyword" ></el-table-column>
-          <el-table-column 
-          label="更新时间" 
-          prop="update_time"
-          sortable
-          >
-            <template slot-scope="scope">
-              {{ scope.row.update_time | formatDate}}
-            </template>
-          </el-table-column>
+          <el-table-column label="名称" prop="name" width="200"></el-table-column>
+          <el-table-column label="描述" prop="description" ></el-table-column>
           <el-table-column label="操作" fixed="right" >
               <template slot-scope="scope"> 
-                  <el-button plain size="mini" type="primary" @click="handleShowDialog(scope.row,'check')" >查看</el-button>
                   <el-button plain size="mini" type="warn" @click="handleShowDialog(scope.row,'edit')" >编辑</el-button>
                   <el-button plain size="mini" type="danger" @click="handleShowDialog(scope.row,'del')" >删除</el-button>
               </template>
@@ -46,13 +30,12 @@
 </template>
 
 <script>
-import {getSummary,formatDate} from '../../../../lin/util/myUtil'
 export default {
   name: 'ListTable',
   props:{
-    tempIssueList:{
+    tempCategoryList:{
       type:Array,
-      default:[]
+      default:[],
     },
     tempCount:Number,
     tempCurrentPage:{
@@ -67,7 +50,7 @@ export default {
   },
   methods:{
 
-    /**显示查看,编辑dialog */
+    /**显示编辑删除dialog */
     handleShowDialog(row,type){
       this.$emit('showDialog',row,type);
     },
@@ -76,11 +59,7 @@ export default {
       this.$emit('currentChange',currentPage)
     },
   },
-  filters:{
-    getSummary,
-    formatDate
-  }
-   
+
 };
 </script>
 <style>
