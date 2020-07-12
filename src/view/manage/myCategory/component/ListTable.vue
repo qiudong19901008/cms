@@ -7,7 +7,7 @@
           <el-table-column label="描述" prop="description" ></el-table-column>
           <el-table-column label="操作" fixed="right" >
               <template slot-scope="scope"> 
-                  <el-button plain size="mini" type="warn" @click="handleShowDialog(scope.row,'edit')" >编辑</el-button>
+                  <el-button plain size="mini" type="warning" @click="handleShowDialog(scope.row,'edit')" >编辑</el-button>
                   <el-button plain size="mini" type="danger" @click="handleShowDialog(scope.row,'del')" >删除</el-button>
               </template>
           </el-table-column>

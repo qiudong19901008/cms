@@ -6,6 +6,7 @@
             width="60%"
             :showClose="false"
             :visible.sync= "isShowDialog"
+             :close-on-click-modal="false"
             v-if="!tempIsDelete"
             center>
             <el-form @submit.native.prevent  :rules="rules" ref='form' status-icon :model="issueAnwser" label-width="100px">
@@ -40,6 +41,7 @@
         title="提示"
         width="30%"
         :showClose="false"
+         :close-on-click-modal="false"
         :visible.sync="isShowDialog"
         v-if="tempIsDelete"
         center>

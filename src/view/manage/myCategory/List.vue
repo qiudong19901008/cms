@@ -94,7 +94,6 @@ export default {
 
     /**弹出新增,编辑,查看dialog */
     async handleShowDialog(row,type){
-      console.log(row)
       if(type == 'edit'){
         this.category = row;
       }

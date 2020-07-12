@@ -6,6 +6,7 @@
             width="60%"
             :showClose="false"
             :visible.sync= "isShowDialog"
+            :close-on-click-modal="false"
             v-if="!tempIsDelete"
             center>
             <el-form @submit.native.prevent  :rules="rules" ref='form' status-icon :model="category" label-width="100px">
@@ -27,6 +28,7 @@
         width="30%"
         :showClose="false"
         :visible.sync="isShowDialog"
+        ::close-on-click-modal="false"
         v-if="tempIsDelete"
         center>
           <span>确定删除该条数据？</span>

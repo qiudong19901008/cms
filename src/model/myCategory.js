@@ -6,6 +6,10 @@ class MyCategoryM {
    * 获取所有分类列表
    */
   static async getAll({name}){
+    // const data = {}
+    // if(name){
+    //   data.name=name
+    // }
     return await _axios({
       method:'get',
       url:'v1/mc/list',

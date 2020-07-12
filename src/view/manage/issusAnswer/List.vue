@@ -74,7 +74,7 @@ export default {
     /**组件初始化 */
     async init(params ={}){
       const data = await IssueAnwserM.getAll(params);
-      const categories = await MyCategoryM.getAll();
+      const categories = await MyCategoryM.getAll({});
       this.issueList = data.list;
       this.count = data.count;
       this.categoryList = categories.list;
