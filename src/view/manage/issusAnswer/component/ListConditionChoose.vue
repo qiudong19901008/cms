@@ -2,6 +2,14 @@
     <!-- @keyup.enter.native="search" -->
     <div class = "container">
         <div class="form-container">
+          <!-- 问题选择 -->
+          <el-input class="condition" size="medium" placeholder="问题" type="text" style="width:400px" 
+            v-model="issue" @keyup.enter.native="handleSearch">
+          </el-input>
+          <!-- 关键字选择 -->
+          <el-input class="condition" size="medium" placeholder="关键字" type="text" style="width:200px" 
+            v-model="keyword" @keyup.enter.native="handleSearch">
+          </el-input>
           <!-- 分类选择 -->
           <el-select class="condition"  size="medium" filterable placeholder="分类" v-model="categoryId" >
             <el-option
@@ -11,14 +19,7 @@
               :value="item.value">
             </el-option>
           </el-select>
-          <!-- 关键字选择 -->
-          <el-input class="condition" size="medium" placeholder="关键字" type="text" style="width:200px" 
-            v-model="keyword" @keyup.enter.native="handleSearch">
-          </el-input>
-          <!-- 问题选择 -->
-          <el-input class="condition" size="medium" placeholder="问题" type="text" style="width:400px" 
-            v-model="issue" @keyup.enter.native="handleSearch">
-          </el-input>
+          
         </div>
         <!-- 搜索按钮 | 重置按钮 -->
         <div class = "btn-container">
