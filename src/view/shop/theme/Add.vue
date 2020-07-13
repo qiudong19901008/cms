@@ -1,7 +1,7 @@
 <template>
     <div class="container">
         <div class="header">
-            <span>新增商品</span>
+            <span>新增主题</span>
             <span class="back" @click="handleBack">
                 <i class="iconfont icon-fanhui"/> 返回
             </span>
@@ -10,7 +10,7 @@
         <div class="form-container">
             <el-row>
                 <el-col :lg="16" :md="20" :sm="24" :xs="24">
-                    <ProductForm @submit="handleSubmit"/>
+                    <ThemeForm @submit="handleSubmit"/>
                 </el-col>
             </el-row>
         </div>
@@ -19,11 +19,11 @@
 
 <script>
 /* eslint-disable */
-import ProductForm from './component/Form'
-import ProductM from '../../model/product'
+import ThemeForm from './component/Form'
+import ThemeM from '@/model/theme'
 export default {
   name: 'Add',
-  components:{ProductForm},
+  components:{ThemeForm},
   methods: {
     // 返回按钮点击事件
     handleBack() {
@@ -31,13 +31,20 @@ export default {
     },
     /**提交form表单 */
     async handleSubmit(formData){
-        console.log(formData);
-        try{
-            await ProductM.addOne(formData);
-            this.$message.success('新增成功');
-            this.handleBack();
-        }catch(e){
-            console.log(e);
+        const products = JSON.parse(JSON.stringify(formData.products));
+        const mainInfo = {
+          name:formData.name,
+          description:formData.description,
+          head_img_id:formData.head_img.id,
+          topic_img_id:formData.topic_img.id,
+        };
+        const productIdArr = products.map(p=>p.id);
+        try {
+            const res = await ThemeM.createOne(mainInfo)
+            await ThemeM.addProducts(res.id,productIdArr);
+            this.$message.success('新增成功')
+            this.handleBack()
+        } catch (e) {
             this.$message.error('新增失败');
         }
     },

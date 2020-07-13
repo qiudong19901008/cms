@@ -11,7 +11,7 @@ const manageRouter = {
     {
       title: '问题答案列表',
       type: 'view',
-      route: '/issusAnswer/list',
+      route: '/manage/issusAnswer/list',
       filePath: 'view/manage/issusAnswer/List.vue',
       inNav: true,
       icon: 'iconfont icon-tushuguanli',
@@ -19,7 +19,7 @@ const manageRouter = {
     {
       title: '知识分类列表',
       type: 'view',
-      route: '/myCategory/list',
+      route: '/manage/myCategory/list',
       filePath: 'view/manage/myCategory/List.vue',
       inNav: true,
       icon: 'iconfont icon-tushuguanli',

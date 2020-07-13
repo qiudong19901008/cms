@@ -19,7 +19,7 @@
 </template>
 
 <script>
-import ThemeM from '../../model/theme'
+import ThemeM from '@/model/theme'
 import ThemeForm from './component/Form'
 export default {
   name: 'Edit',

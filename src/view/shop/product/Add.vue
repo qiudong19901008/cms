@@ -1,8 +1,7 @@
-<!-- src/views/banner/add.vue -->
 <template>
     <div class="container">
         <div class="header">
-            <span>新增轮播图</span>
+            <span>新增商品</span>
             <span class="back" @click="handleBack">
                 <i class="iconfont icon-fanhui"/> 返回
             </span>
@@ -11,7 +10,7 @@
         <div class="form-container">
             <el-row>
                 <el-col :lg="16" :md="20" :sm="24" :xs="24">
-                    <BannerForm @submit="handleSubmit"/>
+                    <ProductForm @submit="handleSubmit"/>
                 </el-col>
             </el-row>
         </div>
@@ -20,10 +19,11 @@
 
 <script>
 /* eslint-disable */
-import BannerForm from './compenent/form'
-import BannerM from '../../model/banner'
+import ProductForm from './component/Form'
+import ProductM from '@/model/product'
 export default {
   name: 'Add',
+  components:{ProductForm},
   methods: {
     // 返回按钮点击事件
     handleBack() {
@@ -31,22 +31,18 @@ export default {
     },
     /**提交form表单 */
     async handleSubmit(formData){
-        //提取三个有用的字段img_id、key_word、type
-        formData.items = formData.items.map(item => ({
-            img_id: item.img_id,
-            key_word: item.key_word,
-            type: item.type,
-        }))
-        try {
-            const res = await BannerM.createBanner(formData)
-            this.$message.success('新增成功')
-            this.handleBack()
-        } catch (e) {
-            this.$message.error(e)
+        console.log(formData);
+        try{
+            await ProductM.addOne(formData);
+            this.$message.success('新增成功');
+            this.handleBack();
+        }catch(e){
+            console.log(e);
+            this.$message.error('新增失败');
         }
     },
   },
-  components:{BannerForm},
+  
 }
 </script>
 
@@ -73,7 +69,9 @@ export default {
         }
 
         .form-container {
-            margin-top: 40px;
+           padding: 20px 20px 100px 20px;
         }
     }
+
+    
 </style>

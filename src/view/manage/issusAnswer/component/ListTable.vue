@@ -46,7 +46,7 @@
 </template>
 
 <script>
-import {getSummary,formatDate} from '../../../../lin/util/myUtil'
+import {getSummary,formatDate} from '@/lin/util/myUtil'
 export default {
   name: 'ListTable',
   props:{

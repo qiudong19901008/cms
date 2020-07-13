@@ -31,7 +31,7 @@
 
 <script>
 /* eslint-disable */
-import OrderM from '../../model/order'
+import OrderM from '@/model/order'
 import ListConditionChoose from './component/ListConditionChoose'
 import ListTable from './component/ListTable'
 import ListDialog from './component/ListDialog'

@@ -72,7 +72,7 @@ export default {
           issue:'',
           anwser:'',
           category:{
-            id:1,
+            id:-1,
           },
           keyword:''
       },

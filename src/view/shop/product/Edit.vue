@@ -20,7 +20,7 @@
 <script>
 /* eslint-disable */
 import ProductForm from './component/Form'
-import ProductM from '../../model/product'
+import ProductM from '@/model/product'
 import { 
   customImageUpload,
   createId,

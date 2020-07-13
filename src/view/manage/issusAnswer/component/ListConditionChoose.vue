@@ -3,7 +3,7 @@
     <div class = "container">
         <div class="form-container">
           <!-- 问题选择 -->
-          <el-input class="condition" size="medium" placeholder="问题" type="text" style="width:400px" 
+          <el-input class="condition" size="medium" placeholder="问题/关键字/答案" type="text" style="width:400px" 
             v-model="issue" @keyup.enter.native="handleSearch">
           </el-input>
           <!-- 关键字选择 -->

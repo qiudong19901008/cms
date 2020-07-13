@@ -43,7 +43,7 @@
 
 <script>
 /* eslint-disable */
-import CategoryM from '../../model/category'
+import CategoryM from '@/model/category'
 import Add from './Add'
 import Edit from './Edit'
 export default {

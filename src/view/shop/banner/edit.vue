@@ -21,7 +21,7 @@
 <script>
 /* eslint-disable */
 import BannerForm from './compenent/form'
-import BannerM from '../../model/banner'
+import BannerM from '@/model/banner'
 export default {
   name: 'Edit',
   props:{

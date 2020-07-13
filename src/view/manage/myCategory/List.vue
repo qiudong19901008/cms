@@ -34,7 +34,7 @@
 
 <script>
 /* eslint-disable */
-import MyCategoryM from '../../../model/myCategory'
+import MyCategoryM from '@/model/myCategory'
 import ListConditionChoose from './component/ListConditionChoose'
 import ListTable from './component/ListTable'
 import ListDialog from './component/ListDialog'

@@ -2,7 +2,7 @@
 <template>
     <div class="container">
         <div class="header">
-            <span>编辑分类</span>
+            <span>新增轮播图</span>
             <span class="back" @click="handleBack">
                 <i class="iconfont icon-fanhui"/> 返回
             </span>
@@ -11,7 +11,7 @@
         <div class="form-container">
             <el-row>
                 <el-col :lg="16" :md="20" :sm="24" :xs="24">
-                    <CategoryForm :data="category" @submit="handleSubmit"/>
+                    <BannerForm @submit="handleSubmit"/>
                 </el-col>
             </el-row>
         </div>
@@ -20,53 +20,33 @@
 
 <script>
 /* eslint-disable */
-import CategoryForm from './component/Form'
-import CategoryM from '../../model/category'
+import BannerForm from './compenent/form'
+import BannerM from '@/model/banner'
 export default {
-  name: 'Edit',
-  props:{
-      data:Object,
-  },
-  data(){
-    return{
-      category:null
-    }
-  },
-  components:{CategoryForm},
-  created(){
-      this.init();
-  },
+  name: 'Add',
   methods: {
-    /**
-     * 初始化
-     */
-    init(){
-      const data = JSON.parse(JSON.stringify(this.data));
-      this.category = data;
-    },
-    //提交事件
-    async handleSubmit(formData){
-      const id = formData.id;
-      const submitInfo={
-           name:formData.name,
-           description:formData.description,
-           topic_img_id:formData.topic_img.id,
-           from:1
-       };
-       try{
-           await CategoryM.editOne(id,submitInfo);
-           this.$message.success('修改成功');
-           this.handleBack();
-       }catch(e){
-           this.$message.error('修改失败');
-       }
-    },
     // 返回按钮点击事件
     handleBack() {
       this.$emit('back')
     },
+    /**提交form表单 */
+    async handleSubmit(formData){
+        //提取三个有用的字段img_id、key_word、type
+        formData.items = formData.items.map(item => ({
+            img_id: item.img_id,
+            key_word: item.key_word,
+            type: item.type,
+        }))
+        try {
+            const res = await BannerM.createBanner(formData)
+            this.$message.success('新增成功')
+            this.handleBack()
+        } catch (e) {
+            this.$message.error(e)
+        }
+    },
   },
-  
+  components:{BannerForm},
 }
 </script>
 

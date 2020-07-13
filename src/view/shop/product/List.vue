@@ -68,7 +68,7 @@
 
 <script>
 /* eslint-disable */
-import ProductM from '../../model/product'
+import ProductM from '@/model/product'
 import Add from './Add'
 import Edit from './Edit'
 export default {

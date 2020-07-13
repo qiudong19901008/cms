@@ -91,8 +91,8 @@
 
 <script>
 import UploadImgs from '@/component/base/upload-image'
-import ProductM from '../../../model/product'
-import CategoryM from '../../../model/category'
+import ProductM from '@/model/product'
+import CategoryM from '@/model/category'
 import { 
   customImageUpload,
   createId,

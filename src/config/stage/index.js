@@ -1,25 +1,21 @@
 import adminConfig from './admin'
-import bannerConfig from './shop'
-// import themeConfig from './theme' 
-// import categoryConfig from './category' 
-// import productConfig from './product' 
-// import orderConfig from './order' 
+import shopConfig from './shop'
 import manageConfig from './manage'
 import pluginsConfig from './plugin'
 import Utils from '@/lin/util/util'
 
 // eslint-disable-next-line import/no-mutable-exports
 let homeRouter = [
-  {
-    title: '林间有风',
-    type: 'view',
-    name: Symbol('about'),
-    route: '/about',
-    filePath: 'view/about/about.vue',
-    inNav: true,
-    icon: 'iconfont icon-iconset0103',
-    order: 1,
-  },
+  // {
+  //   title: '林间有风',
+  //   type: 'view',
+  //   name: Symbol('about'),
+  //   route: '/about',
+  //   filePath: 'view/about/about.vue',
+  //   inNav: true,
+  //   icon: 'iconfont icon-iconset0103',
+  //   order: 1,
+  // },
   {
     title: '日志管理',
     type: 'view',
@@ -28,7 +24,7 @@ let homeRouter = [
     filePath: 'view/log/log.vue',
     inNav: true,
     icon: 'iconfont icon-rizhiguanli',
-    order: 2,
+    order: 1,
     permission: ['查询所有日志'],
   },
   {
@@ -50,12 +46,8 @@ let homeRouter = [
     icon: 'iconfont icon-rizhiguanli',
   },
   adminConfig,
-  bannerConfig,
+  shopConfig,
   manageConfig,
-  // themeConfig,
-  // categoryConfig,
-  // productConfig,
-  // orderConfig
 ]
 
 const plugins = [...pluginsConfig]

@@ -38,8 +38,8 @@
 
 <script>
 /* eslint-disable */
-import IssueAnwserM from '../../../model/issueAnwser'
-import MyCategoryM from '../../../model/myCategory'
+import IssueAnwserM from '@/model/issueAnwser'
+import MyCategoryM from '@/model/myCategory'
 import ListConditionChoose from './component/ListConditionChoose'
 import ListTable from './component/ListTable'
 import ListDialog from './component/ListDialog'
@@ -123,7 +123,7 @@ export default {
           issue:'',
           anwser:'',
           category:{
-            id:1
+            id:3,
           },
           keyword:''
         }
