@@ -44,7 +44,8 @@ export default {
         await User.getToken(username, password)
         await this.getInformation()
         this.loading = false
-        this.$router.push('/about')
+        // this.$router.push('/about')
+        this.$router.push('/manage/issusAnswer/list')
         this.$message.success('登录成功')
       } catch (e) {
         this.loading = false
