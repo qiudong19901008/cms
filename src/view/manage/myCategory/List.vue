@@ -50,7 +50,7 @@ export default {
     return {
       categoryList:[],//列表数据
       count:-1,//当前数据总数
-
+      
       name:'',
 
       category:null,//一个分类实体
@@ -63,7 +63,7 @@ export default {
   methods:{
     /**组件初始化 */
     async init(params ={}){
-      const categories = await MyCategoryM.getAll(params);
+      const categories = await MyCategoryM.getAllPagination(params);
       this.count = categories.count;
       this.categoryList = categories.list;
     },

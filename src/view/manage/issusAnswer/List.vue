@@ -2,7 +2,7 @@
 <template>
   <div class="lin-container">
     <div class="lin-title">
-      <div>问题答案列表</div>
+      <div>问题答案列表  {{aa}}</div>
       <el-button type="primary" @click="handleShowDialog">新增</el-button>
     </div>
     <!-- 表格条件查询 -->
@@ -53,6 +53,8 @@ export default {
   },
   data(){
     return {
+      aa:process.env.VUE_APP_BASE_URL,
+
       issueList:[],//列表数据
       count:-1,//当前数据总数
 
@@ -74,7 +76,7 @@ export default {
     /**组件初始化 */
     async init(params ={}){
       const data = await IssueAnwserM.getAll(params);
-      const categories = await MyCategoryM.getAll({});
+      const categories = await MyCategoryM.getAll();
       this.issueList = data.list;
       this.count = data.count;
       this.categoryList = categories.list;

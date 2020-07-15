@@ -2,14 +2,21 @@
 import _axios, { get, put, _delete } from '@/lin/plugin/axios'
 
 class MyCategoryM {
+
   /**
    * 获取所有分类列表
    */
-  static async getAll({name}){
-    // const data = {}
-    // if(name){
-    //   data.name=name
-    // }
+  static async getAll(){
+    return await _axios({
+      method:'get',
+      url:'v1/mc',
+    });
+  }
+
+  /**
+   * 获取分页分类列表
+   */
+  static async getAllPagination({name}){
     return await _axios({
       method:'get',
       url:'v1/mc/list',
