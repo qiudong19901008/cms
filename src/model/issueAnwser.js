@@ -6,7 +6,6 @@ class IssueAnwserM {
    * 获取问题答案列表
    */
   static async getAll({page,size,issue,anwser,categoryId,keyword}){
-    size=8
     return await _axios({
       method:'get',
       url:'v1/ia/list',

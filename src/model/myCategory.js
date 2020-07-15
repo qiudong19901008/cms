@@ -16,12 +16,14 @@ class MyCategoryM {
   /**
    * 获取分页分类列表
    */
-  static async getAllPagination({name}){
+  static async getAllPagination({name,page,size}){
     return await _axios({
       method:'get',
       url:'v1/mc/list',
       data:{
-        name
+        name,
+        page,
+        size
       }
     });
   }

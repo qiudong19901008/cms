@@ -2,7 +2,7 @@
 <template>
   <div class="lin-container">
     <div class="lin-title">
-      <div>问题答案列表  {{aa}}</div>
+      <div>问题答案列表</div>
       <el-button type="primary" @click="handleShowDialog">新增</el-button>
     </div>
     <!-- 表格条件查询 -->
@@ -43,6 +43,7 @@ import MyCategoryM from '@/model/myCategory'
 import ListConditionChoose from './component/ListConditionChoose'
 import ListTable from './component/ListTable'
 import ListDialog from './component/ListDialog'
+import {showDialogEnum,selectEnum,propertyInitEnum} from '@/config/enum'
 
 export default {
   name: 'List',
@@ -53,20 +54,18 @@ export default {
   },
   data(){
     return {
-      aa:process.env.VUE_APP_BASE_URL,
+      issueList:propertyInitEnum.ARRAY,//列表数据
+      count:propertyInitEnum.NUMBER,//当前数据总数
 
-      issueList:[],//列表数据
-      count:-1,//当前数据总数
+      categoryList:propertyInitEnum.ARRAY,//问题分类列表
+      issue:propertyInitEnum.STRING,
+      keyword:propertyInitEnum.STRING,
+      categoryId:propertyInitEnum.NUMBER,
 
-      categoryList:[],//问题分类列表
-      issue:'',
-      keyword:'',
-      categoryId:0,
-
-      issueAnwser:null,//一个问题实体
+      issueAnwser:propertyInitEnum.OBJECT,//一个问题实体
       // issueId:-1,//为删除准备的id
-      isCheck:false,//是否是查看
-      isDelete:false,//是否是删除
+      isCheck:propertyInitEnum.BOOLEAN,//是否是查看
+      isDelete:propertyInitEnum.BOOLEAN,//是否是删除
     }
   },
   async created(){
@@ -79,8 +78,7 @@ export default {
       const categories = await MyCategoryM.getAll();
       this.issueList = data.list;
       this.count = data.count;
-      this.categoryList = categories.list;
-      console.log(this.count)
+      this.categoryList = categories;
     },
 
     /**搜索点击 */
@@ -98,12 +96,7 @@ export default {
       const page = currentPage-1;
       const params = this._assembleParams();
       params.page=page;
-      try{
-        this.init(params);
-        // this.$message.success('新增成功');
-      }catch(e){
-        // this.$message.error('新增失败');
-      }
+      this.init(params);
     },
 
     /**弹出新增,编辑,查看dialog */
@@ -121,11 +114,11 @@ export default {
       }
       if(!type){
         this.issueAnwser={
-          id:-2,
+          id:showDialogEnum.SHOW_ADD,
           issue:'',
           anwser:'',
           category:{
-            id:3,
+            id:selectEnum.DEFAULT_VALUE,
           },
           keyword:''
         }
@@ -165,18 +158,18 @@ export default {
     /**关闭dialog */
     handleHideDialog(){
       this.issueAnwser={
-        id:-1,
-        issue:'',
-        anwser:'',
+        id:showDialogEnum.HIDE,
+        issue:propertyInitEnum.STRING,
+        anwser:propertyInitEnum.STRING,
         category:{
-          id:1
+          id:propertyInitEnum.NUMBER
         },
         keyword:''
       }
       setTimeout(()=>{
-        this.isDelete=false;
+        this.isDelete=propertyInitEnum.BOOLEAN;
       },500)
-      this.isCheck=false;
+      this.isCheck=propertyInitEnum.BOOLEAN;
       
     },
 
@@ -186,7 +179,7 @@ export default {
         issue:this.issue,
         keyword:this.keyword,
       }
-      if(this.categoryId!=0){
+      if(this.categoryId!=propertyInitEnum.NUMBER){
         params.categoryId =this.categoryId;
       }
       return params;

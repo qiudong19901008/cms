@@ -82,14 +82,9 @@ export default {
     async handleCurrentChange(currentPage){
       const page = currentPage-1;
       const params = this._assembleParams();
-      console.log(params)
       params.page=page;
-      try{
-        this.init(params);
-        // this.$message.success('新增成功');
-      }catch(e){
-        // this.$message.error('新增失败');
-      }
+      console.log(params)
+      this.init(params);
     },
 
     /**弹出新增,编辑,查看dialog */

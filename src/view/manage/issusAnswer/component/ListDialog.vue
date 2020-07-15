@@ -13,7 +13,7 @@
               <el-form-item label="问题" prop="issue">
                 <el-input size="medium" v-model="issueAnwser.issue" placeholder="输入问题" :disabled="tempIsCheck" />
               </el-form-item>
-              <el-form-item label="分类" v-if="!tempIsCheck">
+              <el-form-item label="分类" v-if="!tempIsCheck" prop="category.id">
                 <el-select  size="medium" filterable placeholder="分类" v-model="issueAnwser.category.id" >
                   <el-option
                     v-for="item in categoryList"
@@ -55,6 +55,7 @@
 </template>
 
 <script>
+import {selectEnum,showDialogEnum,propertyInitEnum} from '@/config/enum'
 export default {
   name: 'ListDialog',
   props:{
@@ -65,21 +66,24 @@ export default {
   },
   data() {
     return{
-      isShowDialog:false,
-      categoryList: [],
+      isShowDialog:propertyInitEnum.BOOLEAN,
+      categoryList: propertyInitEnum.ARRAY,
       issueAnwser:{
-         id:-1,
-          issue:'',
-          anwser:'',
+          id:showDialogEnum.HIDE,
+          issue:propertyInitEnum.STRING,
+          anwser:propertyInitEnum.STRING,
           category:{
-            id:-1,
+            id:propertyInitEnum.NUMBER,
           },
-          keyword:''
+          keyword:propertyInitEnum.STRING
       },
       //验证表单的规则
       rules: {
         issue: [
           { required: true,message: '问题不能为空',trigger: 'blur',},
+        ],
+        'category.id': [
+          { required: true,message: '分类不能为空',trigger: 'blur',},
         ],
       },
     }
@@ -112,7 +116,7 @@ export default {
     },
     tempIssueAnwser(){
       this.issueAnwser = this.tempIssueAnwser;
-      this.isShowDialog = this.issueAnwser.id==-1?false:true;
+      this.isShowDialog = this.issueAnwser.id==showDialogEnum.HIDE?false:true;
     }
   },
   
