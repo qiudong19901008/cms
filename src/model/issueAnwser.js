@@ -37,7 +37,7 @@ class IssueAnwserM {
   /**
    * 修改一个问题
    */
-  static async updateOne(id,{issue,anwser,categoryId,keyword}){
+  static async updateOne(id,{issue,anwser,categoryId,keyword,is_important}){
     console.log({issue,anwser,categoryId,keyword,id})
     await _axios({
       method:'put',
@@ -47,6 +47,7 @@ class IssueAnwserM {
         anwser,
         categoryId,
         keyword,
+        is_important,
       }
     });
   }

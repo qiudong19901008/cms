@@ -11,6 +11,17 @@
           </el-table-column>
           <el-table-column label="分类" prop="category.name" ></el-table-column>
           <el-table-column label="关键词" prop="keyword" ></el-table-column>
+          <el-table-column label="重要">
+              <template slot-scope="scope" >
+                   <el-switch
+                   v-model="scope.row.is_important"
+                   :inactive-value="0" 
+                   :active-value="1" 
+                   active-color="#3963bc" 
+                   @change="handleChangeImportant(scope.row)">
+                   </el-switch>
+              </template>
+          </el-table-column>
           <el-table-column 
           label="更新时间" 
           prop="update_time"
@@ -75,11 +86,17 @@ export default {
     handleCurrentChange(currentPage){
       this.$emit('currentChange',currentPage)
     },
+    /**改变is_important属性 */
+    handleChangeImportant(row){
+      const id = row.id;
+      const is_important =row.is_important;//el-switch的v-model已经改变了状态,所以不需要取反
+      this.$emit('changeImportant',id,is_important);
+    }
   },
   filters:{
     getSummary,
     formatDate
-  }
+  },
    
 };
 </script>

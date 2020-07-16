@@ -3,8 +3,8 @@
   "version": "0.3.5",
   "private": true,
   "scripts": {
-    "start:dev": "node script/plugin-get-config.js && vue-cli-service serve --mode development && echo 123",
-    "start:prod": "node script/plugin-get-config.js && vue-cli-service serve --mode production && echo 123",
+    "start:dev": "node script/plugin-get-config.js && vue-cli-service serve --mode development",
+    "start:prod": "node script/plugin-get-config.js && vue-cli-service serve --mode production",
     "build": "node script/plugin-get-config.js && vue-cli-service build ",
     "lint": "vue-cli-service lint",
     "commit": "git-cz",

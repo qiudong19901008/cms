@@ -21,6 +21,7 @@
     :tempCount= "count"
     @showDialog= "handleShowDialog"
     @currentChange= "handleCurrentChange"
+    @changeImportant= "handleChangeImportant"
     >
     </ListTable>
     <!-- 新增,查看,编辑dialog -->
@@ -97,6 +98,11 @@ export default {
       const params = this._assembleParams();
       params.page=page;
       this.init(params);
+    },
+    /**改变is_important状态 */
+    async handleChangeImportant(id,is_important){
+      await IssueAnwserM.updateOne(id,{is_important});
+      this.handleSearch();
     },
 
     /**弹出新增,编辑,查看dialog */
