@@ -13,7 +13,8 @@
     "plugin:reconfig": "node script/plugin-get-config.js",
     "test:unit": "vue-cli-service test:unit",
 
-    "push:baidu": "bash script/bash/baidu-cms.sh"
+    "push:baidu": "bash script/bash/baidu-cms.sh",
+    "push:tx": "bash script/bash/cms-tengxun.sh"
   },
   "dependencies": {
     "@antv/g2plot": "^0.11.35",
