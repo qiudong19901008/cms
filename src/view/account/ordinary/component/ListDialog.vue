@@ -10,7 +10,7 @@
             v-if="!tempIsDelete"
             center>
             <!-- id 平台名称 账号 密码 平台网址 手机号 邮箱 邮箱密码 备注 -->
-            <el-form @submit.native.prevent  :rules="rules" ref='form' status-icon :model="issueAnwser" label-width="100px">
+            <el-form @submit.native.prevent  :rules="rules" ref='form' status-icon :model="account" label-width="100px">
               <el-form-item label="平台名称" prop="platform_name">
                 <el-input size="medium" v-model="account.platform_name" placeholder="输入平台名称" :disabled="tempIsCheck" />
               </el-form-item>
@@ -20,16 +20,16 @@
               <el-form-item label="密码" prop="password">
                 <el-input size="medium" v-model="account.password" placeholder="输入密码" :disabled="tempIsCheck" />
               </el-form-item>
-              <el-form-item label="平台网址" prop="website">
+              <el-form-item label="平台网址">
                 <el-input size="medium" v-model="account.website" placeholder="输入平台网址" :disabled="tempIsCheck" />
               </el-form-item>
-              <el-form-item label="手机号" prop="phone">
+              <el-form-item label="手机号">
                 <el-input size="medium" v-model="account.phone" placeholder="输入手机号" :disabled="tempIsCheck" />
               </el-form-item>
-              <el-form-item label="邮箱" prop="mailbox">
+              <el-form-item label="邮箱">
                 <el-input size="medium" v-model="account.mailbox" placeholder="输入邮箱" :disabled="tempIsCheck" />
               </el-form-item>
-              <el-form-item label="邮箱密码" prop="mailbox_pwd">
+              <el-form-item label="邮箱密码">
                 <el-input size="medium" v-model="account.mailbox_pwd" placeholder="输入邮箱密码" :disabled="tempIsCheck" />
               </el-form-item>
               <!-- prop="tracingNoChecker" -->
@@ -44,7 +44,7 @@
         title="提示"
         width="30%"
         :showClose="false"
-         :close-on-click-modal="false"
+        :close-on-click-modal="false"
         :visible.sync="isShowDialog"
         v-if="tempIsDelete"
         center>
@@ -83,11 +83,14 @@ export default {
       },
       //验证表单的规则
       rules: {
-        'issue': [
-          { required: true,message: '问题不能为空',trigger: 'blur',},
+        'platform_name': [
+          { required: true,message: '平台名称不能为空',trigger: 'blur',},
         ],
-        'category.id': [
-          { required: true,message: '分类不能为空',trigger: 'blur',},
+        'account': [
+          { required: true,message: '账号不能为空',trigger: 'blur',},
+        ],
+        'password': [
+          { required: true,message: '密码不能为空',trigger: 'blur',},
         ],
       },
     }
@@ -96,12 +99,12 @@ export default {
     //执行操作
     handleBeSureExecute(type){
       if(type == 'del'){
-        this.$emit('beSureExecute',this.issueAnwser,type);
+        this.$emit('beSureExecute',this.account,type);
         return;
       }
       this.$refs.form.validate((valid) => {
         if (valid) {
-          this.$emit('beSureExecute',this.issueAnwser,type);
+          this.$emit('beSureExecute',this.account,type);
         }
       }) 
     },
@@ -113,7 +116,7 @@ export default {
   watch:{
     tempAccount(){
       this.account = this.tempAccount;
-      this.isShowDialog = this.issueAnwser.id==showDialogEnum.HIDE?false:true;
+      this.isShowDialog = this.account.id==showDialogEnum.HIDE?false:true;
     }
   },
   
