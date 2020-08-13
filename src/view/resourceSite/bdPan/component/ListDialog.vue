@@ -1,0 +1,124 @@
+<template>
+    <div class = "container">
+        <!-- 新增,编辑,查看dialog -->
+        <el-dialog
+            title="百度网盘"
+            width="60%"
+            :showClose="false"
+            :visible.sync= "isShowDialog"
+             :close-on-click-modal="false"
+            v-if="!tempIsDelete"
+            center>
+            <el-form @submit.native.prevent  :rules="rules" ref='form' status-icon :model="issueAnwser" label-width="100px">
+              <el-form-item label="问题" prop="issue">
+                <el-input size="medium" v-model="issueAnwser.issue" placeholder="输入问题" :disabled="tempIsCheck" />
+              </el-form-item>
+              <el-form-item label="分类" v-if="!tempIsCheck" prop="category.id">
+                <el-select  size="medium" filterable placeholder="分类" v-model="issueAnwser.category.id" >
+                  <el-option
+                    v-for="item in categoryList"
+                    :key="item.value"
+                    :label="item.label"
+                    :value="item.value">
+                  </el-option>
+                </el-select>
+              </el-form-item>
+              <!-- prop="tracingNoChecker" -->
+              <el-form-item label="关键词" v-if="!tempIsCheck" >
+                <el-input size="medium" v-model="issueAnwser.keyword" placeholder="输入关键词"/>
+              </el-form-item>
+              <el-form-item label="答案" >
+                <el-input size="medium" v-model="issueAnwser.anwser" :rows="12" type="textarea"  placeholder="输入答案"/>
+              </el-form-item>
+            </el-form>
+            <span slot="footer" class="dialog-footer">
+              <el-button  @click="handleHideDialog">取 消</el-button>
+              <el-button type="primary" @click="handleBeSureExecute" v-if="!tempIsCheck">确 定</el-button>
+            </span>
+        </el-dialog>
+        <!-- 删除dialog -->
+        <el-dialog
+        title="提示"
+        width="30%"
+        :showClose="false"
+         :close-on-click-modal="false"
+        :visible.sync="isShowDialog"
+        v-if="tempIsDelete"
+        center>
+          <span>确定删除该条数据？</span>
+          <span slot="footer" class="dialog-footer">
+            <el-button @click="handleHideDialog">取 消</el-button>
+            <el-button type="primary" @click="handleBeSureExecute('del')">确 定</el-button>
+          </span>
+        </el-dialog>
+    </div>
+</template>
+
+<script>
+import {selectEnum,showDialogEnum,propertyInitEnum} from '@/config/enum'
+export default {
+  name: 'ListDialog',
+  props:{
+    tempIssueAnwser:Object,
+    tempCategoryList:Array,
+    tempIsCheck:Boolean,
+    tempIsDelete:Boolean,
+  },
+  data() {
+    return{
+      isShowDialog:propertyInitEnum.BOOLEAN,
+      categoryList: propertyInitEnum.ARRAY,
+      issueAnwser:{
+          id:showDialogEnum.HIDE,
+          issue:propertyInitEnum.STRING,
+          anwser:propertyInitEnum.STRING,
+          category:{
+            id:propertyInitEnum.NUMBER,
+          },
+          keyword:propertyInitEnum.STRING
+      },
+      //验证表单的规则
+      rules: {
+        issue: [
+          { required: true,message: '问题不能为空',trigger: 'blur',},
+        ],
+        'category.id': [
+          { required: true,message: '分类不能为空',trigger: 'blur',},
+        ],
+      },
+    }
+  },
+  methods:{
+    //执行操作
+    handleBeSureExecute(type){
+      if(type == 'del'){
+        this.$emit('beSureExecute',this.issueAnwser,type);
+        return;
+      }
+      this.$refs.form.validate((valid) => {
+        if (valid) {
+          this.$emit('beSureExecute',this.issueAnwser,type);
+        }
+      }) 
+    },
+    //关闭dialog
+    handleHideDialog(){
+      this.$emit('hideDialog');
+    }
+  },
+  watch:{
+    tempCategoryList(){
+      const temp = []
+      this.tempCategoryList.forEach(c=>{
+        temp.push({value:c.id,label:c.name})
+      })
+      this.categoryList=temp;
+    },
+    tempIssueAnwser(){
+      this.issueAnwser = this.tempIssueAnwser;
+      this.isShowDialog = this.issueAnwser.id==showDialogEnum.HIDE?false:true;
+    }
+  },
+  
+};
+</script>

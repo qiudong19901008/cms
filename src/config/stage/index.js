@@ -1,6 +1,8 @@
 import adminConfig from './admin'
 import shopConfig from './shop'
 import manageConfig from './manage'
+import resourceSite from './resourceSite'
+import accountConfig from './account'
 import pluginsConfig from './plugin'
 import Utils from '@/lin/util/util'
 
@@ -48,6 +50,8 @@ let homeRouter = [
   adminConfig,
   shopConfig,
   manageConfig,
+  resourceSite,
+  accountConfig
 ]
 
 const plugins = [...pluginsConfig]
