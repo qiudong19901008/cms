@@ -9,26 +9,40 @@
              :close-on-click-modal="false"
             v-if="!tempIsDelete"
             center>
-            <el-form @submit.native.prevent  :rules="rules" ref='form' status-icon :model="issueAnwser" label-width="100px">
-              <el-form-item label="问题" prop="issue">
-                <el-input size="medium" v-model="issueAnwser.issue" placeholder="输入问题" :disabled="tempIsCheck" />
+            <el-form @submit.native.prevent  :rules="rules" ref='form' status-icon :model="bdPanRow" label-width="100px">
+              <el-form-item label="用户名">
+                <el-input size="medium" v-model="bdPanRow.username" placeholder="自动补全" :disabled="true" />
               </el-form-item>
-              <el-form-item label="分类" v-if="!tempIsCheck" prop="category.id">
-                <el-select  size="medium" filterable placeholder="分类" v-model="issueAnwser.category.id" >
-                  <el-option
-                    v-for="item in categoryList"
-                    :key="item.value"
-                    :label="item.label"
-                    :value="item.value">
-                  </el-option>
-                </el-select>
+              <!-- 编辑的时候不能修改账号 -->
+              <el-form-item label="账号" prop="account">
+                <el-input size="medium" v-model="bdPanRow.account" placeholder="输入账号" :disabled="tempIsCheck" />
               </el-form-item>
-              <!-- prop="tracingNoChecker" -->
-              <el-form-item label="关键词" v-if="!tempIsCheck" >
-                <el-input size="medium" v-model="issueAnwser.keyword" placeholder="输入关键词"/>
+              <el-form-item label="密码" prop="password">
+                <el-input size="medium" v-model="bdPanRow.password" placeholder="输入密码" :disabled="tempIsCheck" />
               </el-form-item>
-              <el-form-item label="答案" >
-                <el-input size="medium" v-model="issueAnwser.anwser" :rows="12" type="textarea"  placeholder="输入答案"/>
+              <el-form-item label="邮箱">
+                <el-input size="medium" v-model="bdPanRow.mailbox" placeholder="输入邮箱" :disabled="tempIsCheck" />
+              </el-form-item>
+              <el-form-item label="邮箱密码">
+                <el-input size="medium" v-model="bdPanRow.mailbox_pwd" placeholder="输入邮箱密码" :disabled="tempIsCheck" />
+              </el-form-item>
+              <el-form-item label="电话">
+                <el-input size="medium" v-model="bdPanRow.phone" placeholder="输入电话" :disabled="tempIsCheck" />
+              </el-form-item>
+              <el-form-item label="总容量">
+                <el-input size="medium" v-model="bdPanRow.total_capacity" placeholder="自动补全" :disabled="true"  />
+              </el-form-item>
+              <el-form-item label="可用容量">
+                <el-input size="medium" v-model="bdPanRow.free_capacity" placeholder="自动补全" :disabled="true"  />
+              </el-form-item>
+              <el-form-item label="BDUSS">
+                <el-input size="medium" v-model="bdPanRow.BDUSS" placeholder="自动补全" :disabled="true"  />
+              </el-form-item>
+              <el-form-item label="STOKEN">
+                <el-input size="medium" v-model="bdPanRow.STOKEN" placeholder="自动补全" :disabled="true"  />
+              </el-form-item>
+              <el-form-item label="备注">
+                <el-input size="medium" v-model="bdPanRow.remark" :rows="8" type="textarea"  placeholder="输入备注" :disabled="tempIsCheck" />
               </el-form-item>
             </el-form>
             <span slot="footer" class="dialog-footer">
@@ -59,31 +73,34 @@ import {selectEnum,showDialogEnum,propertyInitEnum} from '@/config/enum'
 export default {
   name: 'ListDialog',
   props:{
-    tempIssueAnwser:Object,
-    tempCategoryList:Array,
+    tempBdPanRow:Object,
     tempIsCheck:Boolean,
     tempIsDelete:Boolean,
   },
   data() {
     return{
       isShowDialog:propertyInitEnum.BOOLEAN,
-      categoryList: propertyInitEnum.ARRAY,
-      issueAnwser:{
-          id:showDialogEnum.HIDE,
-          issue:propertyInitEnum.STRING,
-          anwser:propertyInitEnum.STRING,
-          category:{
-            id:propertyInitEnum.NUMBER,
-          },
-          keyword:propertyInitEnum.STRING
+      bdPanRow:{
+          'id':showDialogEnum.HIDE,
+          'username':propertyInitEnum.STRING,
+          'account':propertyInitEnum.STRING,
+          'password':propertyInitEnum.STRING,
+          'mailbox':propertyInitEnum.STRING,
+          'mailbox_pwd':propertyInitEnum.STRING,
+          'phone':propertyInitEnum.STRING,
+          'total_capacity':propertyInitEnum.STRING,
+          'free_capacity':propertyInitEnum.STRING,
+          'BDUSS':propertyInitEnum.STRING,
+          'STOKEN':propertyInitEnum.STRING,
+          'remark':propertyInitEnum.STRING,
       },
       //验证表单的规则
       rules: {
-        issue: [
-          { required: true,message: '问题不能为空',trigger: 'blur',},
+        account: [
+          { required: true,message: '账号不能为空',trigger: 'blur',},
         ],
-        'category.id': [
-          { required: true,message: '分类不能为空',trigger: 'blur',},
+        'password': [
+          { required: true,message: '密码不能为空',trigger: 'blur',},
         ],
       },
     }
@@ -92,12 +109,12 @@ export default {
     //执行操作
     handleBeSureExecute(type){
       if(type == 'del'){
-        this.$emit('beSureExecute',this.issueAnwser,type);
+        this.$emit('beSureExecute',this.bdPanRow,type);
         return;
       }
       this.$refs.form.validate((valid) => {
         if (valid) {
-          this.$emit('beSureExecute',this.issueAnwser,type);
+          this.$emit('beSureExecute',this.bdPanRow,type);
         }
       }) 
     },
@@ -107,16 +124,9 @@ export default {
     }
   },
   watch:{
-    tempCategoryList(){
-      const temp = []
-      this.tempCategoryList.forEach(c=>{
-        temp.push({value:c.id,label:c.name})
-      })
-      this.categoryList=temp;
-    },
-    tempIssueAnwser(){
-      this.issueAnwser = this.tempIssueAnwser;
-      this.isShowDialog = this.issueAnwser.id==showDialogEnum.HIDE?false:true;
+    tempBdPanRow(){
+      this.bdPanRow = this.tempBdPanRow;
+      this.isShowDialog = this.bdPanRow.id==showDialogEnum.HIDE?false:true;
     }
   },
   

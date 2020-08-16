@@ -9,10 +9,10 @@ const resourceSiteRouter = {
   icon: 'iconfont icon-tushuguanli',
   children: [
     {
-      title: '百度网盘列表',
+      title: '已爬取资源列表',
       type: 'view',
-      route: '/resourceSite/bdPan/list',
-      filePath: 'view/resourceSite/bdPan/List.vue',
+      route: '/resourceSite/crawledResource/list',
+      filePath: 'view/resourceSite/crawledResource/List.vue',
       inNav: true,
       icon: 'iconfont icon-tushuguanli',
     },
@@ -24,6 +24,15 @@ const resourceSiteRouter = {
       inNav: true,
       icon: 'iconfont icon-tushuguanli',
     },
+    {
+      title: '百度网盘列表',
+      type: 'view',
+      route: '/resourceSite/bdPan/list',
+      filePath: 'view/resourceSite/bdPan/List.vue',
+      inNav: true,
+      icon: 'iconfont icon-tushuguanli',
+    },
+    
     
   ]
 }

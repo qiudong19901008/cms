@@ -2,7 +2,7 @@
 <template>
   <div class="lin-container">
     <div class="lin-title">
-      <div>账户列表</div>
+      <div>已爬取资源列表</div>
       <el-button type="primary" @click="handleShowDialog">新增</el-button>
     </div>
     <!-- 表格条件查询 -->

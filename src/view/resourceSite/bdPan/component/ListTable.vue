@@ -8,6 +8,7 @@
           <el-table-column label="密码" prop="password" ></el-table-column>
           <el-table-column label="注册邮箱" prop="mailbox" ></el-table-column>
           <el-table-column label="邮箱密码" prop="mailbox_pwd" ></el-table-column>
+          <el-table-column label="手机号" prop="phone" ></el-table-column>
           <!-- <el-table-column label="已用容量" prop="used_capacity" ></el-table-column> -->
           <el-table-column label="所有容量" prop="total_capacity" >
             <template slot-scope="scope">
@@ -15,8 +16,8 @@
             </template>
           </el-table-column>
           <el-table-column label="可用容量" >
-            <template slot-scope="scope">
-              {{scope.row.total_capacity-scope.row.used_capacity+'G'}}
+            <template slot-scope="scope" prop = "free_capacity">
+              {{scope.row.free_capacity+'G'}}
             </template>
           </el-table-column>
           <el-table-column label="BDUSS">
@@ -29,6 +30,7 @@
                 {{scope.row.STOKEN | getSummary}}
               </template>
           </el-table-column>
+          <el-table-column label="备注" prop="remark" ></el-table-column>
           <el-table-column label="操作" fixed="right" min-width="200">
               <template slot-scope="scope"> 
                   <el-button plain size="mini" type="primary" @click="handleShowDialog(scope.row,'check')" >查看</el-button>
