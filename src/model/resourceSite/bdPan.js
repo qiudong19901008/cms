@@ -25,6 +25,7 @@ class BDPan {
     * 
   */
  static async addOneAccount(data) {
+   console.log(data)
   await _axios({
      method: 'post',
      url: 'v1/bdpan/add',
@@ -39,6 +40,7 @@ class BDPan {
  * 可选参数: password, mailbox, mailbox_pwd, phone
  */
 static async editOneAccount(id,data) {
+  console.log(data)
   await _axios({
      method: 'put',
      url: `v1/bdpan/edit/${id}`,

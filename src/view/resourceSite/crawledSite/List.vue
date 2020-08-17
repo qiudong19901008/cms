@@ -2,16 +2,12 @@
 <template>
   <div class="lin-container">
     <div class="lin-title">
-      <div>百度网盘列表</div>
+      <div>站点列表</div>
       <el-button type="primary" @click="handleShowDialog">新增</el-button>
     </div>
-    <!-- :tempCategoryList ="categoryList"
-    :tempIssue.sync ="issue"
-    :tempKeyword.sync ="keyword"
-    :tempCategoryId.sync ="categoryId" -->
+    :tempRemarkPhoneUsername.sync = "remarkPhoneUsername"
     <!-- 表格条件查询 -->
     <ListConditionChoose 
-    :tempRemarkPhoneUsername.sync = "remarkPhoneUsername"
     @reset = "handleReset"
     @search = "handleSearch"
     >
@@ -40,7 +36,7 @@
 
 <script>
 /* eslint-disable */
-import BDPan from '@/model/resourceSite/bdPan'
+import Site from '@/model/resourceSite/site'
 import ListConditionChoose from './component/ListConditionChoose'
 import ListTable from './component/ListTable'
 import ListDialog from './component/ListDialog'
@@ -55,18 +51,18 @@ export default {
   },
   data(){
     return {
-      bdPanList:propertyInitEnum.ARRAY,//列表数据
+      siteList:propertyInitEnum.ARRAY,//列表数据
       count:propertyInitEnum.NUMBER,//当前数据总数
       pageSize:propertyInitEnum.NUMBER,//每页现实数据个数
 
-      bdPanRow:propertyInitEnum.OBJECT,//一个网盘实体
-      reset:propertyInitEnum.BOOLEAN,//是否从百度网盘重新抓取数据
+      siteRow:propertyInitEnum.OBJECT,//一个实体
+      // reset:propertyInitEnum.BOOLEAN,//是否从百度网盘重新抓取数据
 
       isCheck:propertyInitEnum.BOOLEAN,//是否是查看
       isDelete:propertyInitEnum.BOOLEAN,//是否是删除
 
       //查询条件
-      remarkPhoneUsername:propertyInitEnum.STRING//备注||电话号码||用户名
+      // remarkPhoneUsername:propertyInitEnum.STRING//备注||电话号码||用户名
     }
   },
   async created(){
@@ -76,8 +72,8 @@ export default {
     /**组件初始化 */
     async init(params){
       params = this._makeSurePagination(params)
-      const data = await BDPan.getBDPanList(params)
-      this.bdPanList = data['list']
+      const data = await Site.getList(params)
+      this.siteList = data['list']
       this.count = data['count']
       this.pageSize = params['pageSize']
     },
@@ -103,7 +99,7 @@ export default {
     },
     /**改变is_important状态 */
     async handleChangeImportant(id,is_important){
-      await BDPan.editOneAccount(id,{is_important});
+      await siteList.editOne(id,{is_important});
       this.handleSearch();
     },
 
@@ -111,10 +107,6 @@ export default {
     async handleShowDialog(row,type){
       if(type == 'edit'){
         this.bdPanRow = row;
-      }
-      if(type == 'reset'){
-        this.bdPanRow =row;
-        this.reset = true;
       }
       if(type =='check'){
         this.bdPanRow = row;
@@ -127,16 +119,15 @@ export default {
       if(!type){
         this.bdPanRow={
           'id':showDialogEnum.SHOW_ADD,
-          'username':propertyInitEnum.STRING,
+          'baseUrl':propertyInitEnum.STRING,
+          'pageNum':propertyInitEnum.NUMBER,
+          'domain':propertyInitEnum.STRING,
+          'type':propertyInitEnum.STRING,
+          'name':propertyInitEnum.STRING,
           'account':propertyInitEnum.STRING,
-          'password':propertyInitEnum.STRING,
-          'mailbox':propertyInitEnum.STRING,
-          'mailbox_pwd':propertyInitEnum.STRING,
-          'phone':propertyInitEnum.STRING,
-          'total_capacity':propertyInitEnum.STRING,
-          'free_capacity':propertyInitEnum.STRING,
-          'BDUSS':propertyInitEnum.STRING,
-          'STOKEN':propertyInitEnum.STRING,
+          'secret':propertyInitEnum.STRING,
+          'mainUrl':propertyInitEnum.STRING,
+          'loginUrl':propertyInitEnum.STRING,
           'remark':propertyInitEnum.STRING,
         }
       }
@@ -145,27 +136,26 @@ export default {
     async handleBeSureExecute(row,type){
       const id =row.id;
       if(type == 'del'){
-        await BDPan.delAccounts(id);
+        await Site.delMany(id);
         this.handleHideDialog();
         this.handleSearch();
         return ;
       }
       
       let params = {
+        'baseUrl':row['baseUrl'],
+        'pageNum':row['pageNum'],
+        'domain':row['domain'],
+        'type':row['type'],
+        'name':row['name'],
         'account':row['account'],
-        'password':row['password'],
-        'phone':row['phone'],
-        'mailbox':row['mailbox'],
-        'mailbox_pwd':row['mailbox_pwd'],
+        'secret':row['secret'],
+        'mainUrl':row['mainUrl'],
+        'loginUrl':row['loginUrl'],
         'remark':row['remark'],
       }
       try{
         if(id>0){//修改
-          if(this.reset){//修改并重新获取百度盘数据
-            params['reset'] = true
-          }else{
-            params['reset'] = false
-          }
           await BDPan.editOneAccount(id,params);
         }else{//新增
           await BDPan.addOneAccount(params);
@@ -182,29 +172,17 @@ export default {
     /**关闭dialog */
     handleHideDialog(){
       this.bdPanRow={
-        'id':showDialogEnum.HIDE,
-        'account':propertyInitEnum.STRING,
-        'password':propertyInitEnum.STRING,
-        'mailbox':propertyInitEnum.STRING,
-        'mailbox_pwd':propertyInitEnum.STRING,
-        'phone':propertyInitEnum.STRING,
-        'BDUSS':propertyInitEnum.STRING,
-        'STOKEN':propertyInitEnum.STRING,
-        'total_capacity':propertyInitEnum.NUMBER,
-        'free_capacity':propertyInitEnum.NUMBER,
-        'remark':propertyInitEnum.STRING,
+       
       }
       setTimeout(()=>{
         this.isDelete=propertyInitEnum.BOOLEAN;
         this.isCheck=propertyInitEnum.BOOLEAN;
-        this.reset = propertyInitEnum.BOOLEAN;
       },500)     
     },
 
     /**组装发送参数 */
     _assembleParams(){
       const params = {
-        remarkPhoneUsername :this.remarkPhoneUsername
       }
       return params;
     },

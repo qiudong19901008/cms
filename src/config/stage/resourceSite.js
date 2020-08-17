@@ -9,6 +9,14 @@ const resourceSiteRouter = {
   icon: 'iconfont icon-tushuguanli',
   children: [
     {
+      title: '被爬取站点列表',
+      type: 'view',
+      route: '/resourceSite/crawledSite/list',
+      filePath: 'view/resourceSite/crawledSite/List.vue',
+      inNav: true,
+      icon: 'iconfont icon-tushuguanli',
+    },
+    {
       title: '已爬取资源列表',
       type: 'view',
       route: '/resourceSite/crawledResource/list',
