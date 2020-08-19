@@ -1,16 +1,17 @@
 <template>
     <div class="container">
-      <el-table :data="tempAccountList" >
+      <el-table :data="tempSiteList" >
           <!-- label定义列头显示的文本，prop定义要渲染data数组中元素的哪个字段，width定义列宽 -->
-          <!-- id 平台名称 账号 密码 平台网址 手机号 邮箱 邮箱密码 备注 -->
           <el-table-column label="序号" prop="id"></el-table-column>
-          <el-table-column label="平台名称" prop="platform_name" ></el-table-column>
-          <el-table-column label="账号" prop="account" ></el-table-column>
-          <el-table-column label="密码" prop="password" ></el-table-column>
-          <el-table-column label="平台网址" prop="website" ></el-table-column>
-          <el-table-column label="手机号" prop="phone" ></el-table-column>
-          <el-table-column label="邮箱" prop="mailbox" ></el-table-column>
-          <el-table-column label="邮箱密码" prop="mailbox_pwd" ></el-table-column>
+          <el-table-column label="基础URL" prop="baseUrl" ></el-table-column>
+          <el-table-column label="总页数" prop="pageNum" ></el-table-column>
+          <el-table-column label="域名" prop="domain" ></el-table-column>
+          <el-table-column label="网站类型" prop="type" ></el-table-column>
+          <el-table-column label="网站名" prop="name" ></el-table-column>
+          <el-table-column label="登陆账号" prop="account" ></el-table-column>
+          <el-table-column label="登陆密码" prop="secret" ></el-table-column>
+          <el-table-column label="登陆URL" prop="loginUrl" ></el-table-column>
+          <el-table-column label="主页URL" prop="mainUrl" ></el-table-column>
           <el-table-column label="备注" prop="remark" ></el-table-column>
           <el-table-column label="操作" fixed="right" min-width="200">
               <template slot-scope="scope"> 
@@ -43,7 +44,7 @@ import {getSummary,formatDate} from '@/lin/util/myUtil'
 export default {
   name: 'ListTable',
   props:{
-    tempAccountList:{
+    tempSiteList:{
       type:Array,
       default:[]
     },

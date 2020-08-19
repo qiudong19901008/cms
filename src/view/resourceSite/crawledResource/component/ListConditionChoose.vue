@@ -2,13 +2,9 @@
     <!-- @keyup.enter.native="search" -->
     <div class = "container">
         <div class="form-container">
-          <!-- 平台名称|网址|备注 -->
-          <el-input class="condition" size="medium" placeholder="平台名称/网址/备注" type="text" style="width:400px" 
-            v-model="remarkWebsitePlatform" @keyup.enter.native="handleSearch">
-          </el-input>
-          <!-- 账号名称 -->
-          <el-input class="condition" size="medium" placeholder="账号名称" type="text" style="width:200px" 
-            v-model="accountName" @keyup.enter.native="handleSearch">
+          <!-- 网站类型/备注 -->
+          <el-input class="condition" size="medium" placeholder="网站类型/备注 " type="text" style="width:400px" 
+            v-model="remarkType" @keyup.enter.native="handleSearch">
           </el-input>
           
         </div>
@@ -25,13 +21,11 @@
 export default {
   name: 'ListConditionChoose',
   props:{
-    tempRemarkWebsitePlatform:String,
-    tempAccountName:String
+    tempRemarkType:String
   },
   data() {
     return { 
-      remarkWebsitePlatform:'',   
-      accountName:''
+      remarkType:''    
     };
   },
   methods:{
@@ -41,18 +35,14 @@ export default {
     },
     /**重置逻辑 */
     handleResert(){
-      this.remarkWebsitePlatform = '',  
-      this.accountName = '',
+      this.remarkType = '' 
       this.$emit('reset')
     },
   },
   watch:{
-    remarkWebsitePlatform(){
-      this.$emit('update:tempRemarkWebsitePlatform',this.remarkWebsitePlatform)
+    remarkType(){
+      this.$emit('update:tempRemarkType',this.remarkType)
     },
-    accountName(){
-      this.$emit('update:tempAccountName',this.accountName)
-    }
   }
 };
 </script>

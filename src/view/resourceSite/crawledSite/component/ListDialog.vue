@@ -6,44 +6,63 @@
             width="60%"
             :showClose="false"
             :visible.sync= "isShowDialog"
-             :close-on-click-modal="false"
+            :close-on-click-modal="false"
             v-if="!tempIsDelete"
             center>
-            <el-form @submit.native.prevent  :rules="rules" ref='form' status-icon :model="bdPanRow" label-width="100px">
-              <el-form-item label="用户名">
-                <el-input size="medium" v-model="bdPanRow.username" placeholder="自动补全" :disabled="true" />
-              </el-form-item>
-              <!-- 编辑的时候不能修改账号 -->
-              <el-form-item label="账号" prop="account">
-                <el-input size="medium" v-model="bdPanRow.account" placeholder="输入账号" :disabled="tempIsCheck" v-if="bdPanRow.id<0"/>
-                <el-input size="medium" v-model="bdPanRow.account" placeholder="输入账号" :disabled="true" v-else />
-              </el-form-item>
-              <el-form-item label="密码" prop="password">
-                <el-input size="medium" v-model="bdPanRow.password" placeholder="输入密码" :disabled="tempIsCheck" />
-              </el-form-item>
-              <el-form-item label="邮箱">
-                <el-input size="medium" v-model="bdPanRow.mailbox" placeholder="输入邮箱" :disabled="tempIsCheck" />
-              </el-form-item>
-              <el-form-item label="邮箱密码">
-                <el-input size="medium" v-model="bdPanRow.mailbox_pwd" placeholder="输入邮箱密码" :disabled="tempIsCheck" />
-              </el-form-item>
-              <el-form-item label="电话">
-                <el-input size="medium" v-model="bdPanRow.phone" placeholder="输入电话" :disabled="tempIsCheck" />
-              </el-form-item>
-              <el-form-item label="总容量">
-                <el-input size="medium" v-model="bdPanRow.total_capacity" placeholder="自动补全" :disabled="true"  />
-              </el-form-item>
-              <el-form-item label="可用容量">
-                <el-input size="medium" v-model="bdPanRow.free_capacity" placeholder="自动补全" :disabled="true"  />
-              </el-form-item>
-              <el-form-item label="BDUSS">
-                <el-input size="medium" v-model="bdPanRow.BDUSS" placeholder="自动补全" :disabled="true"  />
-              </el-form-item>
-              <el-form-item label="STOKEN">
-                <el-input size="medium" v-model="bdPanRow.STOKEN" placeholder="自动补全" :disabled="true"  />
-              </el-form-item>
+            <el-form @submit.native.prevent  :rules="rules" ref='form' status-icon :model="siteRow" label-width="100px">
+              <el-row>
+                <el-col :span="12">
+                  <el-form-item label="基础URL" prop="baseUrl">
+                    <el-input size="medium" v-model="siteRow.baseUrl" placeholder="输入基础URL" :disabled="tempIsCheck" />
+                  </el-form-item>
+                </el-col>
+                <el-col :span="12">
+                  <el-form-item label="页码">
+                    <el-input size="medium" v-model="siteRow.pageNum" placeholder="输入页码" :disabled="tempIsCheck"/>
+                  </el-form-item>
+                </el-col>
+              </el-row>
+              <el-row>
+                <el-col :span="12">
+                  <el-form-item label="域名" prop="domain">
+                    <el-input size="medium" v-model="siteRow.domain" placeholder="输入域名" :disabled="tempIsCheck" />
+                  </el-form-item>
+                </el-col>
+                <el-col :span="12">
+                  <el-form-item label="网站类型" prop="type">
+                    <el-input size="medium" v-model="siteRow.type" placeholder="输入类型" :disabled="tempIsCheck" />
+                  </el-form-item>
+                </el-col>
+              </el-row>
+              <el-row>
+                <el-col :span="12">
+                  <el-form-item label="网站名称" prop="name">
+                    <el-input size="medium" v-model="siteRow.name" placeholder="输入名称" :disabled="tempIsCheck" />
+                  </el-form-item>
+                </el-col>
+                <el-col :span="12">
+                  <el-form-item label="登陆账号" prop="account">
+                    <el-input size="medium" v-model="siteRow.account" placeholder="输入账号" :disabled="tempIsCheck" />
+                  </el-form-item>
+                </el-col>
+              </el-row>
+              <el-row>
+                <el-col :span="12">
+                  <el-form-item label="登陆密码" prop="secret">
+                    <el-input size="medium" v-model="siteRow.secret" placeholder="输入密码" :disabled="tempIsCheck" />
+                  </el-form-item>
+                </el-col>
+                <el-col :span="12">
+                  <el-form-item label="登陆URL" prop="loginUrl">
+                    <el-input size="medium" v-model="siteRow.loginUrl" placeholder="输入登陆URL" :disabled="tempIsCheck" />
+                  </el-form-item>
+                </el-col>
+              </el-row>
+              <el-form-item label="首页URL" prop="mainUrl">
+                <el-input size="medium" v-model="siteRow.mainUrl" placeholder="输入首页URL" :disabled="tempIsCheck" />
+              </el-form-item>   
               <el-form-item label="备注">
-                <el-input size="medium" v-model="bdPanRow.remark" :rows="8" type="textarea"  placeholder="输入备注" :disabled="tempIsCheck" />
+                <el-input size="medium" v-model="siteRow.remark" :rows="8" type="textarea"  placeholder="输入备注" :disabled="tempIsCheck" />
               </el-form-item>
             </el-form>
             <span slot="footer" class="dialog-footer">
@@ -74,34 +93,36 @@ import {selectEnum,showDialogEnum,propertyInitEnum} from '@/config/enum'
 export default {
   name: 'ListDialog',
   props:{
-    tempBdPanRow:Object,
+    tempSiteRow:Object,
     tempIsCheck:Boolean,
     tempIsDelete:Boolean,
   },
   data() {
     return{
       isShowDialog:propertyInitEnum.BOOLEAN,
-      bdPanRow:{
-          'id':showDialogEnum.HIDE,
-          'username':propertyInitEnum.STRING,
-          'account':propertyInitEnum.STRING,
-          'password':propertyInitEnum.STRING,
-          'mailbox':propertyInitEnum.STRING,
-          'mailbox_pwd':propertyInitEnum.STRING,
-          'phone':propertyInitEnum.STRING,
-          'total_capacity':propertyInitEnum.STRING,
-          'free_capacity':propertyInitEnum.STRING,
-          'BDUSS':propertyInitEnum.STRING,
-          'STOKEN':propertyInitEnum.STRING,
-          'remark':propertyInitEnum.STRING,
+      siteRow:{
+        'id':showDialogEnum.HIDE,
+        'baseUrl':propertyInitEnum.STRING,
+        'pageNum':propertyInitEnum.STRING,
+        'domain':propertyInitEnum.STRING,
+        'type':propertyInitEnum.STRING,
+        'name':propertyInitEnum.STRING,
+        'account':propertyInitEnum.STRING,
+        'secret':propertyInitEnum.STRING,
+        'mainUrl':propertyInitEnum.STRING,
+        'loginUrl':propertyInitEnum.STRING,
+        'remark':propertyInitEnum.STRING,
       },
       //验证表单的规则
       rules: {
-        account: [
-          { required: true,message: '账号不能为空',trigger: 'blur',},
+        domain: [
+          { required: true,message: '域名不能为空',trigger: 'blur',},
         ],
-        'password': [
-          { required: true,message: '密码不能为空',trigger: 'blur',},
+        'mainUrl': [
+          { required: true,message: '首页地址不能为空',trigger: 'blur',},
+        ],
+        'baseUrl': [
+          { required: true,message: '基础分页URL不能为空',trigger: 'blur',},
         ],
       },
     }
@@ -110,12 +131,12 @@ export default {
     //执行操作
     handleBeSureExecute(type){
       if(type == 'del'){
-        this.$emit('beSureExecute',this.bdPanRow,type);
+        this.$emit('beSureExecute',this.siteRow,type);
         return;
       }
       this.$refs.form.validate((valid) => {
         if (valid) {
-          this.$emit('beSureExecute',this.bdPanRow,type);
+          this.$emit('beSureExecute',this.siteRow,type);
         }
       }) 
     },
@@ -125,9 +146,9 @@ export default {
     }
   },
   watch:{
-    tempBdPanRow(){
-      this.bdPanRow = this.tempBdPanRow;
-      this.isShowDialog = this.bdPanRow.id==showDialogEnum.HIDE?false:true;
+    tempSiteRow(){
+      this.siteRow = this.tempSiteRow;
+      this.isShowDialog = this.siteRow.id==showDialogEnum.HIDE?false:true;
     }
   },
   

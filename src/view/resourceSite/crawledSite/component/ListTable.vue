@@ -1,41 +1,21 @@
 <template>
     <div class="container">
-      <el-table :data="tempBDPanList" >
+      <el-table :data="tempSiteList" >
           <!-- label定义列头显示的文本，prop定义要渲染data数组中元素的哪个字段，width定义列宽 -->
           <el-table-column label="序号" prop="id"></el-table-column>
-          <el-table-column label="用户名" prop="username" ></el-table-column>
-          <el-table-column label="账号" prop="account" ></el-table-column>
-          <el-table-column label="密码" prop="password" ></el-table-column>
-          <el-table-column label="注册邮箱" prop="mailbox" ></el-table-column>
-          <el-table-column label="邮箱密码" prop="mailbox_pwd" ></el-table-column>
-          <el-table-column label="手机号" prop="phone" ></el-table-column>
-          <!-- <el-table-column label="已用容量" prop="used_capacity" ></el-table-column> -->
-          <el-table-column label="所有容量" prop="total_capacity" >
-            <template slot-scope="scope">
-              {{scope.row.total_capacity+'G'}}
-            </template>
-          </el-table-column>
-          <el-table-column label="可用容量" >
-            <template slot-scope="scope" prop = "free_capacity">
-              {{scope.row.free_capacity+'G'}}
-            </template>
-          </el-table-column>
-          <el-table-column label="BDUSS">
-              <template slot-scope="scope">
-                {{scope.row.BDUSS | getSummary}}
-              </template>
-          </el-table-column>
-          <el-table-column label="STOKEN">
-              <template slot-scope="scope">
-                {{scope.row.STOKEN | getSummary}}
-              </template>
-          </el-table-column>
+          <el-table-column label="基础URL" prop="baseUrl" ></el-table-column>
+          <el-table-column label="总页数" prop="pageNum" ></el-table-column>
+          <el-table-column label="域名" prop="domain" ></el-table-column>
+          <el-table-column label="网站类型" prop="type" ></el-table-column>
+          <el-table-column label="登陆账号" prop="account" ></el-table-column>
+          <el-table-column label="登陆密码" prop="secret" ></el-table-column>
+          <el-table-column label="登陆URL" prop="loginUrl" ></el-table-column>
+          <el-table-column label="主页URL" prop="mainUrl" ></el-table-column>
           <el-table-column label="备注" prop="remark" ></el-table-column>
           <el-table-column label="操作" fixed="right" min-width="200">
               <template slot-scope="scope"> 
                   <el-button plain size="mini" type="primary" @click="handleShowDialog(scope.row,'check')" >查看</el-button>
                   <el-button plain size="mini" type="warning" @click="handleShowDialog(scope.row,'edit')" >编辑</el-button>
-                  <el-button plain size="mini" type="warning" @click="handleShowDialog(scope.row,'reset')" >更新</el-button>
                   <el-button plain size="mini" type="danger" @click="handleShowDialog(scope.row,'del')" >删除</el-button>
               </template>
           </el-table-column>
@@ -63,7 +43,7 @@ import {getSummary,formatDate} from '@/lin/util/myUtil'
 export default {
   name: 'ListTable',
   props:{
-    tempBDPanList:{
+    tempSiteList:{
       type:Array,
       default:[]
     },

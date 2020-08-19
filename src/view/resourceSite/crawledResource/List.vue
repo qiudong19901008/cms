@@ -5,17 +5,16 @@
       <div>已爬取资源列表</div>
       <el-button type="primary" @click="handleShowDialog">新增</el-button>
     </div>
+    <!-- :tempRemarkType.sync = "remarkType" -->
     <!-- 表格条件查询 -->
     <ListConditionChoose 
-    :tempRemarkWebsitePlatform.sync = "remarkWebsitePlatform"
-    :tempAccountName.sync = "accountName"
     @reset = "handleReset"
     @search = "handleSearch"
     >
     </ListConditionChoose>
     <!-- 表格 -->
     <ListTable
-    :tempAccountList= "accountList"
+    :tempIntroList= "introList"
     :tempCount= "count"
     :tempPageSize= "pageSize"
     @currentChange= "handleCurrentChange"
@@ -27,9 +26,9 @@
     <ListDialog 
     @beSureExecute= "handleBeSureExecute" 
     @hideDialog= "handleHideDialog"
-    :tempAccount= "account"
-    :tempIsCheck="isCheck"
-    :tempIsDelete="isDelete"
+    :tempIntroRow = "introRow"
+    :tempIsCheck= "isCheck"
+    :tempIsDelete= "isDelete"
     >
     </ListDialog>
   </div>
@@ -37,8 +36,7 @@
 
 <script>
 /* eslint-disable */
-import ordinary from '@/model/account/ordinary'
-// import MyCategoryM from '@/model/myCategory'
+import Intro from '@/model/resourceSite/intro'
 import ListConditionChoose from './component/ListConditionChoose'
 import ListTable from './component/ListTable'
 import ListDialog from './component/ListDialog'
@@ -53,18 +51,18 @@ export default {
   },
   data(){
     return {
-      accountList:propertyInitEnum.ARRAY,//列表数据
+      introList:propertyInitEnum.ARRAY,//列表数据
       count:propertyInitEnum.NUMBER,//当前数据总数
       pageSize:propertyInitEnum.NUMBER,//每页现实数据个数
 
-      account:propertyInitEnum.OBJECT,//一个账号实体
-  
+      introRow:propertyInitEnum.OBJECT,//一个实体
+      // reset:propertyInitEnum.BOOLEAN,//是否从百度网盘重新抓取数据
+
       isCheck:propertyInitEnum.BOOLEAN,//是否是查看
       isDelete:propertyInitEnum.BOOLEAN,//是否是删除
 
       //查询条件
-      accountName:propertyInitEnum.STRING,
-      remarkWebsitePlatform:propertyInitEnum.STRING
+      // remarkType:propertyInitEnum.STRING//网站类型/备注
     }
   },
   async created(){
@@ -74,8 +72,8 @@ export default {
     /**组件初始化 */
     async init(params){
       params = this._makeSurePagination(params)
-      const data = await ordinary.getAccountList(params)
-      this.accountList = data['list']
+      const data = await Intro.getList(params)
+      this.siteList = data['list']
       this.count = data['count']
       this.pageSize = params['pageSize']
     },
@@ -93,70 +91,73 @@ export default {
     /**分页条件查询查询 */
     async handleCurrentChange(currentPage){
       const pageNum = currentPage-1;
-      const params = {}
-      // const params = this._assembleParams();//组装查询条件
+      const params = this._assembleParams();//组装查询条件
       params['pageNum']=pageNum;
       params['pageSize'] = this.pageSize
       this.init(params);
     },
     /**改变is_important状态 */
     async handleChangeImportant(id,is_important){
-      await ordinary.editOneAccount(id,{is_important});
+      await Intro.editOne(id,{is_important});
       this.handleSearch();
     },
 
     /**弹出新增,编辑,查看dialog */
     async handleShowDialog(row,type){
       if(type == 'edit'){
-        this.account = row;
+        this.introRow = row;
       }
-      if(type =='check'){//查看
-        this.account = row;
+      if(type =='check'){
+        this.introRow = row;
         this.isCheck=true;
       }
       if(type == 'del'){
-        this.account = row;
+        this.introRow = row;
         this.isDelete = true;
       }
       if(!type){
-        this.account={
-          'id':showDialogEnum.SHOW_ADD,
-          'platform_name':propertyInitEnum.STRING,
-          'account':propertyInitEnum.STRING,
-          'password':propertyInitEnum.STRING,
-          'website':propertyInitEnum.STRING,
-          'phone':propertyInitEnum.STRING,
-          'mailbox':propertyInitEnum.STRING,
-          'mailbox_pwd':propertyInitEnum.STRING,
-          'remark':propertyInitEnum.STRING,
+        this.introRow={
+          // 'id':showDialogEnum.SHOW_ADD,
+          // 'baseUrl':propertyInitEnum.STRING,
+          // 'pageNum':propertyInitEnum.STRING,
+          // 'domain':propertyInitEnum.STRING,
+          // 'type':propertyInitEnum.STRING,
+          // 'name':propertyInitEnum.STRING,
+          // 'account':propertyInitEnum.STRING,
+          // 'secret':propertyInitEnum.STRING,
+          // 'mainUrl':propertyInitEnum.STRING,
+          // 'loginUrl':propertyInitEnum.STRING,
+          // 'remark':propertyInitEnum.STRING,
         }
       }
     },
     /**确认新增,修改,删除操作 */
-    async handleBeSureExecute(account,type){
-      const id =account.id;
+    async handleBeSureExecute(row,type){
+      const id =row.id;
       if(type == 'del'){
-        await ordinary.delOneAccount(id);
+        await Intro.delMany(id);
         this.handleHideDialog();
         this.handleSearch();
         return ;
       }
       
       let params = {
-        'platform_name':account['platform_name'],
-        'account':account['account'],
-        'password':account['password'],
-        'website':account['website'],
-        'phone':account['phone'],
-        'mailbox':account['mailbox'],
-        'mailbox_pwd':account['mailbox_pwd'],
-        'remark':account['remark'],
+        // 'baseUrl':row['baseUrl'],
+        // 'pageNum':row['pageNum'],
+        // 'domain':row['domain'],
+        // 'type':row['type'],
+        // 'name':row['name'],
+        // 'account':row['account'],
+        // 'secret':row['secret'],
+        // 'mainUrl':row['mainUrl'],
+        // 'loginUrl':row['loginUrl'],
+        // 'remark':row['remark'],
       }
       try{
         if(id>0){//修改
-          await ordinary.editOneAccount(id,params);
+          await Intro.editOne(id,params);
         }else{//新增
-          await ordinary.addOneAccount(params);
+          await Intro.addOne(params);
         }
         this.handleHideDialog();
         this.handleSearch();
@@ -169,31 +170,29 @@ export default {
     },
     /**关闭dialog */
     handleHideDialog(){
-      this.account={
-        'id':showDialogEnum.HIDE,
-        'platform_name':propertyInitEnum.STRING,
-        'account':propertyInitEnum.STRING,
-        'password':propertyInitEnum.STRING,
-        'website':propertyInitEnum.STRING,
-        'phone':propertyInitEnum.STRING,
-        'mailbox':propertyInitEnum.STRING,
-        'mailbox_pwd':propertyInitEnum.STRING,
-        'remark':propertyInitEnum.STRING,
+      this.introRow={
+        // 'id':showDialogEnum.HIDE,
+        // 'baseUrl':propertyInitEnum.STRING,
+        // 'pageNum':propertyInitEnum.NUMBER,
+        // 'domain':propertyInitEnum.STRING,
+        // 'type':propertyInitEnum.STRING,
+        // 'name':propertyInitEnum.STRING,
+        // 'account':propertyInitEnum.STRING,
+        // 'secret':propertyInitEnum.STRING,
+        // 'mainUrl':propertyInitEnum.STRING,
+        // 'loginUrl':propertyInitEnum.STRING,
+        // 'remark':propertyInitEnum.STRING,
       }
-      //在设置showDialogEnum.HIDE还没完成的时候,就初始化isDelete,isCheck 会导致界面跳动. 给500ms延时就能避免
       setTimeout(()=>{
         this.isDelete=propertyInitEnum.BOOLEAN;
         this.isCheck=propertyInitEnum.BOOLEAN;
-      },500)
-      
-      
+      },500)     
     },
 
     /**组装发送参数 */
     _assembleParams(){
       const params = {
-        remarkWebsitePlatform:this.remarkWebsitePlatform,
-        accountName:this.accountName
+      //  remarkType:this.remarkType
       }
       return params;
     },

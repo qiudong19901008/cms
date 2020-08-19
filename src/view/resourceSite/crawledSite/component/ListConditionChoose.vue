@@ -2,9 +2,9 @@
     <!-- @keyup.enter.native="search" -->
     <div class = "container">
         <div class="form-container">
-          <!-- 电话|用户名|备注 -->
-          <el-input class="condition" size="medium" placeholder="电话/用户名/备注" type="text" style="width:400px" 
-            v-model="remarkPhoneUsername" @keyup.enter.native="handleSearch">
+          <!-- 网站类型/备注 -->
+          <el-input class="condition" size="medium" placeholder="网站类型/备注 " type="text" style="width:400px" 
+            v-model="remarkType" @keyup.enter.native="handleSearch">
           </el-input>
           
         </div>
@@ -21,11 +21,11 @@
 export default {
   name: 'ListConditionChoose',
   props:{
-    tempRemarkPhoneUsername:String
+    tempRemarkType:String
   },
   data() {
     return { 
-      remarkPhoneUsername:''    
+      remarkType:''    
     };
   },
   methods:{
@@ -35,13 +35,13 @@ export default {
     },
     /**重置逻辑 */
     handleResert(){
-      this.remarkPhoneUsername = '' 
+      this.remarkType = '' 
       this.$emit('reset')
     },
   },
   watch:{
-    remarkPhoneUsername(){
-      this.$emit('update:tempRemarkPhoneUsername',this.remarkPhoneUsername)
+    remarkType(){
+      this.$emit('update:tempRemarkType',this.remarkType)
     },
   }
 };

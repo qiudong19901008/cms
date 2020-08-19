@@ -5,16 +5,16 @@
       <div>站点列表</div>
       <el-button type="primary" @click="handleShowDialog">新增</el-button>
     </div>
-    :tempRemarkPhoneUsername.sync = "remarkPhoneUsername"
     <!-- 表格条件查询 -->
     <ListConditionChoose 
+    :tempRemarkType.sync = "remarkType"
     @reset = "handleReset"
     @search = "handleSearch"
     >
     </ListConditionChoose>
     <!-- 表格 -->
     <ListTable
-    :tempBDPanList= "bdPanList"
+    :tempSiteList= "siteList"
     :tempCount= "count"
     :tempPageSize= "pageSize"
     @currentChange= "handleCurrentChange"
@@ -26,7 +26,7 @@
     <ListDialog 
     @beSureExecute= "handleBeSureExecute" 
     @hideDialog= "handleHideDialog"
-    :tempBdPanRow = "bdPanRow"
+    :tempSiteRow = "siteRow"
     :tempIsCheck= "isCheck"
     :tempIsDelete= "isDelete"
     >
@@ -62,7 +62,7 @@ export default {
       isDelete:propertyInitEnum.BOOLEAN,//是否是删除
 
       //查询条件
-      // remarkPhoneUsername:propertyInitEnum.STRING//备注||电话号码||用户名
+      remarkType:propertyInitEnum.STRING//网站类型/备注
     }
   },
   async created(){
@@ -91,8 +91,7 @@ export default {
     /**分页条件查询查询 */
     async handleCurrentChange(currentPage){
       const pageNum = currentPage-1;
-      const params = {}
-      // const params = this._assembleParams();//组装查询条件
+      const params = this._assembleParams();//组装查询条件
       params['pageNum']=pageNum;
       params['pageSize'] = this.pageSize
       this.init(params);
@@ -106,21 +105,21 @@ export default {
     /**弹出新增,编辑,查看dialog */
     async handleShowDialog(row,type){
       if(type == 'edit'){
-        this.bdPanRow = row;
+        this.siteRow = row;
       }
       if(type =='check'){
-        this.bdPanRow = row;
+        this.siteRow = row;
         this.isCheck=true;
       }
       if(type == 'del'){
-        this.bdPanRow = row;
+        this.siteRow = row;
         this.isDelete = true;
       }
       if(!type){
-        this.bdPanRow={
+        this.siteRow={
           'id':showDialogEnum.SHOW_ADD,
           'baseUrl':propertyInitEnum.STRING,
-          'pageNum':propertyInitEnum.NUMBER,
+          'pageNum':propertyInitEnum.STRING,
           'domain':propertyInitEnum.STRING,
           'type':propertyInitEnum.STRING,
           'name':propertyInitEnum.STRING,
@@ -156,9 +155,9 @@ export default {
       }
       try{
         if(id>0){//修改
-          await BDPan.editOneAccount(id,params);
+          await Site.editOne(id,params);
         }else{//新增
-          await BDPan.addOneAccount(params);
+          await Site.addOne(params);
         }
         this.handleHideDialog();
         this.handleSearch();
@@ -171,8 +170,18 @@ export default {
     },
     /**关闭dialog */
     handleHideDialog(){
-      this.bdPanRow={
-       
+      this.siteRow={
+        'id':showDialogEnum.HIDE,
+        'baseUrl':propertyInitEnum.STRING,
+        'pageNum':propertyInitEnum.NUMBER,
+        'domain':propertyInitEnum.STRING,
+        'type':propertyInitEnum.STRING,
+        'name':propertyInitEnum.STRING,
+        'account':propertyInitEnum.STRING,
+        'secret':propertyInitEnum.STRING,
+        'mainUrl':propertyInitEnum.STRING,
+        'loginUrl':propertyInitEnum.STRING,
+        'remark':propertyInitEnum.STRING,
       }
       setTimeout(()=>{
         this.isDelete=propertyInitEnum.BOOLEAN;
@@ -183,6 +192,7 @@ export default {
     /**组装发送参数 */
     _assembleParams(){
       const params = {
+       remarkType:this.remarkType
       }
       return params;
     },
