@@ -174,8 +174,8 @@ export default {
       }
       setTimeout(()=>{
         this.isDelete=propertyInitEnum.BOOLEAN;
+        this.isCheck=propertyInitEnum.BOOLEAN;
       },500)
-      this.isCheck=propertyInitEnum.BOOLEAN;
       
     },
 

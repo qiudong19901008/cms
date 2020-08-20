@@ -16,41 +16,30 @@ class Intro {
     return introList;
   }
 
-   /**
-    * @url POST intro/add
-    * 新增一个爬取站点
-    */
- static async addOne(data) {
+ 
+/**
+* 爬取网站详情
+* @param {*} data 
+*/
+static async crawlContent(data){
   await _axios({
-     method: 'post',
-     url: 'intro/add',
-     data,
-   });
- }
+    method:'post',
+    url:`crawl/content`,
+    data
+  })
+}
 
- /**
- * @url PUT intro/edit/:id
- * 修改一个账号信息
- */
-static async editOne(id,data) {
+/**
+* 处理资源
+* @param {*} data 
+*/
+static async processResource(data){
   await _axios({
-     method: 'put',
-     url: `intro/edit/${id}`,
-     data,
-   });
- }
- /**
- * @url DELETE intro/del/:ids
- * 删除一个站点信息
- * 必备参数: ids 
- * 格式: 1,2,3,5...
- */
-static async delMany(ids) {
-  await _axios({
-     method: 'delete',
-     url: `intro/del/${ids}`,
-   });
- }
+    method:'post',
+    url:`crawl/processResource`,
+    data
+  })
+}
   
   
 

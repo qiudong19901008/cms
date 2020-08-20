@@ -1,22 +1,42 @@
 <template>
     <div class="container">
-      <el-table :data="tempSiteList" >
+      <el-table :data="tempIntroList" >
           <!-- label定义列头显示的文本，prop定义要渲染data数组中元素的哪个字段，width定义列宽 -->
           <el-table-column label="序号" prop="id"></el-table-column>
-          <el-table-column label="基础URL" prop="baseUrl" ></el-table-column>
-          <el-table-column label="总页数" prop="pageNum" ></el-table-column>
-          <el-table-column label="域名" prop="domain" ></el-table-column>
-          <el-table-column label="网站类型" prop="type" ></el-table-column>
-          <el-table-column label="网站名" prop="name" ></el-table-column>
-          <el-table-column label="登陆账号" prop="account" ></el-table-column>
-          <el-table-column label="登陆密码" prop="secret" ></el-table-column>
-          <el-table-column label="登陆URL" prop="loginUrl" ></el-table-column>
-          <el-table-column label="主页URL" prop="mainUrl" ></el-table-column>
-          <el-table-column label="备注" prop="remark" ></el-table-column>
+          <el-table-column label="文章id" prop="articleId" ></el-table-column>
+          <el-table-column label="内容页url" prop="contentUrl" >
+            <template slot-scope="scope"> 
+              {{scope.row.contentUrl | getSummary}}
+            </template>
+          </el-table-column>
+          <el-table-column label="封面图片" >
+            <template slot-scope="scope"> 
+              <img :src="scope.row.imgSrc"  min-width="70" height="70" />
+            </template>
+          </el-table-column>
+          <el-table-column label="分类" prop="categories" ></el-table-column>
+          <el-table-column label="文章标题" prop="articleTitle" >
+            <template slot-scope="scope"> 
+              {{scope.row.articleTitle | getSummary}}
+            </template>
+          </el-table-column>
+          <el-table-column label="所属网站" prop="site.domain" ></el-table-column>
+          <el-table-column label="已爬取详情" prop="isDeal">
+            <template slot-scope="scope">
+              <el-tag type="danger" v-if="scope.row.isDeal==0">未抓取</el-tag>
+              <el-tag type="info" v-else >已抓取</el-tag>
+            </template>
+          </el-table-column>
+          <el-table-column label="已处理过" prop="isHandle" >
+            <template slot-scope="scope">
+              <el-tag type="danger" v-if="scope.row.isHandle==0">未处理</el-tag>
+              <el-tag type="info" v-else >已处理</el-tag>
+            </template>
+          </el-table-column>
           <el-table-column label="操作" fixed="right" min-width="200">
               <template slot-scope="scope"> 
                   <el-button plain size="mini" type="primary" @click="handleShowDialog(scope.row,'check')" >查看</el-button>
-                  <el-button plain size="mini" type="warning" @click="handleShowDialog(scope.row,'edit')" >编辑</el-button>
+                  <!-- <el-button plain size="mini" type="warning" @click="handleShowDialog(scope.row,'edit')" >编辑</el-button> -->
                   <el-button plain size="mini" type="danger" @click="handleShowDialog(scope.row,'del')" >删除</el-button>
               </template>
           </el-table-column>
@@ -25,7 +45,7 @@
       <div class="pagination-container">
         <el-pagination
           background
-          layout="prev, pager, next"
+          layout="total,prev, pager, next,jumper"
           @current-change= "handleCurrentChange"
           :total= "tempCount"
           :page-size= "tempPageSize"
@@ -44,7 +64,7 @@ import {getSummary,formatDate} from '@/lin/util/myUtil'
 export default {
   name: 'ListTable',
   props:{
-    tempSiteList:{
+    tempIntroList:{
       type:Array,
       default:[]
     },
@@ -60,7 +80,7 @@ export default {
   },
   data() {
     return{
-    
+     
     }
   },
   methods:{

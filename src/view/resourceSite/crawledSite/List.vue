@@ -8,8 +8,13 @@
     <!-- 表格条件查询 -->
     <ListConditionChoose 
     :tempRemarkType.sync = "remarkType"
+    :tempSiteList.sync = "siteList"
+    :tempSiteId.sync = "siteId"
+    :tempBegin.sync = "begin"
+    :tempEnd.sync = "end"
     @reset = "handleReset"
     @search = "handleSearch"
+    @crawl = "handleCrawl"
     >
     </ListConditionChoose>
     <!-- 表格 -->
@@ -56,13 +61,16 @@ export default {
       pageSize:propertyInitEnum.NUMBER,//每页现实数据个数
 
       siteRow:propertyInitEnum.OBJECT,//一个实体
-      // reset:propertyInitEnum.BOOLEAN,//是否从百度网盘重新抓取数据
 
       isCheck:propertyInitEnum.BOOLEAN,//是否是查看
       isDelete:propertyInitEnum.BOOLEAN,//是否是删除
 
       //查询条件
-      remarkType:propertyInitEnum.STRING//网站类型/备注
+      remarkType:propertyInitEnum.STRING,//网站类型/备注
+      //爬虫专用
+      siteId:propertyInitEnum.NUMBER,//当前站点id
+      begin:propertyInitEnum.STRING,//开始页码
+      end:propertyInitEnum.STRING,//结束页码
     }
   },
   async created(){
@@ -86,6 +94,15 @@ export default {
     /**重置 */
     async handleReset(){
       this.init();
+    },
+    /**爬取简介 */
+    async handleCrawl(){
+      await Site.crawlIntro({
+        id:this.siteId,
+        begin:this.begin,
+        end:this.end,
+      })
+      this.$message.success(`正在爬取id为${this.siteId}网站简介信息...`)
     },
 
     /**分页条件查询查询 */

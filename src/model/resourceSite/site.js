@@ -54,7 +54,17 @@ static async delMany(ids) {
    });
  }
   
-  
+ /**
+  * 爬取网站简介
+  * @param {*} data 
+  */
+static async crawlIntro(data){
+  await _axios({
+    method:'post',
+    url:`crawl/intro`,
+    data
+  })
+}
 
 
   

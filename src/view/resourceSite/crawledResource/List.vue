@@ -3,13 +3,22 @@
   <div class="lin-container">
     <div class="lin-title">
       <div>已爬取资源列表</div>
-      <el-button type="primary" @click="handleShowDialog">新增</el-button>
+      <!-- <el-button type="primary" @click="handleShowDialog">新增</el-button> -->
     </div>
-    <!-- :tempRemarkType.sync = "remarkType" -->
+    
     <!-- 表格条件查询 -->
     <ListConditionChoose 
+    :tempIsDeal.sync = "isDeal"
+    :tempIsHandle.sync = "isHandle"
+    :tempCategoryOrTags.sync = "categoryOrTags"
+    :tempSiteDomainOrName.sync= "siteDomainOrName"
+    :tempSiteList.sync = "siteList"
+    :tempSiteId.sync = "siteId"
+    :tempHandleCount.sync = "handleCount"
     @reset = "handleReset"
     @search = "handleSearch"
+    @crawlContent= "handleCrawlContent"
+    @processResource = "handleProcessResource"
     >
     </ListConditionChoose>
     <!-- 表格 -->
@@ -37,6 +46,7 @@
 <script>
 /* eslint-disable */
 import Intro from '@/model/resourceSite/intro'
+import Site from '@/model/resourceSite/site'
 import ListConditionChoose from './component/ListConditionChoose'
 import ListTable from './component/ListTable'
 import ListDialog from './component/ListDialog'
@@ -62,7 +72,15 @@ export default {
       isDelete:propertyInitEnum.BOOLEAN,//是否是删除
 
       //查询条件
-      // remarkType:propertyInitEnum.STRING//网站类型/备注
+      isDeal:propertyInitEnum.STRING,
+      isHandle:propertyInitEnum.STRING,
+      categoryOrTags:propertyInitEnum.STRING,
+      siteDomainOrName:propertyInitEnum.STRING,
+
+      //网站信息列表
+      siteList:propertyInitEnum.ARRAY,
+      siteId:propertyInitEnum.NUMBER,
+      handleCount:propertyInitEnum.STRING,
     }
   },
   async created(){
@@ -72,10 +90,12 @@ export default {
     /**组件初始化 */
     async init(params){
       params = this._makeSurePagination(params)
-      const data = await Intro.getList(params)
-      this.siteList = data['list']
+      let data = await Intro.getList(params)
+      this.introList = data['list']
       this.count = data['count']
       this.pageSize = params['pageSize']
+      data = await Site.getList({pageSize:50})
+      this.siteList = data['list']
     },
 
     /**搜索点击 */
@@ -87,7 +107,22 @@ export default {
     async handleReset(){
       this.init();
     },
-
+    /**爬取详情 */
+    async handleCrawlContent(){
+      await Intro.crawlContent({
+        id:this.siteId,
+        count:this.handleCount,
+      })
+      this.$message.success(`正在爬取id为${this.siteId}的网站内容详情...`)
+    },
+    /**处理资源 */
+    async handleProcessResource(){
+      await Intro.processResource({
+        id:this.siteId,
+        count:this.handleCount,
+      })
+       this.$message.success(`正在处理id为${this.siteId}的网站资源...`)
+    },
     /**分页条件查询查询 */
     async handleCurrentChange(currentPage){
       const pageNum = currentPage-1;
@@ -118,7 +153,7 @@ export default {
       if(!type){
         this.introRow={
           // 'id':showDialogEnum.SHOW_ADD,
-          // 'baseUrl':propertyInitEnum.STRING,
+          // 'articleId':propertyInitEnum.STRING,
           // 'pageNum':propertyInitEnum.STRING,
           // 'domain':propertyInitEnum.STRING,
           // 'type':propertyInitEnum.STRING,
@@ -171,17 +206,18 @@ export default {
     /**关闭dialog */
     handleHideDialog(){
       this.introRow={
-        // 'id':showDialogEnum.HIDE,
-        // 'baseUrl':propertyInitEnum.STRING,
-        // 'pageNum':propertyInitEnum.NUMBER,
-        // 'domain':propertyInitEnum.STRING,
-        // 'type':propertyInitEnum.STRING,
-        // 'name':propertyInitEnum.STRING,
-        // 'account':propertyInitEnum.STRING,
-        // 'secret':propertyInitEnum.STRING,
-        // 'mainUrl':propertyInitEnum.STRING,
-        // 'loginUrl':propertyInitEnum.STRING,
-        // 'remark':propertyInitEnum.STRING,
+        'id':showDialogEnum.HIDE,
+        'articleId':propertyInitEnum.STRING,
+        'articleTitle':propertyInitEnum.STRING,
+        'categories':propertyInitEnum.STRING,
+        'content':{},
+        'contentUrl':propertyInitEnum.STRING,
+        'imgSrc':propertyInitEnum.STRING,
+        'isDeal':propertyInitEnum.STRING,
+        'isHandle':propertyInitEnum.STRING,
+        'publicTime':propertyInitEnum.STRING,
+        'site':{},
+        'siteId':propertyInitEnum.NUMBER,
       }
       setTimeout(()=>{
         this.isDelete=propertyInitEnum.BOOLEAN;
@@ -192,7 +228,10 @@ export default {
     /**组装发送参数 */
     _assembleParams(){
       const params = {
-      //  remarkType:this.remarkType
+        isDeal:this.isDeal,
+        isHandle:this.isHandle,
+        categoryOrTags:this.categoryOrTags,
+        siteDomainOrName:this.siteDomainOrName,
       }
       return params;
     },
