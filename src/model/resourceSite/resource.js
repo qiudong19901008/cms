@@ -16,55 +16,67 @@ class Resource {
     return resourceList;
   }
 
-   /**
-    * @url POST site/add
-    * 新增一个爬取站点
-    * 
-    * 
-  */
- static async addOne(data) {
-  await _axios({
-     method: 'post',
-     url: 'site/add',
-     data,
-   });
- }
-
- /**
- * @url PUT site/edit/:id
- * 修改一个账号信息
- */
-static async editOne(id,data) {
-  await _axios({
-     method: 'put',
-     url: `site/edit/${id}`,
-     data,
-   });
- }
- /**
- * @url DELETE site/del/:ids
- * 删除一个站点信息
- * 必备参数: ids 
- * 格式: 1,2,3,5...
- */
-static async delMany(ids) {
-  await _axios({
-     method: 'delete',
-     url: `site/del/${ids}`,
-   });
- }
-  
- /**
-  * 爬取网站简介
+  /**
+  * 插入wp
   * @param {*} data 
   */
-static async crawlIntro(data){
+static async insertWP(data){
   await _axios({
     method:'post',
-    url:`crawl/intro`,
+    url:`crawl/insertWP`,
     data
   })
 }
+
+//    /**
+//     * @url POST site/add
+//     * 新增一个爬取站点
+//     * 
+//     * 
+//   */
+//  static async addOne(data) {
+//   await _axios({
+//      method: 'post',
+//      url: 'site/add',
+//      data,
+//    });
+//  }
+
+//  /**
+//  * @url PUT site/edit/:id
+//  * 修改一个账号信息
+//  */
+// static async editOne(id,data) {
+//   await _axios({
+//      method: 'put',
+//      url: `site/edit/${id}`,
+//      data,
+//    });
+//  }
+//  /**
+//  * @url DELETE site/del/:ids
+//  * 删除一个站点信息
+//  * 必备参数: ids 
+//  * 格式: 1,2,3,5...
+//  */
+// static async delMany(ids) {
+//   await _axios({
+//      method: 'delete',
+//      url: `site/del/${ids}`,
+//    });
+//  }
+  
+//  /**
+//   * 爬取网站简介
+//   * @param {*} data 
+//   */
+// static async crawlIntro(data){
+//   await _axios({
+//     method:'post',
+//     url:`crawl/intro`,
+//     data
+//   })
+// }
 
 
   

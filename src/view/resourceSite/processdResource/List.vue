@@ -7,13 +7,18 @@
     </div>
     <!-- 表格条件查询 -->
     <ListConditionChoose 
-    :tempRemarkType.sync = "remarkType"
     :tempResourcelist.sync = "resourceList"
     :tempSiteId.sync = "siteId"
-    :tempBegin.sync = "begin"
-    :tempEnd.sync = "end"
+    :tempSiteList.sync = "siteList"
+    :tempPanId.sync = "panId"
+    :tempPanList.sync = "panList"
+    :tempIsHandle.sync = "isHandle"
+    :tempDownloadUrl.sync = 'downloadUrl'
+    :tempArticleId.sync = "articleId"
+    :tempHandleCount.sync = "handleCount"
     @reset = "handleReset"
     @search = "handleSearch"
+    @insertWP = "handleInsertWP"
     >
     </ListConditionChoose>
     <!-- 表格 -->
@@ -41,6 +46,8 @@
 <script>
 /* eslint-disable */
 import Resource from '@/model/resourceSite/resource'
+import Site from '@/model/resourceSite/site'
+import BDPan from '@/model/resourceSite/bdPan'
 import ListConditionChoose from './component/ListConditionChoose'
 import ListTable from './component/ListTable'
 import ListDialog from './component/ListDialog'
@@ -64,12 +71,21 @@ export default {
       isCheck:propertyInitEnum.BOOLEAN,//是否是查看
       isDelete:propertyInitEnum.BOOLEAN,//是否是删除
 
-      //查询条件
-      remarkType:propertyInitEnum.STRING,//网站类型/备注
-      //爬虫专用
-      siteId:propertyInitEnum.NUMBER,//当前站点id
-      begin:propertyInitEnum.STRING,//开始页码
-      end:propertyInitEnum.STRING,//结束页码
+      /**查询条件 */
+      //站点选取
+      siteId:propertyInitEnum.NUMBER,//站点id
+      siteList:propertyInitEnum.ARRAY,//网站列表
+      //网盘选取
+      panId:propertyInitEnum.NUMBER,//网盘id
+      panList:propertyInitEnum.ARRAY,//网盘列表
+      //插入状态选取
+      isHandle:propertyInitEnum.STRING,
+      //下载地址
+      downloadUrl:propertyInitEnum.STRING,
+      //WP文章id
+      articleId:propertyInitEnum.STRING,
+      //
+      handleCount:propertyInitEnum.STRING,
     }
   },
   async created(){
@@ -83,6 +99,15 @@ export default {
       this.resourceList = data['list']
       this.count = data['count']
       this.pageSize = params['pageSize']
+      await this._getOtherData()
+    },
+
+    /**获取其他需要的信息 */
+    async _getOtherData(){
+      let data = await Site.getList({pageSize:100})
+      this.siteList = data['list']
+      data =await BDPan.getBDPanList({pageSize:100})
+      this.panList = data['list']
     },
 
     /**搜索点击 */
@@ -94,15 +119,13 @@ export default {
     async handleReset(){
       this.init();
     },
-    /**爬取简介 */
-    // async handleCrawl(){
-    //   await Resource.crawlIntro({
-    //     id:this.siteId,
-    //     begin:this.begin,
-    //     end:this.end,
-    //   })
-    //   this.$message.success(`正在爬取id为${this.siteId}网站简介信息...`)
-    // },
+    /**插入wp */
+    async handleInsertWP(){
+      this.$message.success(`正在插入WP...`)
+      await Resource.insertWP({
+        count:this.handleCount
+      })
+    },
 
     /**分页条件查询查询 */
     async handleCurrentChange(currentPage){
@@ -150,8 +173,8 @@ export default {
           'shareid':propertyInitEnum.STRING,
           'from':propertyInitEnum.STRING,
           'filename':propertyInitEnum.STRING,
-          'pan_id':propertyInitEnum.STRING,
-          'site_id':propertyInitEnum.STRING,
+          'pan_id':propertyInitEnum.NUMBER,
+          'site_id':propertyInitEnum.NUMBER,
           'articleId':propertyInitEnum.STRING,
           'pan':{},
           'site':{},
@@ -215,8 +238,8 @@ export default {
         'shareid':propertyInitEnum.STRING,
         'from':propertyInitEnum.STRING,
         'filename':propertyInitEnum.STRING,
-        'pan_id':propertyInitEnum.STRING,
-        'site_id':propertyInitEnum.STRING,
+        'pan_id':propertyInitEnum.NUMBER,
+        'site_id':propertyInitEnum.NUMBER,
         'articleId':propertyInitEnum.STRING,
         'pan':{},
         'site':{},
@@ -229,8 +252,21 @@ export default {
 
     /**组装发送参数 */
     _assembleParams(){
-      const params = {
-      //  remarkType:this.remarkType
+      const params = {}
+       if(this.siteId!=propertyInitEnum.NUMBER){
+        params['siteId'] = this.siteId
+      }
+      if(this.panId!=propertyInitEnum.NUMBER){
+        params['panId'] = this.panId
+      }
+      if(this.isHandle!=propertyInitEnum.STRING){
+        params['isHandle'] = this.isHandle
+      }
+      if(this.downloadUrl!=propertyInitEnum.STRING){
+        params['downloadUrl'] = this.downloadUrl
+      }
+      if(this.articleId!=propertyInitEnum.STRING){
+        params['articleId'] = this.articleId
       }
       return params;
     },
@@ -244,7 +280,9 @@ export default {
         params['pageNum'] = 0
       }
       return params
-    } 
+    },
+
+    
   
     
   },

@@ -228,10 +228,18 @@ export default {
     /**组装发送参数 */
     _assembleParams(){
       const params = {
-        isDeal:this.isDeal,
-        isHandle:this.isHandle,
-        categoryOrTags:this.categoryOrTags,
-        siteDomainOrName:this.siteDomainOrName,
+      }
+      if(this.isDeal!=propertyInitEnum.STRING){
+        params['isDeal'] = this.isDeal
+      }
+      if(this.isHandle!=propertyInitEnum.STRING){
+        params['isHandle'] = this.isHandle
+      }
+      if(this.categoryOrTags!=propertyInitEnum.STRING){
+        params['categoryOrTags'] = this.categoryOrTags
+      }
+      if(this.siteDomainOrName!=propertyInitEnum.STRING){
+        params['siteDomainOrName'] = this.siteDomainOrName
       }
       return params;
     },
