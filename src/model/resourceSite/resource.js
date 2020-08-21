@@ -28,6 +28,18 @@ static async insertWP(data){
   })
 }
 
+/**
+ * @url POST /crawl/reShare
+ * 重新对资源进行分享
+ */
+static async reShare(data){
+  await _axios({
+    method:'post',
+    url:`crawl/reShare`,
+    data
+  })
+}
+
 //    /**
 //     * @url POST site/add
 //     * 新增一个爬取站点

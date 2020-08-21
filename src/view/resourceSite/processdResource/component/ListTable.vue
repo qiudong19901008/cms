@@ -1,7 +1,8 @@
 <template>
     <div class="container">
-      <el-table :data="tempResourceList" >
+      <el-table :data="tempResourceList"  @selection-change="handleSelectionChange">
           <!-- label定义列头显示的文本，prop定义要渲染data数组中元素的哪个字段，width定义列宽 -->
+          <el-table-column type="selection" width="55"></el-table-column>
           <el-table-column label="序号" prop="id"></el-table-column>
           <el-table-column label="标题" prop="title" >
             <template slot-scope="scope"> 
@@ -104,6 +105,16 @@ export default {
       const id = row.id;
       const is_important =row.is_important;//el-switch的v-model已经改变了状态,所以不需要取反
       this.$emit('changeImportant',id,is_important);
+    },
+
+    /**表格选择状态改变触发 */
+    handleSelectionChange(rows){
+      const idList=[]
+      rows.forEach((row)=>{
+        idList.push(row['id'])
+      })
+      // console.log(idList)
+      this.$emit('changeSelection',idList);
     }
   },
   filters:{

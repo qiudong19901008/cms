@@ -12,11 +12,14 @@
           <el-col :span="2" >
             <el-button type="warning" @click="handleInsertWP" size="medium">插入WP</el-button>
           </el-col>
+          <el-col :span="2" >
+            <el-button type="warning" @click="handleReShare" size="medium">重新分享</el-button>
+          </el-col>
         </el-row>
 
         <!-- 搜索 -->
         <el-row :gutter="20">
-          <el-col :span="3" :offset="3">
+          <el-col :span="3" :offset="1">
             <el-select v-model="siteId" placeholder="请选择网站">
               <el-option
                 v-for="item in siteList"
@@ -40,6 +43,12 @@
             <el-select v-model="isHandle"  placeholder="处理状态" style="width:100px">
                 <el-option label="已插入" value="1"></el-option>
                 <el-option label="未插入" value="0"></el-option>
+            </el-select>
+          </el-col>
+          <el-col :span="2">
+            <el-select v-model="isShare" placeholder="分享状态" style="width:100px">
+                <el-option label="已分享" value="1"></el-option>
+                <el-option label="未分享" value="0"></el-option>
             </el-select>
           </el-col>
           <el-col :span="6">
@@ -85,6 +94,8 @@ export default {
     tempArticleId:String,
     //插入wp数量
     tempHandleCount:String,
+    //分享状态
+    tempIsShare:String,
   },
   data() {
     return { 
@@ -102,6 +113,8 @@ export default {
       articleId:'',
       //插入数量
       handleCount:'',
+      //分享状态
+      isShare:'',
     };
   },
   methods:{
@@ -119,11 +132,16 @@ export default {
       this.downloadUrl = ''
       this.articleId = ''
       this.handleCount = ''
+      this.isShare =''
       this.$emit('reset')
     },
     /**爬取简介 */
     handleInsertWP(){
       this.$emit('insertWP');
+    },
+    /**重新分享 */
+    handleReShare(){
+      this.$emit('reShare')
     }
   },
   watch:{
@@ -163,7 +181,11 @@ export default {
     },
     isHandle(){
       this.$emit('update:tempIsHandle',this.isHandle)
-    }
+    },
+    isShare(){
+      this.$emit('update:tempIsShare',this.isShare)
+    },
+
   }
 };
 </script>

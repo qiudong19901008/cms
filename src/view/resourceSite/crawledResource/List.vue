@@ -80,6 +80,7 @@ export default {
       categoryOrTags:propertyInitEnum.STRING,
       siteDomainOrName:propertyInitEnum.STRING,
 
+
       //网站信息列表
       siteList:propertyInitEnum.ARRAY,
       siteId:propertyInitEnum.NUMBER,

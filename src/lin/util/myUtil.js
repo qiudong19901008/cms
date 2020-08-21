@@ -83,12 +83,15 @@ const addArrPropeties = (arr,addP)=>{
 const getSummary = (val,number=10)=>{
   let Datas = val;
   //所返回数据length为7是添加"..."
-    let Datas_msg = Datas.substr(0, number) + "...";
-    if (Datas.length <= 8) {
-      return Datas;
-    } else {
-      return Datas_msg;
-    }
+  if(!Datas){
+    return ''
+  }
+  let Datas_msg = Datas.substr(0, number) + "...";
+  if (Datas.length <= 8) {
+    return Datas;
+  } else {
+    return Datas_msg;
+  }
 }
 /**
  * 时间格式化

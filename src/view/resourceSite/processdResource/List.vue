@@ -16,9 +16,11 @@
     :tempDownloadUrl.sync = 'downloadUrl'
     :tempArticleId.sync = "articleId"
     :tempHandleCount.sync = "handleCount"
+    :tempIsShare.sync = "isShare"
     @reset = "handleReset"
     @search = "handleSearch"
     @insertWP = "handleInsertWP"
+    @reShare = "handlReShare"
     >
     </ListConditionChoose>
     <!-- 表格 -->
@@ -29,6 +31,7 @@
     @currentChange= "handleCurrentChange"
     @showDialog= "handleShowDialog"
     @changeImportant= "handleChangeImportant"
+    @changeSelection= "handleChangeSelection"
     >
     </ListTable>
     <!-- 新增,查看,编辑dialog -->
@@ -65,6 +68,7 @@ export default {
       resourceList:propertyInitEnum.ARRAY,//列表数据
       count:propertyInitEnum.NUMBER,//当前数据总数
       pageSize:propertyInitEnum.NUMBER,//每页现实数据个数
+      idList:propertyInitEnum.ARRAY,//表格被选中数据的id列表
 
       resourceRow:propertyInitEnum.OBJECT,//一个实体
 
@@ -86,6 +90,8 @@ export default {
       articleId:propertyInitEnum.STRING,
       //
       handleCount:propertyInitEnum.STRING,
+      //分享状态
+      isShare:propertyInitEnum.STRING,
     }
   },
   async created(){
@@ -110,6 +116,11 @@ export default {
       this.panList = data['list']
     },
 
+    /**改变选中数据 */
+    async handleChangeSelection(idList){
+      this.isList = idList
+    },
+
     /**搜索点击 */
     async handleSearch(){
       const params = this._assembleParams();//组装查询条件
@@ -124,6 +135,13 @@ export default {
       this.$message.success(`正在插入WP...`)
       await Resource.insertWP({
         count:this.handleCount
+      })
+    },
+    /**重新分享 */
+    async handlReShare(){
+      this.$message.success(`正在重新分享已选中数据...`)
+      await Resource.reShare({
+        idList:this.isList
       })
     },
 
@@ -267,6 +285,9 @@ export default {
       }
       if(this.articleId!=propertyInitEnum.STRING){
         params['articleId'] = this.articleId
+      }
+       if(this.isShare!=propertyInitEnum.STRING){
+        params['isShare'] = this.isShare
       }
       return params;
     },
