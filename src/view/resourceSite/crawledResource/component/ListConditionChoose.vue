@@ -16,6 +16,16 @@
           <el-col :span="2">
             <el-input placeholder="数量" v-model="handleCount"></el-input>
           </el-col>
+          <el-col :span="3">
+            <el-select size="medium" filterable placeholder="网盘账号" v-model="panId" >
+              <el-option
+                v-for="item in panList"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value">
+              </el-option>
+            </el-select>
+          </el-col>
           <el-col :span="4" >
             <el-button type="warning" @click="handleCrawlContent" size="medium">爬取详情</el-button>
             <el-button type="warning" @click="handleProcessResource" size="medium">处理资源</el-button>
@@ -70,6 +80,8 @@ export default {
     tempSiteList:Array,
     tempSiteId:Number,
     tempHandleCount:String,
+    tempPanList:Array,
+    tempPanId:Number,
   },
   data() {
     return { 
@@ -80,6 +92,8 @@ export default {
       siteList:[],
       siteId:undefined,
       handleCount:'',
+      panList:[],
+      panId:undefined,
     };
   },
   methods:{
@@ -95,6 +109,7 @@ export default {
       this.siteDomainOrName=''
       this.siteId=undefined
       this.handleCount = '',
+      this.panId=undefined
       this.$emit('reset')
     },
     /**爬取详情 */
@@ -119,11 +134,11 @@ export default {
     siteDomainOrName(){
       this.$emit('update:tempSiteDomainOrName',this.siteDomainOrName)
     },
-    siteId(){
-      this.$emit('update:tempSiteId',this.siteId)
-    },
     handleCount(){
       this.$emit('update:tempHandleCount',this.handleCount)
+    },
+    siteId(){
+      this.$emit('update:tempSiteId',this.siteId)
     },
     tempSiteList(){
       const temp = []
@@ -131,7 +146,19 @@ export default {
         temp.push({value:c.id,label:c.domain})
       })
       this.siteList=temp;
+    },
+    panId(){
+      this.$emit('update:tempPanId',this.panId)
+    },
+    tempPanList(){
+      const temp = []
+      this.tempPanList.forEach(c=>{
+        temp.push({value:c.id,label:c.account})
+      })
+      this.panList=temp;
     }
+
+
   }
 };
 </script>

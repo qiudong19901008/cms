@@ -15,6 +15,8 @@
     :tempSiteList.sync = "siteList"
     :tempSiteId.sync = "siteId"
     :tempHandleCount.sync = "handleCount"
+    :tempPanList.sync = "panList"
+    :tempPanId.sync = "panId"
     @reset = "handleReset"
     @search = "handleSearch"
     @crawlContent= "handleCrawlContent"
@@ -47,6 +49,7 @@
 /* eslint-disable */
 import Intro from '@/model/resourceSite/intro'
 import Site from '@/model/resourceSite/site'
+import BDPan from '@/model/resourceSite/bdPan'
 import ListConditionChoose from './component/ListConditionChoose'
 import ListTable from './component/ListTable'
 import ListDialog from './component/ListDialog'
@@ -81,6 +84,8 @@ export default {
       siteList:propertyInitEnum.ARRAY,
       siteId:propertyInitEnum.NUMBER,
       handleCount:propertyInitEnum.STRING,
+      panList:propertyInitEnum.ARRAY,
+      panId:propertyInitEnum.NUMBER,
     }
   },
   async created(){
@@ -94,8 +99,15 @@ export default {
       this.introList = data['list']
       this.count = data['count']
       this.pageSize = params['pageSize']
-      data = await Site.getList({pageSize:50})
+      await this._getOtherData()
+    },
+
+    /**获取其他需要的信息 */
+    async _getOtherData(){
+      let data = await Site.getList({pageSize:100})
       this.siteList = data['list']
+      data =await BDPan.getBDPanList({pageSize:100})
+      this.panList = data['list']
     },
 
     /**搜索点击 */
@@ -109,19 +121,21 @@ export default {
     },
     /**爬取详情 */
     async handleCrawlContent(){
-      await Intro.crawlContent({
-        id:this.siteId,
-        count:this.handleCount,
-      })
       this.$message.success(`正在爬取id为${this.siteId}的网站内容详情...`)
+      const params = {}
+      params['siteId'] = this.siteId!=propertyInitEnum.NUMBER?this.siteId:''
+      params['count'] = this.count!=propertyInitEnum.STRING?this.handleCount:''
+      await Intro.crawlContent(params)
     },
     /**处理资源 */
     async handleProcessResource(){
-      await Intro.processResource({
-        id:this.siteId,
-        count:this.handleCount,
-      })
-       this.$message.success(`正在处理id为${this.siteId}的网站资源...`)
+      this.$message.success(`正在处理id为${this.siteId}的网站资源...`)
+      const params = {}
+      params['siteId'] = this.siteId!=propertyInitEnum.NUMBER?this.siteId:''
+      params['count'] = this.count!=propertyInitEnum.STRING?this.handleCount:''
+      params['panId'] = this.panId!=propertyInitEnum.NUMBER?this.panId:''
+      await Intro.processResource(params)
+       
     },
     /**分页条件查询查询 */
     async handleCurrentChange(currentPage){
