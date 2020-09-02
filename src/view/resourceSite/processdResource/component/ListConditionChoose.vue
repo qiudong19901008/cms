@@ -4,22 +4,36 @@
 
     <div class = "container">
         <!-- 插入WP -->
-        <el-row :gutter="20" style="padding-bottom:10px">
-          <el-col :span="2">
+        <el-row :gutter="20" style="padding-bottom:10px; border-bottom: 1px solid #dae1ed;">
+          <el-col :span="6">
             <el-input placeholder="插入数量" v-model="handleCount">
             </el-input>
           </el-col>
           <el-col :span="2" >
-            <el-button type="warning" @click="handleInsertWP" size="medium">插入WP</el-button>
+            <el-button type="warning" @click="handleInsertWP" >插入WP</el-button>
+          </el-col>
+        </el-row>
+
+        <!-- 重新分享 -->
+        <el-row :gutter="20" style="padding:10px 0 10px 0; border-bottom: 1px solid #dae1ed;">
+          <el-col :span="2" >
+            <el-button type="warning" @click="handleReShare" >重新分享</el-button>
+          </el-col>
+        </el-row>
+
+        <!-- 更新标签和分类,检查不存在则重新插入WP -->
+        <el-row :gutter="20" style="padding:10px 0 10px 0; border-bottom: 1px solid #dae1ed;">
+          <el-col :span="2" >
+            <el-button type="warning" @click="handleUpdateTerm" >更新标签和分类</el-button>
           </el-col>
           <el-col :span="2" >
-            <el-button type="warning" @click="handleReShare" size="medium">重新分享</el-button>
+            <el-button type="warning" @click="handleCheckReInsert" >检查不存在则重新插入WP</el-button>
           </el-col>
         </el-row>
 
         <!-- 搜索 -->
-        <el-row :gutter="20">
-          <el-col :span="3" :offset="1">
+        <el-row :gutter="20" style="padding:10px 0 10px 0; ">
+          <el-col :span="3">
             <el-select v-model="siteId" placeholder="请选择网站">
               <el-option
                 v-for="item in siteList"
@@ -51,8 +65,8 @@
                 <el-option label="未分享" value="0"></el-option>
             </el-select>
           </el-col>
-          <el-col :span="6">
-            <el-input  placeholder="网盘地址" type="text" 
+          <el-col :span="7">
+            <el-input  placeholder="网盘地址/文章标题" type="text" 
               v-model="downloadUrl" @keyup.enter.native="handleSearch">
             </el-input>
           </el-col>
@@ -142,6 +156,14 @@ export default {
     /**重新分享 */
     handleReShare(){
       this.$emit('reShare')
+    },
+    /**更新标签和分类 */
+    handleUpdateTerm(){
+      this.$emit('updateTerm')
+    },
+    /**检查不存在则重新插入WP */
+    handleCheckReInsert(){
+      this.$emit('checkReInsert')
     }
   },
   watch:{

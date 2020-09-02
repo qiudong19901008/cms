@@ -40,6 +40,30 @@ static async reShare(data){
   })
 }
 
+/**
+ * @url POST /crawl/updateTerm
+ * 重新对资源进行分享
+ */
+static async updateTerm(data){
+  await _axios({
+    method:'post',
+    url:`crawl/updateTerm`,
+    data
+  })
+}
+
+/**
+ * @url POST /crawl/checkReInsert
+ * 重新对资源进行分享
+ */
+static async checkReInsert(data){
+  await _axios({
+    method:'post',
+    url:`crawl/checkReInsert`,
+    data
+  })
+}
+
 //    /**
 //     * @url POST site/add
 //     * 新增一个爬取站点

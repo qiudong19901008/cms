@@ -21,6 +21,8 @@
     @search = "handleSearch"
     @insertWP = "handleInsertWP"
     @reShare = "handlReShare"
+    @updateTerm = "handleUpdateTerm"
+    @checkReInsert = "handleCheckReInsert"
     >
     </ListConditionChoose>
     <!-- 表格 -->
@@ -118,7 +120,7 @@ export default {
 
     /**改变选中数据 */
     async handleChangeSelection(idList){
-      this.isList = idList
+      this.idList = idList
     },
 
     /**搜索点击 */
@@ -139,9 +141,35 @@ export default {
     },
     /**重新分享 */
     async handlReShare(){
+      if(!this.idList || this.idList.length == 0){
+        this.$message.error(`请选择需要重新分享的文章`)
+        return
+      }
       this.$message.success(`正在重新分享已选中数据...`)
       await Resource.reShare({
-        idList:this.isList
+        idList:this.idList
+      })
+    },
+    /**更新标签和分类 */
+    async handleUpdateTerm(){
+      if(!this.idList || this.idList.length == 0){
+        this.$message.success(`正在全部更新...`)
+      }else{
+        this.$message.success(`正在更新已选择...`)
+      }
+      await Resource.updateTerm({
+        ids:this.idList
+      })
+    },
+     /**检查不存在则重新插入WP */
+    async handleCheckReInsert(){
+      if(!this.idList || this.idList.length == 0){
+        this.$message.error(`请选择需要检测并重新插入的文章`)
+        return
+      }
+      this.$message.success(`正在检测并重新插入已选中数据...`)
+      await Resource.checkReInsert({
+        ids:this.idList
       })
     },
 
