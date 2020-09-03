@@ -92,9 +92,13 @@
               <el-row>
                 <el-col :span="24">
                   <el-form-item label="内容">
-                    <el-input size="medium" :rows="8" type="textarea" v-model="introRow.content.content" placeholder="" :disabled="tempIsCheck" />
+                    <div class="lin-wrap" v-if="introRow.id==-2">
+                      <tinymce @change="change" />
+                    </div>
+                    <el-input size="medium" :rows="8" type="textarea" v-model="introRow.content.content" placeholder="" :disabled="tempIsCheck" v-else />
                   </el-form-item>
                 </el-col>
+                
               </el-row>
             </el-form>
             <span slot="footer" class="dialog-footer">
@@ -121,9 +125,14 @@
 </template>
 
 <script>
+import Tinymce from '@/component/base/tinymce'//富文本编辑器
+
 import {selectEnum,showDialogEnum,propertyInitEnum} from '@/config/enum'
 import {getSummary,formatDate} from '@/lin/util/myUtil'
 export default {
+  components:{
+    Tinymce
+  },
   name: 'ListDialog',
   props:{
     tempIntroRow:Object,
@@ -134,18 +143,26 @@ export default {
     return{
       isShowDialog:propertyInitEnum.BOOLEAN,
       introRow:{
-        'id':showDialogEnum.HIDE,
-        'articleId':propertyInitEnum.STRING,
-        'articleTitle':propertyInitEnum.STRING,
-        'categories':propertyInitEnum.STRING,
-        'content':{},
-        'contentUrl':propertyInitEnum.STRING,
-        'imgSrc':propertyInitEnum.STRING,
-        'isDeal':propertyInitEnum.STRING,
-        'isHandle':propertyInitEnum.STRING,
-        'publicTime':propertyInitEnum.STRING,
-        'site':{},
-        'siteId':propertyInitEnum.STRING,
+          'id':showDialogEnum.HIDE,
+          'articleId':propertyInitEnum.STRING,
+          'articleTitle':propertyInitEnum.STRING,
+          'categories':propertyInitEnum.STRING,
+          'content':{
+            'downloadUrl': propertyInitEnum.STRING,
+            'pwd': propertyInitEnum.STRING,
+            'compressCode': propertyInitEnum.STRING,
+            'tags': propertyInitEnum.STRING,
+            'content':propertyInitEnum.STRING,
+          },
+          'contentUrl':propertyInitEnum.STRING,
+          'imgSrc':propertyInitEnum.STRING,
+          'isDeal':propertyInitEnum.STRING,
+          'isHandle':propertyInitEnum.STRING,
+          'publicTime':propertyInitEnum.STRING,
+          'site':{
+            'domain':propertyInitEnum.STRING,
+          },
+          'siteId':propertyInitEnum.STRING,
       },
       //验证表单的规则
       rules: {
@@ -162,12 +179,17 @@ export default {
     }
   },
   methods:{
+    change(val) {
+      // console.log(val)
+      this.introRow.content.content= val
+    },
     //执行操作
     handleBeSureExecute(type){
       if(type == 'del'){
         this.$emit('beSureExecute',this.introRow,type);
         return;
       }
+      // console.log(this.introRow)
       this.$refs.form.validate((valid) => {
         if (valid) {
           this.$emit('beSureExecute',this.introRow,type);
@@ -182,6 +204,15 @@ export default {
   watch:{
     tempIntroRow(){
       this.introRow = this.tempIntroRow;
+      if(this.introRow.content==null){
+        this.introRow.content={
+          'downloadUrl': propertyInitEnum.STRING,
+          'pwd': propertyInitEnum.STRING,
+          'compressCode': propertyInitEnum.STRING,
+          'tags': propertyInitEnum.STRING,
+          'content':propertyInitEnum.STRING,
+        }
+      }
       this.isShowDialog = this.introRow.id==showDialogEnum.HIDE?false:true;
     }
   },

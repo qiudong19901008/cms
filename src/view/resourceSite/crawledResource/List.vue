@@ -3,7 +3,7 @@
   <div class="lin-container">
     <div class="lin-title">
       <div>已爬取资源列表</div>
-      <!-- <el-button type="primary" @click="handleShowDialog">新增</el-button> -->
+      <el-button type="primary" @click="handleShowDialog">新增</el-button>
     </div>
     
     <!-- 表格条件查询 -->
@@ -154,6 +154,7 @@ export default {
 
     /**弹出新增,编辑,查看dialog */
     async handleShowDialog(row,type){
+      // console.log(row)
       if(type == 'edit'){
         this.introRow = row;
       }
@@ -167,17 +168,26 @@ export default {
       }
       if(!type){
         this.introRow={
-          // 'id':showDialogEnum.SHOW_ADD,
-          // 'articleId':propertyInitEnum.STRING,
-          // 'pageNum':propertyInitEnum.STRING,
-          // 'domain':propertyInitEnum.STRING,
-          // 'type':propertyInitEnum.STRING,
-          // 'name':propertyInitEnum.STRING,
-          // 'account':propertyInitEnum.STRING,
-          // 'secret':propertyInitEnum.STRING,
-          // 'mainUrl':propertyInitEnum.STRING,
-          // 'loginUrl':propertyInitEnum.STRING,
-          // 'remark':propertyInitEnum.STRING,
+          'id':showDialogEnum.SHOW_ADD,
+          'articleId':propertyInitEnum.STRING,
+          'articleTitle':propertyInitEnum.STRING,
+          'categories':propertyInitEnum.STRING,
+          'content':{
+            'downloadUrl': propertyInitEnum.STRING,
+            'pwd': propertyInitEnum.STRING,
+            'compressCode': propertyInitEnum.STRING,
+            'tags': propertyInitEnum.STRING,
+            'content':propertyInitEnum.STRING,
+          },
+          'contentUrl':propertyInitEnum.STRING,
+          'imgSrc':propertyInitEnum.STRING,
+          'isDeal':propertyInitEnum.STRING,
+          'isHandle':propertyInitEnum.STRING,
+          'publicTime':propertyInitEnum.STRING,
+          'site':{
+            'domain':propertyInitEnum.STRING,
+          },
+          'siteId':propertyInitEnum.STRING,
         }
       }
     },
@@ -190,18 +200,49 @@ export default {
         this.handleSearch();
         return ;
       }
-      
+      // console.log(row['content']['downloadUrl'])
       let params = {
-        // 'baseUrl':row['baseUrl'],
-        // 'pageNum':row['pageNum'],
-        // 'domain':row['domain'],
-        // 'type':row['type'],
-        // 'name':row['name'],
-        // 'account':row['account'],
-        // 'secret':row['secret'],
-        // 'mainUrl':row['mainUrl'],
-        // 'loginUrl':row['loginUrl'],
-        // 'remark':row['remark'],
+        content:{},
+        site:{},
+      }
+      //简介表
+      if(row['articleId']!=propertyInitEnum.STRING){
+        params['articleId'] = row['articleId']
+      }
+      if(row['articleTitle']!=propertyInitEnum.STRING){
+        params['articleTitle'] = row['articleTitle']
+      }
+      if(row['categories']!=propertyInitEnum.STRING){
+        params['categories'] = row['categories']
+      }
+      if(row['contentUrl']!=propertyInitEnum.STRING){
+        params['contentUrl'] = row['contentUrl']
+      }
+      if(row['imgSrc']!=propertyInitEnum.STRING){
+        params['imgSrc'] = row['imgSrc']
+      }
+      if(row['publicTime']!=propertyInitEnum.STRING){
+        params['publicTime'] = row['publicTime']
+      }
+      //网站表
+      if( row['site']['domain']!=propertyInitEnum.STRING){
+        params['site']['domain'] = row['site']['domain']
+      }
+      //内容表
+      if(row['content']['downloadUrl']!=propertyInitEnum.STRING){
+        params['content']['downloadUrl'] = row['content']['downloadUrl']
+      }
+      if(row['content']['pwd']!=propertyInitEnum.STRING){
+        params['content']['pwd'] = row['content']['pwd']
+      }
+      if(row['content']['compressCode']!=propertyInitEnum.STRING){
+        params['content']['compressCode'] = row['content']['compressCode']
+      }
+      if(row['content']['tags']!=propertyInitEnum.STRING){
+        params['content']['tags'] = row['content']['tags']
+      }
+      if(row['content']['content']!=propertyInitEnum.STRING){
+        params['content']['content'] = row['content']['content']
       }
       try{
         if(id>0){//修改
@@ -214,25 +255,31 @@ export default {
       }catch(e){
         this.handleHideDialog();
         this.handleSearch();
-      }
-      
-      
+      }    
     },
     /**关闭dialog */
     handleHideDialog(){
       this.introRow={
-        'id':showDialogEnum.HIDE,
-        'articleId':propertyInitEnum.STRING,
-        'articleTitle':propertyInitEnum.STRING,
-        'categories':propertyInitEnum.STRING,
-        'content':{},
-        'contentUrl':propertyInitEnum.STRING,
-        'imgSrc':propertyInitEnum.STRING,
-        'isDeal':propertyInitEnum.STRING,
-        'isHandle':propertyInitEnum.STRING,
-        'publicTime':propertyInitEnum.STRING,
-        'site':{},
-        'siteId':propertyInitEnum.NUMBER,
+          'id':showDialogEnum.HIDE,
+          'articleId':propertyInitEnum.STRING,
+          'articleTitle':propertyInitEnum.STRING,
+          'categories':propertyInitEnum.STRING,
+          'content':{
+            'downloadUrl': propertyInitEnum.STRING,
+            'pwd': propertyInitEnum.STRING,
+            'compressCode': propertyInitEnum.STRING,
+            'tags': propertyInitEnum.STRING,
+            'content':propertyInitEnum.STRING,
+          },
+          'contentUrl':propertyInitEnum.STRING,
+          'imgSrc':propertyInitEnum.STRING,
+          'isDeal':propertyInitEnum.STRING,
+          'isHandle':propertyInitEnum.STRING,
+          'publicTime':propertyInitEnum.STRING,
+          'site':{
+            'domain':propertyInitEnum.STRING,
+          },
+          'siteId':propertyInitEnum.STRING,
       }
       setTimeout(()=>{
         this.isDelete=propertyInitEnum.BOOLEAN;

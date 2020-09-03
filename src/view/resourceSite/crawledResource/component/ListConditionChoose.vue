@@ -2,9 +2,9 @@
     <!-- @keyup.enter.native="search" -->
     <div class = "container">
         <!-- 爬取详情  处理资源 -->
-        <el-row :gutter="20" style="padding-bottom:10px">
+        <el-row :gutter="20" style="padding:10px 0 30px 0; border-bottom: 1px solid #dae1ed;" >
           <el-col :span="3">
-            <el-select size="medium" filterable placeholder="网站域名" v-model="siteId" >
+            <el-select  filterable placeholder="网站域名" v-model="siteId" >
               <el-option
                 v-for="item in siteList"
                 :key="item.value"
@@ -17,7 +17,7 @@
             <el-input placeholder="数量" v-model="handleCount"></el-input>
           </el-col>
           <el-col :span="3">
-            <el-select size="medium" filterable placeholder="网盘账号" v-model="panId" >
+            <el-select filterable placeholder="网盘账号" v-model="panId" >
               <el-option
                 v-for="item in panList"
                 :key="item.value"
@@ -31,31 +31,32 @@
             <el-button type="warning" @click="handleProcessResource" size="medium">处理资源</el-button>
           </el-col>
         </el-row>
+
         <!-- 搜索 -->
-        <el-row :gutter="20">
-          <el-col :span="2" :offset="8">
-            <el-select v-model="isDeal" size="small" placeholder="详情状态" style="width:100px">
+        <el-row :gutter="20" style="padding:30px 0 10px 0;">
+          <el-col :span="3" >
+            <el-select v-model="isDeal" placeholder="详情状态" >
               <el-option label="已抓取" value="1"></el-option>
               <el-option label="未抓取" value="0"></el-option>
             </el-select>
           </el-col>
-          <el-col :span="2">
-            <el-select v-model="isHandle" size="small" placeholder="处理状态" style="width:100px">
+          <el-col :span="3">
+            <el-select v-model="isHandle" placeholder="处理状态" >
                 <el-option label="已处理" value="1"></el-option>
                 <el-option label="未处理" value="0"></el-option>
             </el-select>
           </el-col>
           <el-col :span="4">
-            <el-input size="small" placeholder="分类/标签" type="text" style="width:200px" 
+            <el-input placeholder="分类/标签" type="text" 
               v-model="categoryOrTags" @keyup.enter.native="handleSearch">
             </el-input>
           </el-col>
           <el-col :span="4">
-            <el-input size="small" placeholder="网站域名/网站名称" type="text" style="width:200px" 
+            <el-input  placeholder="网站域名/网站名称" type="text" 
               v-model="siteDomainOrName" @keyup.enter.native="handleSearch">
             </el-input>
           </el-col>
-          <el-col :span="4">
+          <el-col :span="4" :offset="6">
             <!-- 搜索按钮 | 重置按钮 -->
             <el-button type="primary" @click="handleSearch">搜索</el-button>
             <el-button type="primary" @click="handleResert">重置</el-button>

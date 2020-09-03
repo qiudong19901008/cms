@@ -23,10 +23,10 @@
 
         <!-- 更新标签和分类,检查不存在则重新插入WP -->
         <el-row :gutter="20" style="padding:10px 0 10px 0; border-bottom: 1px solid #dae1ed;">
-          <el-col :span="2" >
+          <el-col :span="4" >
             <el-button type="warning" @click="handleUpdateTerm" >更新标签和分类</el-button>
           </el-col>
-          <el-col :span="2" >
+          <el-col :span="6" >
             <el-button type="warning" @click="handleCheckReInsert" >检查不存在则重新插入WP</el-button>
           </el-col>
         </el-row>

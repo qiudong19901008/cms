@@ -40,6 +40,28 @@ static async processResource(data){
     data
   })
 }
+
+/**
+ * 删除资源
+ */
+static async delMany(ids) {
+  await _axios({
+     method: 'delete',
+     url: `intro/del/${ids}`,
+   });
+ }
+
+/**
+ * 手动添加一个资源
+ */
+static async addOne(data){
+  // console.log(data)
+  await _axios({
+    method:'post',
+    url:`intro/addOne`,
+    data
+  })
+}
   
   
 
