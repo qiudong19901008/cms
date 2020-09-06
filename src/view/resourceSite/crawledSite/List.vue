@@ -145,6 +145,7 @@ export default {
           'mainUrl':propertyInitEnum.STRING,
           'loginUrl':propertyInitEnum.STRING,
           'remark':propertyInitEnum.STRING,
+          'loginCookies':propertyInitEnum.STRING,
         }
       }
     },
@@ -169,6 +170,7 @@ export default {
         'mainUrl':row['mainUrl'],
         'loginUrl':row['loginUrl'],
         'remark':row['remark'],
+        'loginCookies':row['loginCookies']
       }
       try{
         if(id>0){//修改
@@ -199,6 +201,7 @@ export default {
         'mainUrl':propertyInitEnum.STRING,
         'loginUrl':propertyInitEnum.STRING,
         'remark':propertyInitEnum.STRING,
+        'loginCookies':propertyInitEnum.STRING,
       }
       setTimeout(()=>{
         this.isDelete=propertyInitEnum.BOOLEAN;

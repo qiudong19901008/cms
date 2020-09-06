@@ -3,15 +3,36 @@
       <el-table :data="tempSiteList" >
           <!-- label定义列头显示的文本，prop定义要渲染data数组中元素的哪个字段，width定义列宽 -->
           <el-table-column label="序号" prop="id"></el-table-column>
-          <el-table-column label="基础URL" prop="baseUrl" ></el-table-column>
+          <el-table-column label="基础URL" prop="baseUrl" >
+             <template slot-scope="scope"> 
+              {{scope.row.baseUrl | getSummary}}
+             </template>
+          </el-table-column>
           <el-table-column label="总页数" prop="pageNum" ></el-table-column>
           <el-table-column label="域名" prop="domain" ></el-table-column>
           <el-table-column label="网站类型" prop="type" ></el-table-column>
           <el-table-column label="登陆账号" prop="account" ></el-table-column>
           <el-table-column label="登陆密码" prop="secret" ></el-table-column>
-          <el-table-column label="登陆URL" prop="loginUrl" ></el-table-column>
-          <el-table-column label="主页URL" prop="mainUrl" ></el-table-column>
-          <el-table-column label="备注" prop="remark" ></el-table-column>
+          <el-table-column label="登陆URL" prop="loginUrl" >
+             <template slot-scope="scope"> 
+              {{scope.row.loginUrl | getSummary}}
+             </template>
+          </el-table-column>
+          <el-table-column label="主页URL" prop="mainUrl" >
+             <template slot-scope="scope"> 
+              {{scope.row.mainUrl | getSummary}}
+             </template>
+          </el-table-column>
+          <el-table-column label="备注" prop="remark" >
+            <template slot-scope="scope"> 
+              {{scope.row.remark | getSummary}}
+             </template>
+          </el-table-column>
+          <el-table-column label="登陆cookise" prop="loginCookise" >
+             <template slot-scope="scope"> 
+              {{scope.row.loginCookise | getSummary}}
+             </template>
+          </el-table-column>
           <el-table-column label="操作" fixed="right" min-width="200">
               <template slot-scope="scope"> 
                   <el-button plain size="mini" type="primary" @click="handleShowDialog(scope.row,'check')" >查看</el-button>

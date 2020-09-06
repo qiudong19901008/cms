@@ -64,6 +64,9 @@
               <el-form-item label="备注">
                 <el-input size="medium" v-model="siteRow.remark" :rows="8" type="textarea"  placeholder="输入备注" :disabled="tempIsCheck" />
               </el-form-item>
+               <el-form-item label="登陆cookies">
+                <el-input size="medium" v-model="siteRow.loginCookies" :rows="8" type="textarea"  placeholder="" :disabled="tempIsCheck" />
+              </el-form-item>
             </el-form>
             <span slot="footer" class="dialog-footer">
               <el-button  @click="handleHideDialog">取 消</el-button>
@@ -112,6 +115,7 @@ export default {
         'mainUrl':propertyInitEnum.STRING,
         'loginUrl':propertyInitEnum.STRING,
         'remark':propertyInitEnum.STRING,
+        'loginCookies':propertyInitEnum.STRING,
       },
       //验证表单的规则
       rules: {
