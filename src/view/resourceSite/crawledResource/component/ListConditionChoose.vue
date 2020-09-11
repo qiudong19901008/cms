@@ -51,10 +51,20 @@
               v-model="categoryOrTags" @keyup.enter.native="handleSearch">
             </el-input>
           </el-col>
-          <el-col :span="4">
+          <!-- <el-col :span="4">
             <el-input  placeholder="网站域名/网站名称" type="text" 
               v-model="siteDomainOrName" @keyup.enter.native="handleSearch">
             </el-input>
+          </el-col> -->
+          <el-col :span="4">
+            <el-select  filterable placeholder="网站域名" v-model="siteDomainOrName" >
+              <el-option
+                v-for="item in siteList"
+                :key="item.value"
+                :label="item.label"
+                :value="item.label">
+              </el-option>
+            </el-select>
           </el-col>
           <el-col :span="4" :offset="6">
             <!-- 搜索按钮 | 重置按钮 -->

@@ -16,6 +16,7 @@
     :tempDownloadUrl.sync = 'downloadUrl'
     :tempArticleId.sync = "articleId"
     :tempHandleCount.sync = "handleCount"
+    :tempInsertSiteId.sync = "insertSiteId"
     :tempIsShare.sync = "isShare"
     @reset = "handleReset"
     @search = "handleSearch"
@@ -90,8 +91,10 @@ export default {
       downloadUrl:propertyInitEnum.STRING,
       //WP文章id
       articleId:propertyInitEnum.STRING,
-      //
+      //插入wp数量
       handleCount:propertyInitEnum.STRING,
+      //插入wp网站
+      insertSiteId:propertyInitEnum.NUMBER,
       //分享状态
       isShare:propertyInitEnum.STRING,
     }
@@ -134,9 +137,14 @@ export default {
     },
     /**插入wp */
     async handleInsertWP(){
+      if(!this.insertSiteId || this.insertSiteId == -1){
+        this.$message.error(`请选择需要插入的网站`)
+        return
+      }
       this.$message.success(`正在插入WP...`)
       await Resource.insertWP({
-        count:this.handleCount
+        count:this.handleCount,
+        siteId:this.insertSiteId,
       })
     },
     /**重新分享 */

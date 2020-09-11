@@ -5,10 +5,21 @@
     <div class = "container">
         <!-- 插入WP -->
         <el-row :gutter="20" style="padding-bottom:10px; border-bottom: 1px solid #dae1ed;">
-          <el-col :span="6">
+          <el-col :span="3">
+            <el-select v-model="insertSiteId" placeholder="请选择网站">
+              <el-option
+                v-for="item in siteList"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value">
+              </el-option>
+            </el-select>
+          </el-col>
+          <el-col :span="3">
             <el-input placeholder="插入数量" v-model="handleCount">
             </el-input>
           </el-col>
+
           <el-col :span="2" >
             <el-button type="warning" @click="handleInsertWP" >插入WP</el-button>
           </el-col>
@@ -108,6 +119,8 @@ export default {
     tempArticleId:String,
     //插入wp数量
     tempHandleCount:String,
+    //插入wp的网站id
+    tempInsertSiteId:Number,
     //分享状态
     tempIsShare:String,
   },
@@ -127,6 +140,8 @@ export default {
       articleId:'',
       //插入数量
       handleCount:'',
+      //插入wp的网站id
+      insertSiteId:undefined,
       //分享状态
       isShare:'',
     };
@@ -146,10 +161,11 @@ export default {
       this.downloadUrl = ''
       this.articleId = ''
       this.handleCount = ''
+      this.insertSiteId=undefined
       this.isShare =''
       this.$emit('reset')
     },
-    /**爬取简介 */
+    /**插入wp */
     handleInsertWP(){
       this.$emit('insertWP');
     },
@@ -167,9 +183,13 @@ export default {
     }
   },
   watch:{
-    //
+    //插入wp数量
     handleCount(){
       this.$emit('update:tempHandleCount',this.handleCount)
+    },
+    //插入wp网站资源
+    insertSiteId(){
+      this.$emit('update:tempInsertSiteId',this.insertSiteId)
     },
     //下载地址
     downloadUrl(){

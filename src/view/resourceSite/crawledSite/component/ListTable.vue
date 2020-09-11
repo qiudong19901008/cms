@@ -28,9 +28,9 @@
               {{scope.row.remark | getSummary}}
              </template>
           </el-table-column>
-          <el-table-column label="登陆cookise" prop="loginCookise" >
+          <el-table-column label="登陆cookies" prop="loginCookies" >
              <template slot-scope="scope"> 
-              {{scope.row.loginCookise | getSummary}}
+              {{scope.row.loginCookies | getSummary}}
              </template>
           </el-table-column>
           <el-table-column label="操作" fixed="right" min-width="200">
