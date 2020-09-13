@@ -29,7 +29,7 @@ static async insertWP(data){
 }
 
 /**
- * @url POST /crawl/reShare
+ * @url POST crawl/reShare
  * 重新对资源进行分享
  */
 static async reShare(data){
@@ -41,7 +41,7 @@ static async reShare(data){
 }
 
 /**
- * @url POST /crawl/updateTerm
+ * @url POST crawl/updateTerm
  * 重新对资源进行分享
  */
 static async updateTerm(data){
@@ -53,7 +53,7 @@ static async updateTerm(data){
 }
 
 /**
- * @url POST /crawl/checkReInsert
+ * @url POST crawl/checkReInsert
  * 重新对资源进行分享
  */
 static async checkReInsert(data){
@@ -63,6 +63,20 @@ static async checkReInsert(data){
     data
   })
 }
+
+ /**
+ * @url DELETE resource/del/:ids
+ * 删除资源信息
+ * 必备参数: ids 
+ * 格式: 1,2,3,5...
+ */
+static async delSelected(ids) {
+  // console.log(ids)
+  await _axios({
+     method: 'delete',
+     url: `resource/del/${ids}`,
+   });
+ }
 
 //    /**
 //     * @url POST site/add

@@ -40,6 +40,9 @@
           <el-col :span="6" >
             <el-button type="warning" @click="handleCheckReInsert" >检查不存在则重新插入WP</el-button>
           </el-col>
+          <el-col :span="6" >
+            <el-button type="warning" @click="handleDelSelected" >删除选中资源</el-button>
+          </el-col>
         </el-row>
 
         <!-- 搜索 -->
@@ -180,6 +183,10 @@ export default {
     /**检查不存在则重新插入WP */
     handleCheckReInsert(){
       this.$emit('checkReInsert')
+    },
+    /**删除选中资源 */
+    handleDelSelected(){
+      this.$emit('delSelected')
     }
   },
   watch:{

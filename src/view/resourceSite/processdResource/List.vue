@@ -24,6 +24,7 @@
     @reShare = "handlReShare"
     @updateTerm = "handleUpdateTerm"
     @checkReInsert = "handleCheckReInsert"
+    @delSelected = "handleDelSelected"
     >
     </ListConditionChoose>
     <!-- 表格 -->
@@ -180,6 +181,24 @@ export default {
         ids:this.idList
       })
     },
+    /**删除选中资源 */
+    async handleDelSelected(){
+      if(!this.idList || this.idList.length == 0){
+        this.$message.error(`请选择需要删除的资源`)
+        return
+      }
+      // this.$message.success(`正在删除的资源...`)
+      let ids = ''
+      for(let id of this.idList){
+        ids+=id+','
+      }
+      ids = ids.slice(0,-1)
+      // console.log(ids)
+      await Resource.delSelected(ids)
+      this.handleSearch()
+      this.$message.success(`删除成功...`)
+    },
+
 
     /**分页条件查询查询 */
     async handleCurrentChange(currentPage){
