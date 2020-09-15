@@ -23,6 +23,12 @@
           <el-col :span="2" >
             <el-button type="warning" @click="handleInsertWP" >插入WP</el-button>
           </el-col>
+          <el-col :span="2" >
+            <el-button type="warning" @click="handleUpdateThumbnail" >更新封面图</el-button>
+          </el-col>
+          <el-col :span="4" >
+            <el-button type="warning" @click="handleUpdateTerm" >更新标签,分类,内容,标题</el-button>
+          </el-col>
         </el-row>
 
         <!-- 重新分享 -->
@@ -30,19 +36,19 @@
           <el-col :span="2" >
             <el-button type="warning" @click="handleReShare" >重新分享</el-button>
           </el-col>
+          
         </el-row>
 
         <!-- 更新标签和分类,检查不存在则重新插入WP -->
         <el-row :gutter="20" style="padding:10px 0 10px 0; border-bottom: 1px solid #dae1ed;">
           <el-col :span="4" >
-            <el-button type="warning" @click="handleUpdateTerm" >更新标签和分类</el-button>
-          </el-col>
-          <el-col :span="6" >
             <el-button type="warning" @click="handleCheckReInsert" >检查不存在则重新插入WP</el-button>
           </el-col>
-          <el-col :span="6" >
+          <el-col :span="4" >
             <el-button type="warning" @click="handleDelSelected" >删除选中资源</el-button>
           </el-col>
+
+          <!-- updatePic -->
         </el-row>
 
         <!-- 搜索 -->
@@ -187,6 +193,10 @@ export default {
     /**删除选中资源 */
     handleDelSelected(){
       this.$emit('delSelected')
+    },
+    /**更新封面图 */
+    handleUpdateThumbnail(){
+      this.$emit('updateThumbnail')
     }
   },
   watch:{

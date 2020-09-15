@@ -25,6 +25,7 @@
     @updateTerm = "handleUpdateTerm"
     @checkReInsert = "handleCheckReInsert"
     @delSelected = "handleDelSelected"
+    @updateThumbnail = "handleUpdateThumbnail"
     >
     </ListConditionChoose>
     <!-- 表格 -->
@@ -161,13 +162,18 @@ export default {
     },
     /**更新标签和分类 */
     async handleUpdateTerm(){
+      if(!this.insertSiteId || this.insertSiteId == -1){
+        this.$message.error(`请选择需要更新内容的网站`)
+        return
+      }
       if(!this.idList || this.idList.length == 0){
         this.$message.success(`正在全部更新...`)
       }else{
         this.$message.success(`正在更新已选择...`)
       }
       await Resource.updateTerm({
-        ids:this.idList
+        ids:this.idList,
+        siteId:this.insertSiteId
       })
     },
      /**检查不存在则重新插入WP */
@@ -197,6 +203,15 @@ export default {
       await Resource.delSelected(ids)
       this.handleSearch()
       this.$message.success(`删除成功...`)
+    },
+    /**更新封面图片 */
+    async handleUpdateThumbnail(){
+      if(!this.insertSiteId || this.insertSiteId == -1){
+        this.$message.error(`请选择需要更新封面图的网站`)
+        return
+      }
+      this.$message.success(`正在更新封面图...`)
+      await Resource.updatePic(this.insertSiteId,this.handleCount)
     },
 
 

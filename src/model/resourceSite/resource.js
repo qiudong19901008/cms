@@ -78,6 +78,20 @@ static async delSelected(ids) {
    });
  }
 
+ /**
+ * @url POST crawl/updatePic/siteId
+ * 更新封面图
+ */
+ static async updatePic(siteId,count){
+   await _axios({
+    method: 'post',
+    url: `crawl/updatePic/${siteId}`,
+    data:{
+      count
+    }
+  });
+ }
+
 //    /**
 //     * @url POST site/add
 //     * 新增一个爬取站点
