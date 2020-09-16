@@ -74,6 +74,7 @@ export default {
       count:propertyInitEnum.NUMBER,//当前数据总数
       pageSize:propertyInitEnum.NUMBER,//每页现实数据个数
       idList:propertyInitEnum.ARRAY,//表格被选中数据的id列表
+      rows:propertyInitEnum.ARRAY,//表格被选中数据列表
 
       resourceRow:propertyInitEnum.OBJECT,//一个实体
 
@@ -124,8 +125,9 @@ export default {
     },
 
     /**改变选中数据 */
-    async handleChangeSelection(idList){
+    async handleChangeSelection(idList,rows){
       this.idList = idList
+      this.rows = rows
     },
 
     /**搜索点击 */
@@ -162,9 +164,17 @@ export default {
     },
     /**更新标签和分类 */
     async handleUpdateTerm(){
-      if(!this.insertSiteId || this.insertSiteId == -1){
-        this.$message.error(`请选择需要更新内容的网站`)
-        return
+      // if(!this.insertSiteId || this.insertSiteId == -1){
+      //   this.$message.error(`请选择需要更新内容的网站`)
+      //   return
+      // }
+      // 如果选中的数据中,siteId有不相同的,那么就不执行
+      const siteId = this.rows[0]['site_id']
+      for(let row of this.rows){
+        if(siteId != row['site_id']){
+          this.$message.error(`选中数据的siteId不同,请选择相同siteId的数据`)
+          return
+        }
       }
       if(!this.idList || this.idList.length == 0){
         this.$message.success(`正在全部更新...`)
@@ -173,7 +183,7 @@ export default {
       }
       await Resource.updateTerm({
         ids:this.idList,
-        siteId:this.insertSiteId
+        siteId,
       })
     },
      /**检查不存在则重新插入WP */
@@ -181,6 +191,14 @@ export default {
       if(!this.idList || this.idList.length == 0){
         this.$message.error(`请选择需要检测并重新插入的文章`)
         return
+      }
+      // 如果选中的数据中,siteId有不相同的,那么就不执行
+      const siteId = this.rows[0]['site_id']
+      for(let row of this.rows){
+        if(siteId != row['site_id']){
+          this.$message.error(`选中数据的siteId不同,请选择相同siteId的数据`)
+          return
+        }
       }
       this.$message.success(`正在检测并重新插入已选中数据...`)
       await Resource.checkReInsert({

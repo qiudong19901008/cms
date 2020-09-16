@@ -122,19 +122,30 @@ export default {
     },
     /**爬取详情 */
     async handleCrawlContent(){
-      this.$message.success(`正在爬取id为${this.siteId}的网站内容详情...`)
       const params = {}
-      params['siteId'] = this.siteId!=propertyInitEnum.NUMBER?this.siteId:''
-      params['count'] = this.count!=propertyInitEnum.STRING?this.handleCount:''
+      // params['siteId'] = this.siteId!=propertyInitEnum.NUMBER?this.siteId:''
+      if(!this.siteId || this.siteId == -1){
+        this.$message.error(`请选择需要爬取详情的网站`)
+        return
+      }
+      params['count'] = this.count!=propertyInitEnum.STRING?this.handleCount:100
       await Intro.crawlContent(params)
     },
     /**处理资源 */
     async handleProcessResource(){
       this.$message.success(`正在处理id为${this.siteId}的网站资源...`)
       const params = {}
-      params['siteId'] = this.siteId!=propertyInitEnum.NUMBER?this.siteId:''
-      params['count'] = this.count!=propertyInitEnum.STRING?this.handleCount:''
-      params['panId'] = this.panId!=propertyInitEnum.NUMBER?this.panId:''
+      if(!this.siteId || this.siteId == -1){
+        this.$message.error(`请选择需要处理资源的网站`)
+        return
+      }
+      if(!this.panId || this.panId == -1){
+        this.$message.error(`请选择需要存储的网盘`)
+        return
+      }
+      // params['siteId'] = this.siteId!=propertyInitEnum.NUMBER?this.siteId:''
+      // params['panId'] = this.panId!=propertyInitEnum.NUMBER?this.panId:''
+      params['count'] = this.count!=propertyInitEnum.STRING?this.handleCount:100
       await Intro.processResource(params)
        
     },

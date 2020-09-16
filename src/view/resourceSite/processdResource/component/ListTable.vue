@@ -114,7 +114,7 @@ export default {
         idList.push(row['id'])
       })
       // console.log(idList)
-      this.$emit('changeSelection',idList);
+      this.$emit('changeSelection',idList,rows);
     }
   },
   filters:{

@@ -26,9 +26,6 @@
           <el-col :span="2" >
             <el-button type="warning" @click="handleUpdateThumbnail" >更新封面图</el-button>
           </el-col>
-          <el-col :span="4" >
-            <el-button type="warning" @click="handleUpdateTerm" >更新标签,分类,内容,标题</el-button>
-          </el-col>
         </el-row>
 
         <!-- 重新分享 -->
@@ -36,13 +33,15 @@
           <el-col :span="2" >
             <el-button type="warning" @click="handleReShare" >重新分享</el-button>
           </el-col>
-          
         </el-row>
 
         <!-- 更新标签和分类,检查不存在则重新插入WP -->
         <el-row :gutter="20" style="padding:10px 0 10px 0; border-bottom: 1px solid #dae1ed;">
           <el-col :span="4" >
             <el-button type="warning" @click="handleCheckReInsert" >检查不存在则重新插入WP</el-button>
+          </el-col>
+          <el-col :span="4" >
+            <el-button type="warning" @click="handleUpdateTerm" >更新标签,分类,内容,标题</el-button>
           </el-col>
           <el-col :span="4" >
             <el-button type="warning" @click="handleDelSelected" >删除选中资源</el-button>
@@ -244,9 +243,46 @@ export default {
     isShare(){
       this.$emit('update:tempIsShare',this.isShare)
     },
-
+    
   }
+  
 };
+
+//功能按钮备注
+console.log(
+`功能按钮介绍:
+
+  插入WP: 
+    功能介绍: 把处理后的资源插入到wp(按未被插入的资源['publicTime','ASC']插入)
+    必选参数: 请选择网站
+    可选参数: 插入数量(默认插入选中网站的100个)
+  
+  更新封面图: 
+    功能介绍: 把已经插入到wp中的封面图进行更新(按已经插入的资源['articleId','asc']更新)
+    必选参数: 请选择网站
+    可选参数: 插入数量(默认更新选中网站的全部)
+  
+  重新分享: 
+    功能介绍: 把已经保存到百度网盘的资源重新分享, 并把分享后的信息更新到crawl_handle_resource中
+    必选参数: 列表勾选框idList
+    可选参数: 
+
+  检查不存在则重新插入WP: 
+    功能介绍: 先根据资源表的articleId检查wp中是否有该文章, 如果没有则重新把该条资源插入wp中
+    必选参数: 列表勾选框idList(选中的资源必须是同一个siteId)
+    可选参数:
+
+  更新标签,分类,内容,标题: 
+    功能介绍: 把已经插入到wp的数据反向更新到crawl_handle_resource表中(按已经插入的资源['update_time','DESC']更新)
+    必选参数: 
+    可选参数: 列表勾选框idList(默认更新到选中网站的全部,选中的资源必须是同一个siteId)
+
+  
+  删除选中资源: 
+    功能介绍: 删除crawl_handle_resource表中的某条资源
+    必选参数: 列表勾选框idList
+    可选参数: 
+`)
 </script>
 <style lang="scss" scoped>
   .container{

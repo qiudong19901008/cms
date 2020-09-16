@@ -81,6 +81,7 @@
 </template>
 
 <script>
+
 export default {
   name: 'ListConditionChoose',
   props:{
@@ -172,6 +173,21 @@ export default {
 
   }
 };
+
+//功能按钮介绍
+console.log(
+`功能按钮介绍:
+
+  爬取详情: 
+    功能介绍:根据简介信息中的contentUrl字段, 爬取详细信息(按未被爬取的详情['publicTime','DESC']爬取)
+    必选参数:网站域名
+    可选参数:数量(如果未输入,默认爬取100个)
+  
+  处理资源:
+    功能介绍:根据爬取到的简介信息和详细信息组合成一条数据, 进行适当的处理,并把资源保存到百度网盘中(按已完全爬取未被处理的资源['publicTime','DESC']处理)
+    必选参数:网站域名,网盘账号
+    可选参数:数量(如果未输入,默认处理100个)
+`)
 </script>
 <style lang="scss" scoped>
   .container{
