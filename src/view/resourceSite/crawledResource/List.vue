@@ -21,6 +21,7 @@
     @search = "handleSearch"
     @crawlContent= "handleCrawlContent"
     @processResource = "handleProcessResource"
+    @transferResource = "handleTransferResource" 
     >
     </ListConditionChoose>
     <!-- 表格 -->
@@ -143,12 +144,32 @@ export default {
         this.$message.error(`请选择需要存储的网盘`)
         return
       }
-      // params['siteId'] = this.siteId!=propertyInitEnum.NUMBER?this.siteId:''
-      // params['panId'] = this.panId!=propertyInitEnum.NUMBER?this.panId:''
+      params['siteId'] = this.siteId
+      params['panId'] = this.panId
       params['count'] = this.count!=propertyInitEnum.STRING?this.handleCount:100
+      // console.log(params)
       await Intro.processResource(params)
-       
     },
+
+    /**转存资源 20200923 */
+    async handleTransferResource(){
+      this.$message.success(`正在转存id为${this.siteId}的网站资源...`)
+      const params = {}
+      if(!this.siteId || this.siteId == -1){
+        this.$message.error(`请选择需要转存资源的网站`)
+        return
+      }
+      if(!this.panId || this.panId == -1){
+        this.$message.error(`请选择需要存储的网盘`)
+        return
+      }
+      params['siteId'] = this.siteId
+      params['panId'] = this.panId
+      params['count'] = this.count!=propertyInitEnum.STRING?this.handleCount:100
+      // console.log(params)
+      await Intro.transferResource(params)
+    },
+
     /**分页条件查询查询 */
     async handleCurrentChange(currentPage){
       const pageNum = currentPage-1;

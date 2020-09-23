@@ -42,6 +42,18 @@ static async processResource(data){
 }
 
 /**
+ * @url POST /crawl/transfer
+ * 转存资源
+ */
+static async transferResource(data){
+  await _axios({
+    method:'post',
+    url:`crawl/transfer`,
+    data
+  })
+}
+
+/**
  * 删除资源
  */
 static async delMany(ids) {

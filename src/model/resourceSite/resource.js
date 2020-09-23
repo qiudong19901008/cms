@@ -16,6 +16,8 @@ class Resource {
     return resourceList;
   }
 
+  
+
   /**
   * 插入wp
   * @param {*} data 
