@@ -61,12 +61,24 @@
               <el-form-item label="首页URL" prop="mainUrl">
                 <el-input size="medium" v-model="siteRow.mainUrl" placeholder="输入首页URL" :disabled="tempIsCheck" />
               </el-form-item>   
+              <el-form-item label="登陆cookies">
+                <el-input size="medium" v-model="siteRow.loginCookies" :rows="8" type="textarea"  placeholder="" :disabled="tempIsCheck" />
+              </el-form-item>
+              <el-form-item label="needToken">
+                <el-input size="medium" v-model="siteRow.needToken" placeholder="0:不需要,1:需要" :disabled="tempIsCheck" />
+              </el-form-item>
+              <el-form-item label="tokenUrl">
+                <el-input size="medium" v-model="siteRow.tokenUrl" placeholder="请求令牌地址" :disabled="tempIsCheck" />
+              </el-form-item>
+              <el-form-item label="token">
+                 <el-input size="medium" v-model="siteRow.token" :rows="8" type="textarea"  placeholder="输入令牌地址" :disabled="tempIsCheck" />
+              </el-form-item>
               <el-form-item label="备注">
                 <el-input size="medium" v-model="siteRow.remark" :rows="8" type="textarea"  placeholder="输入备注" :disabled="tempIsCheck" />
               </el-form-item>
-               <el-form-item label="登陆cookies">
-                <el-input size="medium" v-model="siteRow.loginCookies" :rows="8" type="textarea"  placeholder="" :disabled="tempIsCheck" />
-              </el-form-item>
+              
+              
+
             </el-form>
             <span slot="footer" class="dialog-footer">
               <el-button  @click="handleHideDialog">取 消</el-button>

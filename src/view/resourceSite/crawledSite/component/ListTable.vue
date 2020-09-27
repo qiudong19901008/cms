@@ -33,6 +33,12 @@
               {{scope.row.loginCookies | getSummary}}
              </template>
           </el-table-column>
+          <el-table-column label="是否需要token" prop="needToken" >
+             <template slot-scope="scope"> 
+              <el-tag type="info" v-if="scope.row.needToken==0">不需要</el-tag>
+              <el-tag type="primary" v-else >需要</el-tag>
+             </template>
+          </el-table-column>
           <el-table-column label="操作" fixed="right" min-width="200">
               <template slot-scope="scope"> 
                   <el-button plain size="mini" type="primary" @click="handleShowDialog(scope.row,'check')" >查看</el-button>

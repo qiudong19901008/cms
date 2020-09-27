@@ -129,6 +129,7 @@ export default {
         this.$message.error(`请选择需要爬取详情的网站`)
         return
       }
+      params['siteId'] = this.siteId
       params['count'] = this.count!=propertyInitEnum.STRING?this.handleCount:100
       await Intro.crawlContent(params)
     },
