@@ -51,7 +51,7 @@
         </el-row>
 
         <!-- 搜索 -->
-        <el-row :gutter="20" style="padding:10px 0 10px 0; ">
+        <el-row :gutter="24" style="padding:10px 0 10px 0; ">
           <el-col :span="3">
             <el-select v-model="siteId" placeholder="请选择网站">
               <el-option
@@ -84,17 +84,27 @@
                 <el-option label="未分享" value="0"></el-option>
             </el-select>
           </el-col>
-          <el-col :span="7">
+          <el-col :span="5">
             <el-input  placeholder="网盘地址/文章标题" type="text" 
               v-model="downloadUrl" @keyup.enter.native="handleSearch">
             </el-input>
           </el-col>
-          <el-col :span="3">
+          <el-col :span="2">
+            <el-input  placeholder="分类" type="text" 
+              v-model="category" @keyup.enter.native="handleSearch">
+            </el-input>
+          </el-col>
+          <el-col :span="2">
+            <el-input  placeholder="标签" type="text" 
+              v-model="tags" @keyup.enter.native="handleSearch">
+            </el-input>
+          </el-col>
+          <el-col :span="2">
             <el-input placeholder="WP文章id" type="text" 
               v-model="articleId" @keyup.enter.native="handleSearch">
             </el-input>
           </el-col>
-          <el-col :span="4">
+          <el-col :span="3">
             <!-- 搜索按钮 | 重置按钮 -->
             <el-button type="primary" @click="handleSearch">搜索</el-button>
             <el-button type="primary" @click="handleResert">重置</el-button>
@@ -131,6 +141,10 @@ export default {
     tempInsertSiteId:Number,
     //分享状态
     tempIsShare:String,
+    //分类
+    tempCategory:String,
+    //标签
+    tempTags:String,
   },
   data() {
     return { 
@@ -152,6 +166,10 @@ export default {
       insertSiteId:undefined,
       //分享状态
       isShare:'',
+      //分类
+      category:'',
+      //标签
+      tags:'',
     };
   },
   methods:{
@@ -171,6 +189,8 @@ export default {
       this.handleCount = ''
       this.insertSiteId=undefined
       this.isShare =''
+      this.category = ''
+      this.tags = ''
       this.$emit('reset')
     },
     /**插入wp */
@@ -199,6 +219,14 @@ export default {
     }
   },
   watch:{
+    //分类
+    category(){
+      this.$emit('update:tempCategory',this.category)
+    },
+    //标签
+    tags(){
+      this.$emit('update:tempTags',this.tags)
+    },
     //插入wp数量
     handleCount(){
       this.$emit('update:tempHandleCount',this.handleCount)

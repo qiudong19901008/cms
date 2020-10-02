@@ -1,0 +1,127 @@
+  <div class = "container">
+      <!-- 爬取详情  处理资源 -->
+      <el-row :gutter="20" style="padding:10px 0 30px 0; border-bottom: 1px solid #dae1ed;" >
+        
+        <el-col :span="3" id="operateEle">
+          <el-select  filterable placeholder="操作类型" v-model="operateType"  @change="handleControllExcuteEle">
+            <el-option
+              v-for="item of operateTypeArr"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value">
+            </el-option>
+          </el-select>
+        </el-col>
+        <el-col :span="3" id="siteIdEle" hidden>
+          <el-select  filterable placeholder="网站域名" v-model="siteId" @change="handleGetSelectOption">
+            <el-option
+              v-for="item in siteList"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value">
+            </el-option>
+          </el-select>
+        </el-col>
+        
+        <el-col :span="3" id="panIdEle" hidden> 
+          <el-select filterable placeholder="网盘账号" v-model="panId" >
+            <el-option
+              v-for="item in panList"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value">
+            </el-option>
+          </el-select>
+        </el-col>
+        <el-col :span="3" hidden id="excuteEle">
+          <el-select  filterable placeholder="执行类型" v-model="excuteType" @change="handleControllParamEle">
+            <el-option
+              v-for="item of excuteTypeArr"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value">
+            </el-option>
+          </el-select>
+        </el-col>
+        <el-col :span="2" id="countEle" hidden>
+          <el-input placeholder="数量" v-model="handleCount"></el-input>
+        </el-col>
+        <el-col :span="3" id="categoryEle" hidden>
+          <el-select  filterable placeholder="分类" v-model="category">
+            <el-option
+              v-for="item in categoryArr"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value">
+            </el-option>
+          </el-select>
+        </el-col>
+        <el-col :span="3" id="tagsEle" hidden>
+          <el-select  filterable placeholder="标签" v-model="tags">
+            <el-option
+              v-for="item in tagsArr"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value">
+            </el-option>
+          </el-select>
+        </el-col>
+        
+        <el-col :span="2" id="excuteBtn">
+          <el-button type="warning" @click="handleExcute" size="medium"> 执行</el-button>
+        </el-col>
+
+        <!-- <el-col :span="2" hidden id="crawlContentBtn">
+          <el-button type="warning" @click="handleCrawlContent" size="medium"  >爬取详情</el-button>
+        </el-col>
+        <el-col :span="2" hidden id="processResourceBtn">
+          <el-button type="warning" @click="handleProcessResource" size="medium">处理资源</el-button>
+        </el-col>
+        <el-col :span="2" hidden id="transferBtn">
+          <el-button type="warning" @click="handleTransferResource" size="medium">转存资源</el-button>
+        </el-col> -->
+
+      </el-row>
+
+      <!-- 搜索 -->
+      <el-row :gutter="20" style="padding:30px 0 10px 0;">
+        <el-col :span="3" >
+          <el-select v-model="isDeal" placeholder="详情状态" >
+            <el-option label="已抓取" value="1"></el-option>
+            <el-option label="未抓取" value="0"></el-option>
+          </el-select>
+        </el-col>
+        <el-col :span="3">
+          <el-select v-model="isHandle" placeholder="处理状态" >
+              <el-option label="已处理" value="1"></el-option>
+              <el-option label="未处理" value="0"></el-option>
+          </el-select>
+        </el-col>
+        <el-col :span="4">
+          <el-input placeholder="分类/标签" type="text" 
+            v-model="categoryOrTags" @keyup.enter.native="handleSearch">
+          </el-input>
+        </el-col>
+        <!-- <el-col :span="4">
+          <el-input  placeholder="网站域名/网站名称" type="text" 
+            v-model="siteDomainOrName" @keyup.enter.native="handleSearch">
+          </el-input>
+        </el-col> -->
+        <el-col :span="4">
+          <el-select  filterable placeholder="网站域名" v-model="siteDomainOrName" >
+            <el-option
+              v-for="item in siteList"
+              :key="item.value"
+              :label="item.label"
+              :value="item.label">
+            </el-option>
+          </el-select>
+        </el-col>
+        <el-col :span="4" :offset="6">
+          <!-- 搜索按钮 | 重置按钮 -->
+          <el-button type="primary" @click="handleSearch">搜索</el-button>
+          <el-button type="primary" @click="handleResert">重置</el-button>
+        </el-col>
+      </el-row>
+  </div>
+

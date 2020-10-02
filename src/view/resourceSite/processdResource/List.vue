@@ -18,6 +18,8 @@
     :tempHandleCount.sync = "handleCount"
     :tempInsertSiteId.sync = "insertSiteId"
     :tempIsShare.sync = "isShare"
+    :tempCategory.sync = "category"
+    :tempTags.sync = "tags"
     @reset = "handleReset"
     @search = "handleSearch"
     @insertWP = "handleInsertWP"
@@ -100,6 +102,10 @@ export default {
       insertSiteId:propertyInitEnum.NUMBER,
       //分享状态
       isShare:propertyInitEnum.STRING,
+      //分类
+      category:propertyInitEnum.STRING,
+      //标签
+      tags:propertyInitEnum.STRING,
     }
   },
   async created(){
@@ -374,8 +380,14 @@ export default {
       if(this.articleId!=propertyInitEnum.STRING){
         params['articleId'] = this.articleId
       }
-       if(this.isShare!=propertyInitEnum.STRING){
+      if(this.isShare!=propertyInitEnum.STRING){
         params['isShare'] = this.isShare
+      }
+      if(this.category!=propertyInitEnum.STRING){
+        params['category'] = this.category
+      }
+      if(this.tags!=propertyInitEnum.STRING){
+        params['tags'] = this.tags
       }
       return params;
     },
@@ -383,7 +395,7 @@ export default {
     _makeSurePagination(params){
       params = params?params:{}
       if(!params['pageSize']){
-        params['pageSize'] = 8
+        params['pageSize'] = 10
       }
       if(!params['pageNum']){
         params['pageNum'] = 0

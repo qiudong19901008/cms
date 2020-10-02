@@ -27,7 +27,11 @@
           </el-table-column>
           <el-table-column label="密码" prop="pwd" ></el-table-column>
           <el-table-column label="解压码" prop="compressCode" ></el-table-column>
-          <el-table-column label="文件保存目录" prop="file_dir" ></el-table-column>
+          <el-table-column label="文件保存目录" prop="file_dir" >
+            <template slot-scope="scope"> 
+              {{scope.row.file_dir | getSummary}}
+            </template>
+          </el-table-column>
           <el-table-column label="是否已插入WP" prop="is_handle" >
             <template slot-scope="scope">
               <el-tag type="danger" v-if="scope.row.is_handle==0">未插入</el-tag>

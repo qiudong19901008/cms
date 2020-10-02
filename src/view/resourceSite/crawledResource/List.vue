@@ -17,11 +17,18 @@
     :tempHandleCount.sync = "handleCount"
     :tempPanList.sync = "panList"
     :tempPanId.sync = "panId"
+    :tempOperateType.sync = "operateType"
+    :tempExcuteType.sync = "excuteType"
+    :tempCategory.sync = "category"
+    :tempTags.sync = "tags"
+    :tempIdList = "idList"
     @reset = "handleReset"
     @search = "handleSearch"
     @crawlContent= "handleCrawlContent"
     @processResource = "handleProcessResource"
     @transferResource = "handleTransferResource" 
+    @getSelectOption = "handleGetSelectOption"
+    @excute = "handleExcute"
     >
     </ListConditionChoose>
     <!-- 表格 -->
@@ -32,6 +39,7 @@
     @currentChange= "handleCurrentChange"
     @showDialog= "handleShowDialog"
     @changeImportant= "handleChangeImportant"
+    @changeSelection = "handleChangeSelection"
     >
     </ListTable>
     <!-- 新增,查看,编辑dialog -->
@@ -88,12 +96,36 @@ export default {
       handleCount:propertyInitEnum.STRING,
       panList:propertyInitEnum.ARRAY,
       panId:propertyInitEnum.NUMBER,
+
+      operateType:propertyInitEnum.STRING,
+      excuteType:propertyInitEnum.STRING,
+      category:propertyInitEnum.STRING,
+      tags:propertyInitEnum.STRING,
+      idList:propertyInitEnum.ARRAY,
+
     }
   },
   async created(){
       await this.init();
   },
   methods:{
+
+    async handleExcute(){
+      switch(this.operateType){
+        case 'crawlContent':
+          await this.handleCrawlContent()
+          break;
+        case 'proccessResource':
+          break;
+        case 'transfer':
+          break;
+        default:
+          this.$message.error(`请选择要执行的操作`)
+          return;
+      }
+    },
+
+
     /**组件初始化 */
     async init(params){
       params = this._makeSurePagination(params)
@@ -121,16 +153,53 @@ export default {
     async handleReset(){
       this.init();
     },
+
     /**爬取详情 */
     async handleCrawlContent(){
       const params = {}
-      // params['siteId'] = this.siteId!=propertyInitEnum.NUMBER?this.siteId:''
       if(!this.siteId || this.siteId == -1){
         this.$message.error(`请选择需要爬取详情的网站`)
         return
       }
       params['siteId'] = this.siteId
-      params['count'] = this.count!=propertyInitEnum.STRING?this.handleCount:100
+      switch(this.excuteType){
+        case 'count':
+          if(!this.handleCount || this.handleCount == ''){
+            this.$message.error(`请填入需要爬取的数量`)
+            return;
+          }
+          params['proccessParam'] = this.handleCount
+          console.log(this.handleCount)
+          params['type'] = 'count'
+          break;
+        case 'category':
+          if(!this.category || this.category == ''){
+            this.$message.error(`请选择需要爬取的种类`)
+            return;
+          }
+          params['proccessParam'] = this.category
+          params['type'] = 'category'
+          break;
+        case 'tags':
+          if(!this.tags || this.tags == ''){
+            this.$message.error(`请选择需要爬取的标签`)
+            return;
+          }
+          params['proccessParam'] = this.tags
+          params['type'] = 'tags'
+          break;
+        case 'ids':
+          if(!this.idList || this.idList.length == 0){
+            this.$message.error(`请选择需要爬取的id列表`)
+            return;
+          }
+          params['proccessParam'] = this.idList
+          params['type'] = 'ids'
+          break;
+        default:
+          this.$message.error(`请选择要执行的类型`)
+          return;
+      }
       await Intro.crawlContent(params)
     },
     /**处理资源 */
@@ -151,6 +220,13 @@ export default {
       // console.log(params)
       await Intro.processResource(params)
     },
+
+    /**改变选中数据 */
+    async handleChangeSelection(idList,rows){
+      this.idList = idList
+      this.rows = rows
+    },
+
 
     /**转存资源 20200923 */
     async handleTransferResource(){

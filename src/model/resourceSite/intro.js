@@ -1,3 +1,9 @@
+/*
+ * @Description: 
+ * @Date: 2020-08-18 11:52:38
+ * @LastEditTime: 2020-10-02 23:26:08
+ * @FilePath: \cms\src\model\resourceSite\intro.js
+ */
 /* eslint-disable */
 import _axios, { get, put, _delete } from '@/lin/plugin/axios'
 
@@ -24,7 +30,8 @@ class Intro {
 static async crawlContent(data){
   await _axios({
     method:'post',
-    url:`crawl/content`,
+    // url:`crawl/content`,
+    url:`spide/content`,
     data
   })
 }
@@ -75,7 +82,30 @@ static async addOne(data){
   })
 }
   
-  
+/************************************20201002 */
+/**
+ * @url POST /resource/category
+ * 获取类别
+ */
+static async getCategoryList(data){
+  return await _axios({
+    method:'post',
+    url:`/resource/category`,
+    data,
+  })
+}
+/**
+ * @url POST /resource/tags
+ * 获取类别
+ */
+static async getTagsList(data){
+  return await _axios({
+    method:'post',
+    url:`/resource/tags`,
+    data,
+  })
+}
+
 
 
   
